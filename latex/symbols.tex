@@ -1,0 +1,51 @@
+ 
+ 
+ %%% this file lists the notations used in the thesis for the reader's benefit and for clarity of exposition. 
+ 
+ % to define a new symbol use the command:   \newnot{symbol:nml} for example.  
+ 
+ 
+ %%%%%%%%%%%%%%%%%%%%%%%
+%Sample List of Symbols
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tabbing}
+% YOU NEED TO ADD THE FIRST ONE MANUALLY TO ADJUST THE TABBING AND SPACES
+$\vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}$~~~~~\=\parbox{5.5in}{The $\nu$ norm if the vector $\vec{x}$\dotfill \pageref{symbol:norm}}\\
+%ADD THE REST OF SYMBOLS WITH THE HELP OF MACRO
+%\addsymbol : {}{symbol:proptp}
+%\addsymbol \vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}: {\hspace{1.2in}The $\nu$ norm if the vector $\vec{x}$}{symbol:norm}
+\addsymbol \vec{a}: {A column vector of entries $a_i$ for $i=1,\dots,d$}{symbol:vec}
+\addsymbol \mathds{1}[A]: {Indicator function for the set $A$}{symbol:ind_A}
+\addsymbol N_{[a,b]}(A\vert B,C): {\hspace{.0in}Normal density on $A$, with mean $B$, and variance $C$, truncated to $[a,b]$}{symbol:normal}
+\addsymbol \sim: {Distributed as, or, Distributed according to the density}{symbol:sim}
+\addsymbol \propto: {Proportional to}{symbol:propto}
+\addsymbol R(\mathcal{T}_i): {\hspace{.0in}The risk of the $i$th tree}{symbol:risk_tree}
+\addsymbol \text{Inv-Gamma}(A\vert B,C): {\hspace{.0in}Inverse gamma density on $A$, with shape $B$, and scale $C$ }{symbol:inv_gamma}
+\addsymbol \text{Multinomial}(A\vert B, C): {\hspace{.0in}Multinomial mass function on A, with count $B$ and probabilities $C$}{symbol:mult}
+\addsymbol \text{Dirichlet}(A\vert B): {\hspace{.0in}Dirichlet density on $A$ with concentration parameters $B$}{symbol:dirichlet}
+\addsymbol s(\mathcal{A},n): {\hspace{.0in}The shatter coefficient for sets $\mathcal{A}$ on sample size $n$}{symbol:shatter_coef}
+\addsymbol V_\mathcal{A}: {\hspace{.0in}The VC dimension for functions in the class $\mathcal{A}$ }{symbol:VC_dim}
+\addsymbol v_n=(1/n)\sum_{i=1}^n\mathds{1}(y_i =\hat{\mathcal{T}}(X_i)): {\hspace{.5in}The empirical error of the classifier}{symbol:empirical_error}
+\addsymbol v=\Pr(\mathcal{T}(X)=y): {\hspace{.0in}The theoretical (Bayes) error of the classifier}{symbol:true_error}
+\addsymbol \mathcal{H}(x): {\hspace{.0in}The entropy function}{symbol:entropy}
+\addsymbol J(\vec{y}\vert\vec{x}): {\hspace{.0in}The Jacobian of the transform from $\vec{y}$ to $\vec{x}$}{symbol:jacobian}
+\addsymbol \mathbb{R}: {\hspace{.0in}The real number system}{symbol:real}
+\addsymbol \mathbb{S}^d: {\hspace{.0in}The $d$-dimensional simplex}{symbol:simp}
+\addsymbol Diag(a_i): {\hspace{.0in}A square, diagonal matrix with diagonal entries $a_i$}{symbol:diag}
+\addsymbol \mathcal{O}(A): {\hspace{.0in}Big ``O'' of $A$}{symbol:big_oh}
+\addsymbol \odot: {\hspace{.0in}Hadamard product of two vectors (element-wise product )}{symbol:hadamard}
+\addsymbol MVN(\vec{a} \vert \vec{b}, C): {\hspace{.0in}Multivariate normal on $\vec{a}$, with mean $\vec{b}$, and covariance $C$}{symbol:mvn}
+\addsymbol S\beta(c\vert \alpha, \beta, a, b): {\hspace{.0in}Scaled beta distribution on $c$ with parameters $\alpha$, $\beta$, scaled to the support $[a,b]$ }{symbol:scaled_beta}
+\addsymbol \Phi,\ \ (\Phi^{-1}): {\hspace{.0in}Cumulative density  (quantile) function for the standard normal}{symbol:sncdf}
+\addsymbol Unif(A,B): {\hspace{.0in}Continuous uniform density on the region $[A,B]$}{symbol:unif}
+\addsymbol \text{Exponential}(\lambda): {\hspace{.0in}Exponential density with rate $\lambda$}{symbol:exponential_dist}
+\addsymbol \text{Laplace}(\mu,\sigma): {\hspace{.0in}Laplace density with location $\mu$ and \emph{scale} $\sigma$ }{symbol:laplace_dist}
+\addsymbol \text{Inv-Wishart}(A \vert B,C): {\hspace{.0in}Inverse Wishart distribution on $A$, with degrees of freedom $B$ and matrix $C$}{symbol:inv_wishart}
+\addsymbol \text{tr}(A): {\hspace{.0in}The trace of the matrix A, the sum of the diagonal elements.}{symbol:trace}
+
+% .
+% .
+% .
+% .
+% ALWAYS KEEP THE FOLLOWING LINE
+\end{tabbing}

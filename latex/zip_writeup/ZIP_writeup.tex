@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{dsfont, amsmath}
+\begin{document}
+
+In this section we provide the derivation for the integrated likelihood for the Bayes ZIP (zero inflated poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime$ will index the non zero observations. the total number of nonzero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the nonzero observed counts. 
+
+\begin{align*}
+\Pr(Y \vert X, \mathcal{T}) &= \prod_{i=1}^b\int_0^1\int_0^\infty\prod_{j=1}^{n_i}\left[\mathds{1}[y_{ij}=0](\phi+(1-\phi)\exp{(-\lambda)})+\mathds{1}[y_{ij}>0]\frac{\exp{(-\lambda)\lambda^{y_{ij}}}}{y_{ij}!} \right]\pi(\phi_i,\lambda_i )d\lambda_id\phi_i\\
+&=\prod_{i=1}^b \int_0^1\int_0^\infty\left(\underbrace{\prod_{j=1}^{n_0}(\phi + (1-\phi)\exp{(-\lambda)})\pi(\phi_i,\lambda_i )d\lambda_id\phi_i}_{=(1)} + \underbrace{\prod_{j^\prime=1}^{n_+}\frac{\exp{(-\lambda)}\lambda^{y_{ij^\prime}} }{y_{ij^\prime}!}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i}_{=(2)}\right)\\ 
+\end{align*} 
+
+We will first tackle $(1)$, then tackle $(2)$. 
+
+\begin{align*}
+(1)&= \int_0^1\int_0^\infty\left(\prod_{j=1}^{n_0}(\phi + (1-\phi)\exp{(-\lambda)})\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
+&= \int_0^1\int_0^\infty\left((\phi + (1-\phi)\exp{(-\lambda)})^{n_0}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
+&= \int_0^1\int_0^\infty\sum_{j=1}^{n_0}{n_0\choose j}\phi^{j}(1-\phi)^{n_0-j}\exp{(-(n_0-j)\lambda)})\pi(\phi_i)\pi(\lambda_i )d\lambda_id\phi_i \\
+\end{align*}
+ 
+ Now we take $\pi(\phi_i)$ to be a beta($\alpha, \beta$) prior and $\pi(\lambda_i)$ to be a gamma($\alpha_{\lambda}, \beta_{\lambda}$) prior. This simplifies matters greatly. 
+ 
+ \begin{align*}
+ & \int_0^1\int_0^\infty\sum_{j=1}^{n_0}{n_0\choose j}\phi^{j}(1-\phi)^{n_0-j}\exp{(-(n_0-j)\lambda)})\frac{\Gamma(\alpha+\beta)\phi^{\alpha-1}(1-\phi)^{\beta-1}}{\Gamma(\alpha)\Gamma(\beta)}\frac{\lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})}}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} d\lambda_id\phi_i \\
+&=\sum_{j=1}^{n_0}{n_0\choose j}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} \underbrace{\int_0^1\phi^{j+\alpha-1}(1-\phi)^{\beta+n_0-j-1}d\phi_i}_{\text{a beta kernel}}  \underbrace{\int_0^\infty \lambda^{\alpha_{\lambda}-1} \exp{(-(n_0-j+\beta_{\lambda}^{-1})\lambda)} d\lambda_i}_{\text{a gamma kernel}}\\
+&=\underbrace{\sum_{j=1}^{n_0}{n_0\choose j}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} \frac{\Gamma(\alpha+j)\Gamma(\beta+n_0-j)\Gamma(\alpha_{\lambda})}{\Gamma(\alpha+\beta+n_0)}(n_0-j+\beta_{\lambda}^{-1})^{\alpha_{\lambda}}}_{=(1)}
+\end{align*} 
+Now with the first piece simplified we move on to piece $(2)$. 
+ 
+ \begin{align*}
+ (2) &= \int_0^1\int_0^\infty\prod_{j^\prime=1}^{n_+}\frac{\exp{(-\lambda)}\lambda^{y_{ij^\prime}} }{y_{ij^\prime}!}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
+ &= \int_0^\infty \prod_{j^\prime=1}^{n_+}\frac{\exp{(-\lambda)}\lambda^{y_{ij^\prime}} }{y_{ij^\prime}!}\pi(\lambda_i )d\lambda_i \\
+ &= \int_0^\infty\frac{\exp{(-n_+\lambda)}\lambda^{n_+\bar{y}_{i+}} }{\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!}\pi(\lambda_i )d\lambda_i \\
+ &= \int_0^\infty\frac{\exp{(-n_+\lambda)}\lambda^{n_+\bar{y}_{i+}} }{\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!}\frac{\lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})}}{\Gamma(\alpha_{\lambda})}d\lambda_i \\
+ &= \frac{\int_0^\infty\exp{(-(n_+ +\beta_{\lambda}^{-1})\lambda)}\lambda^{n_+\bar{y}_{i+} +\alpha_{\lambda}-1} d\lambda_i}{\Gamma(\alpha_{\lambda})\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!} \\
+ &= \underbrace{\frac{\Gamma(n_+\bar{y}_{i+}+\alpha_{\lambda})(n_+ +\beta_{\lambda}^{-1})^{n_+\bar{y}_{i+}+\alpha_{\lambda}}}{\Gamma(\alpha_{\lambda})\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!}}_{=(2)} \\
+ \end{align*}
+ 
+ And the result is shown. 
+
+
+\end{document}

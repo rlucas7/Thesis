@@ -1,0 +1,164 @@
+%% appendices for thesis/proposal
+
+\section*{Appendix A:  Algorithms Pseudo Code}
+Define $\small{\mathcal{T}^0}$ as the initialized tree, $n$ as the number of iterations of each MCMC chain, $\underline{p}^0$ as the initialized probability weights and $\underline{\alpha}^\prime$ as the initialized pseudo-counts for the splits in each dimension, $s$ are the observed split counts from each sampled tree. As defaults we take $\underline{p}^0\propto \underline{1}$, and  $\underline{\alpha}^\prime \propto \underline{1}$. Also $N$ is the tree likelihood of the new or proposed tree and $O$ is the old tree likelihood, both are on the log scale. Finally, $b$ denotes the number of terminal nodes in the current ($\mathcal{T}^i$) decision tree. 
+
+\begin{framed}
+\vspace{-.2in}
+\begin{pseudocode}{Sampler}{n, \underline{p}^0,\mathcal{T}^0, \alpha^0, C}
+\FOR i \GETS 1 \TO n \\
+\ \ X \GETS Discrete\_Uniform\left(1,5\right);\\
+\CASE {(X=1)} \ \ \mathcal{T}^\prime \GETS Grow(\mathcal{T}^i);\\
+\CASE {(X=2)} \ \ \mathcal{T}^\prime \GETS Prune(\mathcal{T}^i);\\
+\CASE {(X=3)} \ \ \mathcal{T}^\prime \GETS Change(\mathcal{T}^i);\\
+\CASE {(X=4)} \ \ \mathcal{T}^\prime \GETS Swap(\mathcal{T}^i);\\
+\CASE {(X=5)} \ \ \mathcal{T}^\prime \GETS Rotate(\mathcal{T}^i);\\
+\ \ N \GETS  log(\Pr(D \vert \mathcal{T}^\prime)); \\
+\ \ O \GETS log(\Pr(D \vert \mathcal{T}^{i-1}));\\
+\CASE {(X=1)} \ \ log(R) \GETS N-O+log(b);\\
+\CASE {(X=2)} \ \ log(R) \GETS N-O+log(b+1);\\ 
+\CASE {(X=3)} \ \ log(R) \GETS N-O+log(p_j)\ -\ log(p_{j^\prime});\\
+\CASE {(X=4 \OR X=5)} \ \ log(R) \GETS  N\ -\ O;\\
+\ \ U\GETS Continuous\_Uniform(0,1);\\
+\IF \{log(U) < log(R)\}  \ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; \\
+\textbf{else} \ \ \mathcal{T}^{i} \GETS \mathcal{T}^{i-1};\\
+\ \ \underline{\alpha}^{i} \GETS \underline{\alpha}^{i-1} + \widetilde{\alpha}\underline{s};\\
+\ \ \underline{p}^i \GETS Dirichlet(\underline{\alpha}^{i});\\
+\ \ \widetilde{\alpha} \GETS C \sum_{j=1}^d\alpha_j / \sum_{i,j}s_{ij};\\
+%\COMMENT{May restart when  $i\%\%m =0$.}\\
+\end{pseudocode}
+\vspace{-.3in}
+\end{framed}
+
+
+The second pseudo-code listing contains the simple sampler approach from Chapter \ref{sec:ALN_chapter}, the notation is similar to the first pseudocode.  
+
+\begin{framed}
+\vspace{-.2in}
+\begin{pseudocode}{Simple Sampler}{n, \underline{p}^0,\mathcal{T}^0, \alpha^0, C}
+\FOR i \GETS 1 \TO n \\
+\ \ X \GETS Discrete\_Uniform\left(1,5\right);\\
+\CASE {(X=1)} \ \ \mathcal{T}^\prime \GETS Grow(\mathcal{T}^i);\\
+\CASE {(X=2)} \ \ \mathcal{T}^\prime \GETS Prune(\mathcal{T}^i);\\
+\CASE {(X=3)} \ \ \mathcal{T}^\prime \GETS Change(\mathcal{T}^i);\\
+\CASE {(X=4)} \ \ \mathcal{T}^\prime \GETS Swap(\mathcal{T}^i);\\
+\CASE {(X=5)} \ \ \mathcal{T}^\prime \GETS Rotate(\mathcal{T}^i);\\
+\ \ N \GETS  log(\Pr(D \vert \mathcal{T}^\prime)); \\
+\ \ O \GETS log(\Pr(D \vert \mathcal{T}^{i-1}));\\
+\CASE {(X=1)} \ \ log(R) \GETS N-O+log(b);\\
+\CASE {(X=2)} \ \ log(R) \GETS N-O+log(b+1);\\ 
+\CASE {(X=3)} \ \ log(R) \GETS N-O+log(p_j)\ -\ log(p_{j^\prime});\\
+\CASE {(X=4 \OR X=5)} \ \ log(R) \GETS  N\ -\ O;\\
+\ \ U\GETS Continuous\_Uniform(0,1);\\
+\IF \{log(U) < log(R)\}  \ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; \\
+\textbf{else} \ \ \mathcal{T}^{i} \GETS \mathcal{T}^{i-1};\\
+\FOR j \GETS 1\TO d\\
+u_j \GETS Unif(0, \exp{(-c_js_j-\mu_j)^2/2\sigma_j^2}) \\
+c_j \GETS Unif(max(-a,-\sqrt{-2log(u_j)}), min(a, \sqrt{-2log(u_j)}))\\
+\sigma_j^2 \GETS Inv-Gamma(2a_j +2, ( (c_js_j-\mu_j)^2+(\mu_j-\mu_j^p)^2 )/2+ b_j)\\
+\mu_j \GETS N[c_js_j+\mu_j^p, \sigma^2_j]\\
+p_j\GETS\exp(\mu_j)/(1+\sum_{k=1}^d\exp(\mu_k))\\
+\textbf{EndFor}\\
+p_{d+1}\GETS 1-\sum_{k=1}^dp_k\\
+\end{pseudocode}
+\vspace{-.3in}
+\end{framed}
+
+\section*{Appendix B: Non-negative Garrote Solutions when $X^TX = I$.}
+
+In this section we derive the non-negative garrote estimators under orthogonal designs. Recall a design matrix $X$ is called orthogonal, or more properly, orthonormal, if $X^TX=I$. This implies that $\sum_ix_{ij}^2=1$ and $\sum_ix_{ij}x_{ik}=0$ for $j\neq k$. 
+
+Recall the non-negative garrote objective function is 
+
+\begin{equation}\label{eqn:nn_garrote_obj}
+\underset{\forall j: c_j\geq 0}{argmin}\ \ \sum_{i=1}^n(y_i -\sum_{j=1}^dc_j\hat{\beta_j}x_{ij})^2 + \lambda\sum_{j=1}^dc_j,
+\end{equation}    
+
+Now for simplicity of exposition we will take $d=2$ and also assume the $y_i$ have had their mean subtracted from each observation, removing the intercept term from the model. This gives us the objective 
+
+\begin{equation}\label{eqn:nn_garroted=2}
+\underset{\forall j: c_j\geq 0}{argmin}\ \ \underbrace{\frac{1}{2}\sum_{i=1}^n(y_i -c_1\hat{\beta}_1x_{i1}-c_2\hat{\beta}_2x_{i2})^2 + \lambda(c_1+c_2)}_{=f(c_1,c_2)},
+\end{equation}    
+
+Now we optimize over $c_j$ by taking derivatives. This results in a system of 2 linear equations, the details follow: 
+
+\begin{align}
+\frac{\partial f}{\partial c_1} &= \sum_i(y_i-c_1\hat{\beta}_1x_{i1}-c_2\hat{\beta}_2x_{i2})(-\hat{\beta}_1x_{i1}) + \lambda \overset{\text{set}}{=} 0\\
+\frac{\partial f}{\partial c_2} &= \sum_i(y_i-c_1\hat{\beta}_1x_{i1}-c_2\hat{\beta}_2x_{i2})(-\hat{\beta}_2x_{i2}) +\lambda \overset{\text{set}}{=} 0
+\end{align}
+
+Multiplying the extra terms through gives us the equations
+
+\begin{align}
+\frac{\partial f}{\partial c_1} &=  \sum_i(-y_i\hat{\beta}_1x_{i1}+c_1\hat{\beta}_1x_{i1}\hat{\beta}_1x_{i1}+c_2\hat{\beta}_2x_{i2}\hat{\beta}_1x_{i1})+\lambda \overset{\text{set}}{=} 0\\
+\frac{\partial f}{\partial c_2} &= \sum_i(-y_i\hat{\beta}_2x_{i2}+c_1\hat{\beta}_1x_{i1}\hat{\beta}_2x_{i2}+c_2\hat{\beta}_2\hat{\beta}_2x_{i2}x_{i2}) +\lambda\overset{\text{set}}{=} 0
+\end{align}
+
+Now after some algebra we get the analogs to the ``normal'' equations in least squares
+
+\begin{align}
+  \hat{\beta}_1\sum_iy_ix_{i1}&=\sum_i(c_1\hat{\beta}_1x_{i1}^2+c_2\hat{\beta}_2x_{i1}x_{i2}) +\lambda\\
+ \hat{\beta}_2\sum_iy_ix_{i2}&=\sum_i(c_1\hat{\beta}_1x_{i1}x_{i2}+c_2\hat{\beta}_2x^2_{i2})+\lambda 
+\end{align}
+
+Now applying the sum through to the RHS of both equations and applying the orthonormal conditions we get
+
+\begin{align}
+  \hat{\beta}_1\sum_iy_ix_{i1}&=c_1\hat{\beta}_1^2+\lambda \\
+ \hat{\beta}_2\sum_iy_ix_{i2}&=c_2\hat{\beta}_2^2 +\lambda
+\end{align}
+
+The orthonormal conditions imply $\sum_ix_{ij}^2=1$, so we divide the $\sum_i y_i x_{ij}$ terms by this ``1'' term. Noting that if the $x_{ij}$'s are centered about their means we have
+
+\begin{equation}
+\hat{\beta}_j = \frac{\sum_i x_{ij} y_i}{\sum_ix_{ij}^2} 
+\end{equation}
+
+Solving for $c_1$ and $c_2$ gives the equations 
+
+\begin{align}
+ 1- \frac{\lambda}{\hat{\beta}_1^2}&=c_1 \\
+  1-\frac{\lambda}{\hat{\beta}_2^2}&=c_2 
+\end{align}
+
+and noting that $c_j \geq 0$ implies we take the positive part.  These are the closed form solutions given in \cite{breiman1995better}. The reader can now easily generalize to the case with $d>2$ covariates. $\square$
+
+The interested reader may work out the analogous results for the constraint $\sum_{j=1}^dc_j^2 \leq s$ for some constant $s$. The closed form solution in the orthonormal $X$ case is also given in \cite{breiman1995better}.  
+
+\section*{Appendix C}
+
+Using the result from Villa and Escobar \cite{villa2006using},  which states. 
+
+\noindent \textbf{Theorem}\\
+
+Suppose $M_{x\vert y}(t)=C_1(t)\exp[C_2(t)Y]$ and there exists a $\delta>0$ such that for $t\in(-\delta, \delta)$, $\vert C_i(t) \vert < \infty$  and $\vert M_y(C_2(t))\vert < \infty$ assuming $M_y(t)$ exists, then $M_x(t) =C_1(t)M_y(C_2(t))$. In more common MGF notation we have $M_x(t) = \mathbb{E}_y(M_{x\vert y}(t))$. 
+See Villa and Escobar for the proof. 
+
+We an use this result to understand the mixture of normals. To do this we recall the forms of the MGFs for three common distributions: 
+
+\begin{equation}\label{eqn:normal_mgf}
+M(t) = \exp\left(\mu t + \frac{\sigma^2t^2}{2}\right)
+\end{equation}
+
+\begin{equation}\label{eqn:exponential_mgf}
+M(t) =\frac{1}{1-\lambda t}
+\end{equation}
+
+\begin{equation}\label{eqn:laplace_mgf}
+M(t) = \frac{ \exp\left(\mu t\right) }{1-b^2t^2}
+\end{equation}
+
+In MGF's \ref{eqn:normal_mgf}-\ref{eqn:laplace_mgf}, the means of the densities are $\mu$, $\lambda$, and $\mu$ respectively. Also, the variances of the densities are $\sigma^2$, $\lambda^2$, and $b^2$.  
+
+Now applying the Theorem of Villa and Escobar we have 
+
+\begin{align*}
+\mathbb{E}\left(M_{x\vert v}(t)\right)&=\mathbb{E}\left(\exp\left(\mu t +2v\sigma^2t^2  \right)\right) \\
+&= \int_0^\infty \exp\left(-v +\mu t +2v\sigma^2t^2  \right)dv\\
+&= \exp(\mu t) \int_0^\infty \exp\left(-v +2v\sigma^2t^2  \right)dv\\
+&= \exp(\mu t) \int_0^\infty \exp\left(-v(1-2\sigma^2t^2)\right)dv\\
+&= \frac{\exp(\mu t) }{1-2\sigma^2t^2} \underbrace{\int_0^\infty(1-2\sigma^2t^2)\exp\left(-v(1-2\sigma^2t^2)\right)dv}_{=1, \text{  because it is an exponential pdf}}\\
+&= \frac{\exp(\mu t) }{1-2\sigma^2t^2}
+\end{align*}
+
+The result is shown. 

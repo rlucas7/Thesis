@@ -1,0 +1,248 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphics}
+\usepackage{epsfig,dsfont}
+\usepackage{times,tikz}%, tikz-qtree}
+\usepackage{amsmath, amssymb, hyperref,float}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{framed, pseudocode}
+\usepackage{mathrsfs} 
+\usepackage{graphicx, dsfont}
+\usepackage{amsthm,fullpage}
+\usepackage{graphicx,float,hyperref}
+
+
+%%%%----------------------------------------- Code for notation list
+% Macro for 'List of Symbols', 'List of Notations' etc...
+\def\listofsymbols{\input{symbols} \clearpage}
+\def\addsymbol #1: #2#3{$#1$ \> \parbox{5.5in}{#2 \dotfill \pageref{#3}}\\} 
+\def\newnot#1{\label{#1}} 
+%%%%%--------------------------------------End of code for notation list
+
+
+%%%%----------------------------------------- Code for abbreviation list
+% Macro for 'abbreviations' etc...
+\def\listofabbreviations{\input{abbreviations} \clearpage}
+\def\addabbrev #1: #2#3{#1 \> \parbox{7in}{#2 \dotfill \pageref{#3}}\\} 
+\def\newabbrev#1{\label{#1}} 
+%%%%%--------------------------------------End of code for notation list
+
+
+\newtheorem{mydef}{Definition}
+\newtheorem{lem}{Lemma}
+\newtheorem{thrm}{Theorem}
+
+\graphicspath{ {/Users/rlucas7/Dropbox/Public/Thesis_Proposal/figures/} }
+%\graphicspath{ {images_folder/}{other_folder/}{third_folder/} } use this if there are several filepaths or folders for images 
+
+%for fancy script letters... $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$
+\newcommand{\Risk}{(1/n)\sum_{i=1}^n\mathbb{I}(g(Z_i)=y_i)}
+\newcommand{\erisk}{(1/n)\sum_{i=1}^n\mathbb{I}(\hat{g}(Z_i)=y_i)}
+\newcommand{\bayesorprob}{Bayesian}
+\newcommand{\yvec}{\underline{y}}
+\newcommand{\xvec}[0]{\underline{x}}
+\newcommand{\simp}[1]{\mathbb{S}^{#1}}
+\newcommand{\Rsp}[1]{\mathbb{R}^{#1}}
+\newcommand{\muvec}[0]{\underline{\mu}}
+\renewcommand{\vec}[1]{\underline{{#1}}}
+\newcommand{\iid}[0]{$i.i.d.$}
+\newcommand{\invgam}[3]{\text{Inv-Gamma}({#1}\vert{#2},{#3})}
+\newcommand{\Sbeta}[4]{S\beta(#1\vert#2, #3, #4)}
+%\usepackage[mathscr]{euscript} 
+% for less fancy script letters... $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$
+
+% The proposal format is the following:
+%        30 pages
+%        12 point type
+%        1 inch margins all around = 6.5   inch columnT
+%        (Total:  30 * 6.5   = 195 page-inches)
+%
+% For letter-size paper: 8.5 in x 11 in
+% Latex Origin is 1''/1'', so measurements are relative to this.
+
+\linespread{1.4} % 1.6 = double space, 1.3 = 1.5 space comment out for regular
+
+
+\topmargin      0.0in
+\headheight     0.0in
+\headsep        0.0in
+\oddsidemargin  0.0in
+\evensidemargin 0.0in
+\textheight     9.0in
+\textwidth      6.5in
+
+
+\title{{\bf Doctoral Thesis Proposal} \\
+\it Thesis proposal}
+\author{ {\bf Lucas Roberts}  \\
+Department of Statistics \\
+Virginia Tech \\
+{\small rlucas7@vt.edu}
+}
+\date{\today}
+
+
+
+
+\begin{document}
+\pagestyle{plain}
+\pagenumbering{roman}
+\maketitle
+
+
+\pagebreak
+\begin{abstract}
+In this thesis proposal we provide a historical survey of the statistics and computer science research in decision trees. We review both the greedy and Bayesian approaches to decision tree induction and propose a novel modification to previous Bayesian decision tree methods. Our approach facilitates covariate selection explicitly in the model, something not present in most previous research. Covariate selection is facilitated by a transform, which we define,  that allows us to use priors from linear models. Using this transform, we are able to modify many common approaches to variable selection in the linear model and bring these methods to bear on the problem of explicit covariate selection in decision tree models. We also provide theoretical guidelines, including a theorem, which gives necessary and sufficient conditions for consistency of decision trees in infinite dimensional spaces. Our examples and case studies use both simulated and real data cases with moderate to large numbers of covariates. The examples give support to the claim that, in large dimensional covariate datasets, if decision tree methods are to be applied, the approach presented here is to be preferred.   
+
+%The thesis proposal is a type of contract between the faculty and the student. 
+%An accepted thesis proposal indicates that the work proposed by the student, 
+%once completed, will be accepted by the faculty as sufficiently innovative and 
+%substantial as to be recognized with the award of the degree. It is part of 
+%the training of the student's research apprenticeship that the form of this 
+%proposal must be as concise as those proposals required by major funding 
+%agencies.
+
+\end{abstract}
+
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\listoffigures
+\pagebreak
+
+\listoftables
+\pagebreak
+
+\clearpage
+\phantomsection
+\chapter{\LARGE{\textbf{List of Symbols}}}
+ \addcontentsline{toc}{section}{\textbf{List of Symbols}}
+\listofsymbols
+\pagebreak
+
+\clearpage
+\phantomsection
+\chapter{\LARGE{\textbf{List of Abbreviations}}}
+ \addcontentsline{toc}{section}{\textbf{List of Abbreviations}}
+\listofabbreviations
+\pagebreak
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+%\section{Introduction}
+%\label{ch:intro}
+
+\input{intro_chapter/intro_chapter.tex}
+ 
+% input for Chapter \ref{ch:var_select}
+ 
+\input{overview_chapter/overview_chapter.tex}
+
+%The content of your proposal. Each topic occupies one section, each
+%with their own conclusion and future work.
+
+
+ \section{Dirichlet Variable Selection For Decision Trees: The DiVaS method}
+\label{ch:var_select}
+\input{dirichlet_var_selection/dirichlet_variable_selection.tex}
+
+%\section{Case Studies}
+%\label{ch:case_study_one}
+
+\input{normal_simplex_transform/previous_var_selection.tex}
+
+%\section{}
+%\label{ch:related}
+%
+%\section{}
+%\label{ch:}
+
+%The content of your proposal. Each topic occupies one section, each
+%with their own conclusion and future work.
+
+\input{proposed_further_research/proposed_further_research.tex}
+
+
+
+
+
+%\subsection{Variable Selection with Bootstrapping}
+%\label{ch:var_sel_boot}
+%
+%\section{Case Studies with Bootstrap Resampling}
+%\label{ch:case_boot_resamp}
+%
+%\subsection{Simulated Examples}
+%\label{ch:cbr_sim_ex}
+%
+%\subsection{UCI Machine Learning Repository Datasets}
+%\label{ch:cbr_UCI_MLR_data}
+%
+%\section{Using A Horseshoe Prior with a General Covariance Structure}
+%\label{ch:hp_gencov}
+%
+%
+%\section{Using A Lasso type prior}
+%
+%\subsection{Simulated Examples}R
+%\label{ch:csa_sim_ex}
+%
+%\subsection{UCI Machine Learning Repository Datasets}
+%\label{ch:csa_UCI_MLR_data}
+
+\section{Research plan}
+\label{ch:plan}
+
+This section provides an overview of what I have completed so far. Also, what still needs to be done.
+
+\subsection{Plan for completion of the research}
+
+Table \ref{tab:plan} shows my plan for completion of the research.
+
+\begin{table}[H]
+\begin{small}
+\hspace{-0.5in}
+%\begin{flushleft}
+\begin{tabular}{lll}
+Timeline & Work & Progress\\
+\hline
+ Jan 2013   & Initial outline & completed\\
+Jan-May 2013.  & Chapters 1, 2, 3, and 4 writing & completed (mostly) \\
+February-Sept. 2013  & sampling methods (SSVS and horseshoe) & started (writing and code)\\
+February-Sept. 2013  & terminal node models paper (ZIP, ZINB,\newabbrev{abbrev:ZINB} ZIBinomial etc.) & not yet started (writing and code)\\
+Oct. 2013-Mar-Apr 2014 &  Local and lasso prior  & not yet started (writing or code)\\
+\end{tabular}
+%\end{flushleft}
+\end{small}
+\caption{Plan for completion of my research}
+\label{tab:plan}
+\end{table}
+
+Thus, I plan to defend my thesis at the end of the spring 2014. 
+
+%\section{Discussion}
+%\label{ch:discuss}
+%
+%Summarize what has been shown in the dissertation and point towards future research. Indicate challenges and areas of promise. 
+
+\pagebreak
+
+\input{appendices/appendixA.tex}
+
+\pagebreak
+
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\bibliographystyle{abbrv}
+
+
+\bibliographystyle{abbrv}
+\bibliography{tree_biblio,tree_biblio1}
+
+
+\end{document}
+
+
