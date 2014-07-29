@@ -1,0 +1,29 @@
+\section{Synthesis: comparing the DiVaS and ALoVaS methods}
+In this section we compare the DiVaS and ALoVaS. While both methods seem relatively similar, both methods performing variable selection on Bayesian decision trees. There are fundamental practical and theoretical differences between the two methods. 
+
+\subsection{Theoretical differences and a simulation study}
+
+\begin{itemize}
+\item Correlation of the dirichlet is only negative  
+\item Linear models with interactions  
+\item A relation with CHAID. Automatic interaction detection is not a myth! 
+\item Linear model with a positive interaction between $x_1$ and $x_2$. 
+\end{itemize}
+
+\subsection{Practical differences and a simulation study}
+
+\begin{itemize}
+\item Conceptual link between linear models  and decision trees with ALoVaS. 
+\item longer to simulate Alovas 
+\item DiVaS requires negative correlations, impossible to know \emph{a priori}
+\item Positive versus negative correlations, linear models and decision trees
+\end{itemize}
+
+\subsection{Conclusions and Recommendations}
+
+\begin{itemize}
+\item ALoVaS provides a conceptually simple generic method adaptable to the shrinkage needs of your own problem. 
+\item DiVaS is more of an ad-hoc method which can provide promising results. 
+\item ALoVaS is to be preferred over DiVaS. 
+\end{itemize}
+

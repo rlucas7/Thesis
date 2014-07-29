@@ -7,10 +7,10 @@
 %%
 %%
 
-\section{Proposed Further Research}
+\section{ALoVaS Models, the Lasso, Horseshoe, and SSVS priors}
 \label{ch:proposed_futue_work}
 
-We propose to further investigate several avenues of research into variable selection for decision trees. These will include: 
+We investigate several priors for use in variable selection with decision trees. They are: 
 
 \begin{itemize}
 \item A stochastic search approach (method of George and McCulloch and Cui and George) \cite{cui2008empirical,george1993variable}. 
@@ -76,7 +76,7 @@ What needs to be done for this approach is a couple of things:
 \item Extensive simulation studies. 
 \end{itemize}
 Also any suggestions by the committee.
-\subsection{A Multivariate Half Cauchy Prior}
+\subsection{A Half-Cauchy or Horseshoe Prior}
 
 The following result will be useful for parameter expansion. If 
 
@@ -100,6 +100,8 @@ for $y>0$ which is the definition of a half-Cauchy density.
 
 Huang and Wand \cite{huang2013simple} indicate that using an inverse-Wishart prior on the variances, with each standard deviation having a half-Cauchy prior, gives a scaled beta marginal for each correlation. At this point it is worth recalling that the t and half-t distributions have as special cases, the Cauchy and half-Cauchy distributions when the degrees of freedom parameter ($\nu$) in the t and half-t is set to $\nu=1$. We will use the scale mixture representation of inverse gammas given above to put half-Cauchy priors on the standard deviations.  
 
+
+%%%% Leave this chunk in for now, but will probably cut it in the end
 The hierarchical model for the sparse inverse-Wishart prior as
 
 \begin{equation}\newnot{symbol:inv_wishart}
@@ -116,7 +118,7 @@ p(\Sigma \vert \kappa, \text{B})\propto \vert \text{B}\vert^{\kappa/2}\vert\Sigm
 \end{equation}
 \newnot{symbol:trace}
 Huang and Wand \cite{huang2013simple} argue that this model constitutes a matrix generalization of the half-t$(\nu, A_k)$ prior for each standard deviation term, and also allows for uniform marginal distributions on each correlation parameter in $\Sigma$, by choosing $\nu=2$. If one instead chooses $\nu=1$, this corresponds to a $S\beta(\rho;1/2,1/2,-1,1)$ distribution. This half-t prior works well in their simulations for both correlated covariates and non-correlated covariates.  
-
+%%%% End of this chunk in for now, but will probably cut it in the end
 What needs to be done for this method is: 
 
 \begin{itemize}
@@ -127,41 +129,24 @@ What needs to be done for this method is:
 \end{itemize}
 Also, any suggestions that committee brings up during the proposal.
 
-\subsection{A Local Prior Approach}
-
-Another alternative we will examine is a `local' prior approach using a moment prior defined in Johnson and Rossell \cite{johnson2010use}. These moment priors are functions that have densities that look like those in Figure \ref{fig:local_priors}.
-
-\begin{figure}[h]
-  \centering
-    \includegraphics[width=0.7\textwidth]{moment_prior_plot_BW.pdf}
-    \caption[Local priors with a point mass at 0]{Local priors with a point mass at 0.}
-  \label{fig:local_priors}
-\end{figure}
-
-The moment priors are defined by the densities 
-
-\begin{equation}
-f_k(x)\propto (x-\mu)^{2k}\pi(x-\mu),
-\end{equation}
-where here $\mu$ denotes the first moment and $k$ is a specified constant. In Figure \ref{fig:local_priors} $k=1$, $\mu=0$, and the two $\pi(x)$s represent a normal and a t distribution with degrees of freedom $2$. The basic idea with the local priors is that we want to circumvent the necessity of specifying informative prior means for the normal priors. These moment priors have large probability masses on two regions, a negative region and a positive region. The two local modes allow the priors' means to encourage the selection of certain covariates (in the positive mode) and to discourage the selection of other covariates (in the negative mode).
-
-What needs to be done for this approach is a couple of things: 
-
-\begin{itemize}
-\item Determine posteriors for the means using these forms of priors. 
-\item Determine if Gibbs sampling can be done on the resulting posteriors. 
-\item Determine if a parameter expansion, or slice sampling can aid in finding Gibbs updates for the posteriors.  
-\item Extensive simulation studies and hyper-parameter sensitivities.
-\end{itemize}
-
-Also, any suggestions that committee brings up during the proposal.
-
-%Quote from tibshirani and knight 1999 bootstrap bumping:
+%\subsection{A Local Prior Approach}
 %
-%In different models, the fixed complexity Approach 1 is implemented differently.
-%For example, in stepwise regression,we choose the number of predictors once and for all from the training data, and then fix that number in each bootstrap sample. In neural
-%nets, we can choose the weight decay parameter from the training data, and then fix it in the bumping process.
+%Another alternative we will examine is a `local' prior approach using a moment prior defined in Johnson and Rossell \cite{johnson2010use}. These moment priors are functions that have densities that look like those in Figure \ref{fig:local_priors}.
 %
-%Quote from CGM 1998 JASA: 
+%\begin{figure}[h]
+%  \centering
+%    \includegraphics[width=0.7\textwidth]{moment_prior_plot_BW.pdf}
+%    \caption[Local priors with a point mass at 0]{Local priors with a point mass at 0.}
+%  \label{fig:local_priors}
+%\end{figure}
 %
-%Bootstrap bumping seems to work better when there are less data. 
+%The moment priors are defined by the densities 
+%
+%\begin{equation}
+%f_k(x)\propto (x-\mu)^{2k}\pi(x-\mu),
+%\end{equation}
+%where here $\mu$ denotes the first moment and $k$ is a specified constant. In Figure \ref{fig:local_priors} $k=1$, $\mu=0$, and the two $\pi(x)$s represent a normal and a t distribution with degrees of freedom $2$. The basic idea with the local priors is that we want to circumvent the necessity of specifying informative prior means for the normal priors. These moment priors have large probability masses on two regions, a negative region and a positive region. The two local modes allow the priors' means to encourage the selection of certain covariates (in the positive mode) and to discourage the selection of other covariates (in the negative mode).
+%
+%What needs to be done for this approach is extensive simulation studies and hyper-parameter sensitivities.
+%
+%Also, any suggestions that committee brings up during the proposal.

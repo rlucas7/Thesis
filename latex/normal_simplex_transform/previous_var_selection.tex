@@ -1,6 +1,6 @@
 % previous variable selection details file
 
-\section{Normal Distributions Transformed to the Unit Simplex: The ALoVaS method. }\label{sec:ALN_chapter}
+\subsection{Normal Distributions Transformed to the Unit Simplex: The ALoVaS method. }\label{sec:ALN_chapter}
 
 This chapter outlines the additive logistic transformation, which transforms a $d$ dimensional multivariate normal distribution onto the unit simplex in $d+1$ dimensions. Note that the unit simplex in $d+1$ dimensions actually lies in a subspace of $d$ dimensions because of the constraint that the sum of the probabilities equals one. 
 
@@ -260,16 +260,12 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 %%%%---------END OF: Graphics from preliminary simulations using the simple sampler approach
 
 
-%\subsection{An Inverse Wishart Prior}
-%
-%The next generalization is to proceed via an Inverse Wishart prior approach. 
-%
-%\subsection{A Multivariate Half Cauchy Prior for $\Sigma$}
-%
-%Using the results of the Bayesian Analysis paper of Huang and Wand \cite{huang2013simple} we can provide a marginally non informative prior on $\Sigma$ which encourages sparsity.  
-%
-%\subsection{A Stochastic Search Variable Selection Approach}
-%
-%Using the results of George and McCulloch we can derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
-%
-%Include Geweke's Modification and Mitchell and Beauchamp
+\subsection{A Lasso Prior}
+
+\subsection{A Half-Cauchy or Horseshoe Prior for $\Sigma$}
+
+\subsection{A Stochastic Search Variable Selection Approach}
+
+Using the results of George and McCulloch we can derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
+
+

@@ -151,81 +151,39 @@ In this thesis proposal we provide a historical survey of the statistics and com
 %\section{Case Studies}
 %\label{ch:case_study_one}
 
+\section{Additive Logistic Variable Selection: The ALoVaS method}
+
 \input{normal_simplex_transform/previous_var_selection.tex}
-
-%\section{}
-%\label{ch:related}
-%
-%\section{}
-%\label{ch:}
-
-%The content of your proposal. Each topic occupies one section, each
-%with their own conclusion and future work.
 
 \input{proposed_further_research/proposed_further_research.tex}
 
+\input{Synthesis/synthesis.tex}
 
+\section{Discussion}
+\label{ch:discuss}
 
+Summarize what has been shown in the dissertation and point towards future research. Indicate challenges and areas of promise. 
 
+\begin{itemize}
+\item The necessity of variable selection in decision trees. 
+\item The pruning rule is not enough
+\item Bootstrapping has it's drawbacks. 
+\item DiVaS a method to handle Variable selection in Bayesian decision trees
+\item Limitations of DiVaS, ad-hoc nature etc. 
+\item ALoVaS method, conceptually a generic method tailored to your specific prior.
+\item Areas of future research needed in decision trees: Alternative terminal node models, more variable selection, and theoretical properties of Bayesian decision trees.
+\end{itemize}
 
-%\subsection{Variable Selection with Bootstrapping}
-%\label{ch:var_sel_boot}
-%
-%\section{Case Studies with Bootstrap Resampling}
-%\label{ch:case_boot_resamp}
-%
-%\subsection{Simulated Examples}
-%\label{ch:cbr_sim_ex}
-%
-%\subsection{UCI Machine Learning Repository Datasets}
-%\label{ch:cbr_UCI_MLR_data}
-%
-%\section{Using A Horseshoe Prior with a General Covariance Structure}
-%\label{ch:hp_gencov}
-%
-%
-%\section{Using A Lasso type prior}
-%
-%\subsection{Simulated Examples}R
-%\label{ch:csa_sim_ex}
-%
-%\subsection{UCI Machine Learning Repository Datasets}
-%\label{ch:csa_UCI_MLR_data}
+\subsection{Future Work}
 
-\section{Research plan}
-\label{ch:plan}
-
-This section provides an overview of what I have completed so far. Also, what still needs to be done.
-
-\subsection{Plan for completion of the research}
-
-Table \ref{tab:plan} shows my plan for completion of the research.
-
-\begin{table}[H]
-\begin{small}
-\hspace{-0.5in}
-%\begin{flushleft}
-\begin{tabular}{lll}
-Timeline & Work & Progress\\
-\hline
- Jan 2013   & Initial outline & completed\\
-Jan-May 2013.  & Chapters 1, 2, 3, and 4 writing & completed (mostly) \\
-February-Sept. 2013  & sampling methods (SSVS and horseshoe) & started (writing and code)\\
-February-Sept. 2013  & terminal node models paper (ZIP, ZINB,\newabbrev{abbrev:ZINB} ZIBinomial etc.) & not yet started (writing and code)\\
-Oct. 2013-Mar-Apr 2014 &  Local and lasso prior  & not yet started (writing or code)\\
-\end{tabular}
-%\end{flushleft}
-\end{small}
-\caption{Plan for completion of my research}
-\label{tab:plan}
-\end{table}
-
-Thus, I plan to defend my thesis at the end of the spring 2014. 
-
-%\section{Discussion}
-%\label{ch:discuss}
-%
-%Summarize what has been shown in the dissertation and point towards future research. Indicate challenges and areas of promise. 
+\begin{itemize}
+\item Zero-inflated (ZI) Bayesian decision trees (Bayes CART style)
+\item ZI Poisson and Negative Binomial trees compared to Greedy algorithms for ZI tree models. 
+\item Case study 1: Solder data 
+\item Case study 2: Nematode data 
+\item Case study 3: subterranean grapevine root intercept counts
+\item Tying it together: ZI Poisson and Negative Binomial methods with variable selection methods
+\end{itemize}
 
 \pagebreak
 
