@@ -52,7 +52,7 @@ source('/Users/rlucas7/ALoVaS/R_code/run_first_ALoVaS.r') # fur ALoVaS
 casper_data <- data.frame(Y,X)
 	n=1000
 	m=10
-	data_dim=101
+	data_dim=100
 	
 # SETTING UP DATA STRUCTURES....
 t_lh<-matrix(NA,nrow=n*m,ncol=1) #matrix tracks the likelihood of the tree at the current iteration of the MCMC chain
@@ -64,6 +64,9 @@ alpha_prime_store<-matrix(NA, nrow=n*m,ncol=length(alpha_prime))
 weight<-matrix(NA, nrow=n*m,ncol=length(alpha_prime)-1)
 count<-matrix(NA,nrow=n*m, ncol=length(alpha_prime))
 #INITIALIZATIONS
+f1 <- as.formula(paste(names(casper_data)[1],paste(names(casper_data)[-1],sep='', collapse='+'), collapse='~', sep='~') )
+
+t1 <- tree(f1, data=casper_data)
 
 t_lh[1]<-tree_lhood(t1,casper_data,theta=0,mult_penalty=FALSE)
 output[1,1]<-length(unique(t1$frame[,1]))-1
@@ -85,8 +88,7 @@ old_count<-0
 
 for(j in 1:m){
 	i<-1
-	tree_num<-sample(1:hmm,1,prob=x_double_prime)
-	tree1<-tree_init_mat[[tree_num]]
+	tree1<-t1
 	tree2<-tree1 
 	Z[i+1000*(j-1)]<-1
 	alpha_prime_store[i+1000*(j-1) ,]<-alpha_prime
@@ -165,11 +167,51 @@ for(i in 2:n){
 	}# end of for(i 1:n) loop
 } #end of for j in 1:m  loop
 
+objects()
+match(max(t_lh), t_lh)
+str(rtree[8330], max.level=1)
+
+rownames(tree1$frame )
+rownames(rtree[[8330]]$frame) 
+rtree[[8330]]
+tree1
+par(mfcol=c(1,1))
+getwd()
+pdf(file='greedy_tree_alovas_divas_compare.pdf')
+plot(tree1, type='uniform')
+text(tree1)
+dev.off()
+
+pdf(file='divas_tree_alovas_divas_compare.pdf')
+plot(rtree[[8330]], type='uniform')
+text(rtree[[8330]])
+dev.off()
+
+
+
 ####===========================EOC to fit the divas model===========================
 
 
 
 ####===========================SOC fit the alovas model=========================== 
+
+
+## make some data in the object format for the ALoVaS models
+
+	simulation_results<-vector(mode='list',length=4)
+	simulation_results[[1]]<-Y
+	simulation_results[[2]]<-X
+	simulation_results[[3]]<-true_beta
+	simulation_results[[4]]<-NULL
+	names(simulation_results)[1]<-'Y, the response vector'
+	names(simulation_results)[2]<-'X, the design matrix'
+	names(simulation_results)[3]<-'beta, the true coefficients'
+	str(simulation_results, max.level=1)
+
+## END OF MAKE SOME DATA IN THE OBJECT BLAH BLAH BLAH for the ALoVaS models
+
+
+
 delta_grid<-seq(from=1,to=25, by=1)
 MSE_grid<-seq(from=1,to=25, by=1)
 n<-length(delta_grid)
@@ -178,46 +220,33 @@ n
 results<-matrix(NA_real_, nrow=7, ncol=1)
 
 ptm <- proc.time()
-k <- 1
-j<-1
 
-for(j in 1:7){
-
-mz <-  my_cov[j,k]
-
-obj<-unbalanced(1000,num_cov=mz,one_hundredth)  
-obj1<-unbalanced(1000,num_cov=mz,one_hundredth)  
-
-
-
-for(i in 1:n){
+for(i in 2:n){
 	dg <- delta_grid[i]
-	ltree1<-lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = dg, vocal=TRUE)
-	MSE_grid[i] <- MSE_calc(ltree1,obj)
+	ltree1<-lasso_tree(sim=simulation_results,n=1000,m=1,r_p =1, delta = dg, vocal=TRUE)
+	MSE_grid[i] <- MSE_calc(ltree1,simulation_results)
 }
 
 mini <- match(min(MSE_grid),MSE_grid)
 optimum <- delta_grid[mini]
 # run one of these three
+
 ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
 #stree1<-ssvs_tree(sim=obj,n=100,m=1,sig_sq_nz = rep(1,mz), sig_sq_z = rep(dg,mz) , vocal=TRUE)
 #htree1 <- horseshoe_tree(sim=obj,n=1000,m=1,tau_sq = optimum, vocal=TRUE)
-# store results in one of these three
-results[j,k] <- MSE_calc(ltree1,obj1)
-#results[j,k] <- MSE_calc(stree1,obj1)
-#results[j,k] <- MSE_calc(htree1,obj1)
+
 # write results to one of these three
  write.csv(results, file='lasso_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
 
- }# end of j loop
+
  
 proc.time() - ptm
 system('echo "this goes into email" | mail "done" rlucas7@vt.edu' )
 
 getwd()
-setwd("/Users/rlucas7/thesis/")
+setwd("/Users/rlucas7/thesis/latex/comparing_alovas_n_divas")
 
 pdf(file='elbow_plot_lasso_compare.pdf')
 
