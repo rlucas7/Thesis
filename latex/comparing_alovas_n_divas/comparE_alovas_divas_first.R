@@ -223,20 +223,20 @@ ptm <- proc.time()
 
 for(i in 2:n){
 	dg <- delta_grid[i]
-	ltree1<-lasso_tree(sim=simulation_results,n=1000,m=1,r_p =1, delta = dg, vocal=TRUE)
-	MSE_grid[i] <- MSE_calc(ltree1,simulation_results)
+	htree1 <- horseshoe_tree(sim=simulation_results,n=1000,m=1,tau_sq = dg, vocal=TRUE)
+	MSE_grid[i] <- MSE_calc(htree1,simulation_results)
 }
 
 mini <- match(min(MSE_grid),MSE_grid)
 optimum <- delta_grid[mini]
 # run one of these three
-
-ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
+htree1 <- horseshoe_tree(sim=obj,n=1000,m=1,tau_sq = optimum, vocal=TRUE)
+#ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
 #stree1<-ssvs_tree(sim=obj,n=100,m=1,sig_sq_nz = rep(1,mz), sig_sq_z = rep(dg,mz) , vocal=TRUE)
 #htree1 <- horseshoe_tree(sim=obj,n=1000,m=1,tau_sq = optimum, vocal=TRUE)
 
 # write results to one of these three
- write.csv(results, file='lasso_compare_results.csv')
+ write.csv(results, file='horseshoe_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
 
