@@ -5,11 +5,11 @@ set.seed(1)
 library(tree)
 p<-100
 n<-500
-non_zero <- 10
+non_zero <- 3
 Y<- matrix(NA_real_, nrow=n, ncol=1)
 X<- matrix(NA_real_, nrow=n, ncol=p)
 true_beta <- c(rep(1 , non_zero), rep( 0 , p - non_zero))
-interact <- 4
+interact <- 0.5
 true_beta[p]<- interact
 ## simulate data 
 
@@ -223,25 +223,28 @@ ptm <- proc.time()
 
 for(i in 2:n){
 	dg <- delta_grid[i]
-	htree1 <- horseshoe_tree(sim=simulation_results,n=1000,m=1,tau_sq = dg, vocal=TRUE)
-	MSE_grid[i] <- MSE_calc(htree1,simulation_results)
+	ltree1<-lasso_tree(sim=simulation_results,n=1000,m=1,r_p =1, delta = dg, vocal=TRUE)
+	MSE_grid[i] <- MSE_calc(ltree1,simulation_results)
 }
 
 mini <- match(min(MSE_grid),MSE_grid)
 optimum <- delta_grid[mini]
 # run one of these three
-htree1 <- horseshoe_tree(sim=obj,n=1000,m=1,tau_sq = optimum, vocal=TRUE)
-#ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
+
+ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
 #stree1<-ssvs_tree(sim=obj,n=100,m=1,sig_sq_nz = rep(1,mz), sig_sq_z = rep(dg,mz) , vocal=TRUE)
 #htree1 <- horseshoe_tree(sim=obj,n=1000,m=1,tau_sq = optimum, vocal=TRUE)
 
 # write results to one of these three
- write.csv(results, file='horseshoe_compare_results.csv')
+ write.csv(results, file='lasso_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
  #write.csv(results, file='lasso_compare_results.csv')
 
-
- 
+ind <- match( min(ltree1[[1]]), ltree1[[1]] )   
+pdf(file='lasso_compare_tree2.pdf')
+plot(ltree1[[2]][[ind]], type='uniform')
+text(ltree1[[2]][[ind]])
+ dev.off()
 proc.time() - ptm
 system('echo "this goes into email" | mail "done" rlucas7@vt.edu' )
 

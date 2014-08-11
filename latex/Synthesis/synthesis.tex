@@ -19,16 +19,9 @@ A nice property of the ALoVaS method is that the if $p_i$, $p_j$ be the two cova
 Cov(log(p_j / p_k), log(p_l / p_m) ) = \sigma_{jl} + \sigma_{km} - \sigma_{jm} - \sigma_{kl},
 \end{equation}
 
-where $\sigma_{ij}$ is the covariance parameter for the normal random variable before the application go the ALT \cite{}. Clearly the four $\sigma_{ij} \geq 0$ in Equation \ref{eqn:cov_aln} so that the covariance could be positive or negative.  
+where $\sigma_{ij}$ is the covariance parameter for the normal random variable before the application of the ALT. Clearly the four $\sigma_{ij} \geq 0$ in Equation \ref{eqn:cov_aln} so that the covariance could be positive or negative.  
 
-At this point it is worth noting that the idea of an automatic interaction detector was first proposed in the CHAID method \cite{}. The CHAID method claims to automatically detect interactions, yet popular documents \cite{} (cite the sas tree book) claim that CHAID and other decision tree methods cannot actually perform automatic interaction detection. The validity of this claim is not the point of this paragraph but it should be clear to the reader how one could visually inspect a fitted tree and determine if interaction is plausible. Moreover, with the ALoVaS automatic interaction detection is plausible, by comparing the sampled values of $Cov(log(p_j/p_k), log(p_l/p_m) )$  against the point zero one gets an indication of the degree of interaction. Moreover we cannot determine if the interaction is positive or negative, only that an interaction is present. 
-
-\begin{itemize}
-\item Correlation of the dirichlet is only negative  
-\item Linear models with interactions  
-\item A relation with CHAID. Automatic interaction detection is not a myth! 
-\item Linear model with a positive interaction between $x_1$ and $x_2$. 
-\end{itemize}
+At this point it is worth noting that the idea of an automatic interaction detector was first proposed in the CHAID method \cite{kass1975significance}. The CHAID method claims to automatically detect interactions, yet popular documents \cite{ville2006decision} claim that CHAID and other decision tree methods cannot actually perform automatic interaction detection. The validity of this claim is not the point of this paragraph but it should be clear to the reader how one could visually inspect a fitted tree and determine if interaction is plausible. Moreover, with the ALoVaS automatic interaction detection is plausible, by comparing the sampled values of $Cov(log(p_j/p_k), log(p_l/p_m) )$  against the point zero one gets an indication of the degree of interaction. Moreover we cannot determine if the interaction is positive or negative, only that an interaction is present. If there was a desire to determine the sign of the interaction then the analyst would need to provide estimates of the parameters in Equation \ref{eqn:cov_aln} or alternately, we might estimate directly $Corr(p_i, p_j)$ with the Bayesian approach we take in the ALoVaS method either approach is feasible. 
 
 We now present a small simulation study. We sampled data according to the model describing in Equation \ref{eqn:interaction_model}. We simulated $n=500$ observations from this model for a training and another for a test, or hold-out data set. We simulated data under the model with $\beta =5, -5$. The trees fitted under a greedy optimization for the two interaction scenarios are shown in Figure \ref{fig:interaction_trees}. 
 
@@ -62,18 +55,27 @@ We ran the ALoVaS and DiVaS algorithms for $10,000$ samples discarding the first
 
 \subsection{Practical differences and a simulation study}
 
-\begin{itemize}
-\item Conceptual link between linear models  and decision trees with ALoVaS. 
-\item longer to simulate Alovas 
-\item DiVaS requires negative correlations, impossible to know \emph{a priori}
-\item Positive versus negative correlations, linear models and decision trees
-\end{itemize}
+While the theoretical differences are important to academics and applied researchers who want to understand the limitations of a specific method the questions most applied researchers tend to have are more Practical in nature and we address those questions in this section. 
 
+Practically speaking the ALoVaS and the DiVaS methods are different in terms of how you can think about selecting a variable to split on, or to remove, from the current decision tree. While the DiVaS method allows us to \emph{quantify} this different scenarios it does not allow us to think about these values in a manner we are familiar with, whereas the ALoVaS method allows us a nice, linear framework to understand these differences. 
+
+Apart from this there are other more practical differences between the DiVaS and ALoVaS methods. For example, the ALoVaS method takes much longer to simulate. This additional length should be no surprise given the difference in the number of parameters to simulate. In the ALoVaS model we typically have means, variances, and covariances to simulate one for each covariate and then global ones as well. This difference is one reason why the sampling takes longer. A second reason comes from the methods used to simulate the parameters from the DiVaS and ALoVaS methods. While the Dirichlet density is complicated because of the relationship with the gamma density there are highly optimized sampling codes for the Dirichlet density which have been used in production since at least the early 1990s and can be considered stable and highly optimized. In contrast, the lasso ALoVaS model for example requires sampling from a generalized inverse Gaussian density which is complicated to sample from. Nevertheless, there are well known accept-reject methods to sample the generalized inverse Gaussian density but they require more work to draw a sample(1.58 samples on average)  than more straightforward sampling methods like the polar method most commonly used to sample the Dirichlet density. In addition the sampling for the generalized inverse Gaussian density typically requires evaluating special functions like the Bessel function. 
+
+A further practical difficulty that distinguishes the two methods is the correlations between the covariate selection probabilities. Recall the DiVaS method requires that the correlations between covariate selection probabilities are negative \emph{a priori}. Whereas the ALoVaS method allows the correlation to be any value in the range $[-1,1]$, the typical area of support for a correlation. The practical difficulty then with the DiVaS method is that it is impossible to know whether the covariate selection probabilities are negative, positive, or zero. Thus, using the DiVaS method seems to be asking for errors of model misspecification. Moreover, if the model is linear with significant interactions as shown earlier in this chapter and we estimate the response with a decision tree then we will have positive covariate selection probabilities. 
+In fact any model having a curvature in two or more of the variables implies that when we build a decision tree we will have a positive covariate selection probability regardless of whether the generative model is linear or not, curvature of the model indicates positive covariate selection probabilities. 
+
+A reasonable question the reader may ask now is: if positive correlations of the covariate selection probabilities are a result of curvature when do negative correlation occur? In this case we would need covariates to split in the decision tree but we would want to select either $x_1$ say or $x_2$ but not both. As one simple example this might occur if the generative model was 
+
+\begin{equation}
+y_i = \beta_1x_1 + \beta_2x_2 + \epsilon_i
+\end{equation}
+ for $i=1, \dots, n$ and the two covariates $x_1$ and $x_2$ were such that $Corr(x_1, x_2) \neq 0$. In this case we see that knowledge of one covariate indicates knowledge of the other covariate as well, if not exact then at least approximately.   In this case we would need the generative model to be linear because the correlation  is a bilinear operator. In this case, we could choose to split on $x_1<c$ for some constant $c$ or we could choose to split on $x_2 < c^\prime$ for some value $c^\prime$ because the two covariates are correlated, knowledge of one implies approximate knowledge of the other and therefore we would only need to split on one and not the other covariate. Thus in this case if covariate $x_1$ is split on for example, the prevalence of a split on covariate $x_2$ would not only be unlikely, but it would also be unnecessary, provided  $|Corr(x_1, x_2)|$ was large enough. 
+ 
 \subsection{Conclusions and Recommendations}
 
-\begin{itemize}
-\item ALoVaS provides a conceptually simple generic method adaptable to the shrinkage needs of your own problem. 
-\item DiVaS is more of an ad-hoc method which can provide promising results. 
-\item ALoVaS is to be preferred over DiVaS. 
-\end{itemize}
+The similarities and the differences between the ALoVaS and DiVaS methods having been pointed out, we now turn to the conclusions and recommendations we have for the use of the two methods. 
+
+While the DiVaS method is a sound method several theoretical and practical difficulties arise when trying to implement the method. In contrast the ALoVaS method has few theoretical difficulties and the practical difficulties are primarily in terms of time to simulate which will typically not be an issue for scientific problems and most problems with no dynamic, or time varying component. Therefore, problems involving decision trees where the data occur on a timescale less than 1 day and especially less than an hour will likely not find use in the DiVaS and ALoVaS methods. Those needing these short timeframe models are likely to find some use in the time varying decision trees proposed by Gramacy, Taddy, and Polson \cite{taddy2011dynamic}. Moreover, the approach of the DiVaS method is more of an ad-hoc method lacking a unifying idea whereas the ALoVaS method has one underlying concept, the ALT to transform from a linear scale to a probability scale. 
+
+The conclusion then seems straightforward if one is to choose between the DiVaS and the ALoVaS methods one would choose the ALoVaS method in terms of its' theoretical soundness, its' conceptual link with linear methods and the ease of implementation. The key drawbacks being the run-time of the algorithm and the need to choose one of the regularization techniques discussed in this text or one of the plethora of other regularization techniques available in the statistics literature.  Regardless of this choice, the ALoVaS method is to be preferred. 
 
