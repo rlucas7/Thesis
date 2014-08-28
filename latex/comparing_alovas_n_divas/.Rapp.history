@@ -898,3 +898,86 @@ pdf(file='elbow_plot_lasso_compare.pdf')#
 #
 plot(delta_grid,MSE_grid/100,type='l')#
 dev.off()
+set.seed(1)#
+library(tree)#
+p<-100#
+n<-500#
+non_zero <- 10#
+Y<- matrix(NA_real_, nrow=n, ncol=1)#
+X<- matrix(NA_real_, nrow=n, ncol=p)#
+true_beta <- c(rep(1 , non_zero), rep( 0 , p - non_zero))#
+interact <- 0.5#
+true_beta[p]<- interact#
+## simulate data #
+#
+for(i in 1:n){#
+	X[i,1:(p-1)] <-rnorm(p-1, mean = 1, sd =1)#
+	X[i,p] <- X[i,1]*X[i,2]#
+	Y[i] <- rnorm(1,mean = sum( X[i,]*true_beta  ), sd=1 )#
+}# end of for i in 1:n looop#
+#
+lm_mod <- lm(Y~X)#
+tree_mod <- tree(Y~X)
+plot(tree_mod,type='uniform')
+text(tree_mod)
+set.seed(1)#
+library(tree)#
+p<-100#
+n<-500#
+non_zero <- 3#
+Y<- matrix(NA_real_, nrow=n, ncol=1)#
+X<- matrix(NA_real_, nrow=n, ncol=p)#
+true_beta <- c(rep(1 , non_zero), rep( 0 , p - non_zero))#
+interact <- 0.5#
+true_beta[p]<- interact#
+## simulate data #
+#
+for(i in 1:n){#
+	X[i,1:(p-1)] <-rnorm(p-1, mean = 1, sd =1)#
+	X[i,p] <- X[i,1]*X[i,2]#
+	Y[i] <- rnorm(1,mean = sum( X[i,]*true_beta  ), sd=1 )#
+}# end of for i in 1:n looop#
+#
+lm_mod <- lm(Y~X)#
+tree_mod <- tree(Y~X)
+plot(tree_mod,type='uniform')
+text(tree_mod)
+X<-X[,1:(p-1)]
+tree_mod <- tree(Y~X)
+plot(tree_mod,type='uniform')
+text(tree_mod)
+simulation_results<-vector(mode='list',length=4)#
+	simulation_results[[1]]<-Y#
+	simulation_results[[2]]<-X#
+	simulation_results[[3]]<-true_beta#
+	simulation_results[[4]]<-NULL#
+	names(simulation_results)[1]<-'Y, the response vector'#
+	names(simulation_results)[2]<-'X, the design matrix'#
+	names(simulation_results)[3]<-'beta, the true coefficients'#
+	str(simulation_results, max.level=1)#
+#
+## END OF MAKE SOME DATA IN THE OBJECT BLAH BLAH BLAH for the ALoVaS models#
+delta_grid<-seq(from=1,to=25, by=1)#
+MSE_grid<-seq(from=1,to=25, by=1)#
+n<-length(delta_grid)#
+n#
+#
+results<-matrix(NA_real_, nrow=7, ncol=1)
+ptm <- proc.time()#
+#
+for(i in 2:n){#
+	dg <- delta_grid[i]#
+	ltree1<-lasso_tree(sim=simulation_results,n=1000,m=1,r_p =1, delta = dg, vocal=TRUE)#
+	MSE_grid[i] <- MSE_calc(ltree1,simulation_results)#
+}#
+#
+mini <- match(min(MSE_grid),MSE_grid)#
+optimum <- delta_grid[mini]#
+# run one of these three#
+#
+ltree1 <- lasso_tree(sim=obj,n=1000,m=1,r_p =1, delta = optimum, vocal=TRUE)
+ind <- match( min(ltree1[[1]]), ltree1[[1]] )   \
+ind <- match( min(ltree1[[1]]), ltree1[[1]] )
+plot(ltree1[[2]][[ind]], type='uniform')
+text(ltree1[[2]][[ind]])
+plot(delta_grid,MSE_grid/100,type='l')
