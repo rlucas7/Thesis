@@ -1,0 +1,38 @@
+\section{Introduction}
+\label{ch:intro}
+
+%Include an introductory paragraph here befroe the start of section 1.1.
+
+% Citing previous \cite{breiman1984classification} and current  \cite{gramacy2012categorical} work
+
+%\subsection{The Scope and Nature of This Thesis}
+
+%list/outline 
+
+% what is the goal of this thesis? 
+
+This thesis outlines variable selection as a genre of research in the intersecting domains of statistics, computer science (CS) and other data sciences, including several related subfields of CS \newabbrev{abbrev:CS} and statistics. Our goal is to develop methods to perform \emph{explicit} variable selection within a decision tree model. We emphasize ``explicit'' because there are several \emph{ad hoc} methods that are currently common in applied practice. These \emph{ad hoc} methods perform variable selection using decision trees, usually with little theoretical justification, and no notion of measure on the individual variables. 
+
+Towards our goal, we give an historical overview of decision trees, surveying literature from both CS and statistics, spanning seven decades. While an exhaustive literature review would be a Herculean task, we seek to examine a representative sample of literature to give the reader sufficient knowledge of the choices and strategies applied by researchers. 
+What will emerge is a confluence of several fields including mathematics, statistics, CS and related subdomains applying their own methods of research into this diverse subdomain of study.     
+
+% traditional role of variable selection.
+
+We are fundamentally looking toward variable selection as the goal, but a reasonable question to ask is ``who cares?''; why should we think that variable selection is worth studying? Moreover, why should we study variable selection in this very specific subdomain of decision trees? The simplest answer is that datasets are getting bigger. Cheap computing power and the march towards an interconnected web of business, socialization and life has nearly automated many data collection processes. This automation has created a 21st century gold rush into any academic pursuit that trains an individual to work with data. %In addition, capital investments have followed recognizing the potential for overnight wealth creation with the properly chosen and implemented idea.
+Thus, big datasets are here to stay.
+
+ Big data can mean a large number of observations, or a large number of variables. In this thesis we are mainly concerned with a large number of variables. Specifically, we study methods to choose subsets of variables from a decision tree model in reasonable ways. 
+
+% methods of VS: forward, backward, stepwise<- ?are these the same? -> stagewise, SSVS: spike-slab etc. Geweke's approach, RJMCMC, any I missed? 
+
+There are many well known statistical models, perhaps the most common is the linear model. A straight forward extension to the linear model is the transformed linear model, known as the generalized linear model (hereafter abbreviated GLM). \newabbrev{abbrev:GLM} Further extensions allow for random effects, known as GLMMs \newabbrev{abbrev:GLMM}(the extra M stands for `mixed'). The earliest developed variable selection techniques are usually considered to be the forward, backward, and stepwise techniques. These three techniques were originally studied for linear regression models in the 1960s. Examining historically, as we do in the next subsection, we will see that decision trees were also one of the first forms of variable selection when the landmark paper by Morgan and Sonquist \cite{morgan1963problems} was published. This groundbreaking work would not be fully appreciated in the research community for nearly two decades. Finally in the 1990s and the first decade of this century, the methods employed in this original paper would be in widespread use, in both academia and industry. 
+
+% straightforward implementation for linear models, GLM and GLMM are straightforward extensions. How to accomplish VS in context of decision trees? 
+
+%One of the primary benefits of the linear model is stated within its' name \emph{linearity}. Linearity makes conceptualizing, computation, and interpretation simple. The original benefit of the theory of the GLM model was that codes previously used for weighted least squares could be used to fit GLM models with relatively little change. An additional benefit of the GLM model is the linearity in the transformed space. This linearity allows an analyst to apply all the variable selection methods from the linear model to the GLM (and GLMM) models. Contrast this with the decision tree model where there is no linearity in the tree model. The recursive partitioning model was proposed initially to handle complex survey data \cite{morgan1963problems} and deal with interactions that the linear model cannot handle or would be too complicated to practically handle. As with most things this model change represents a compromise between simplicity of the model and simplicity of the computational procedure that returns the estimator. 
+
+This introductory chapter only outlines the material to be discussed in the subsequent thesis. We give a literature review of decision trees in the proceeding two subsections of this chapter. The final subsection of this chapter provides a brief literature review of variable selection methods. Chapter 2 gives an overview of the various decision tree models discussed in this thesis and gives some technical details about the models. Chapter 3 presents variable selection methods for decision trees using a Dirichlet type prior approach for covariate selection. In Chapter 3 we discuss a class of methods for variable selection proposed by the author of this thesis. Chapter 4 presents case studies of decision tree variable selection methods using simulated data and using data taken from the UCI \newabbrev{abbrev:UCI}machine learning repository \cite{Frank:2010uq}. Chapter 5 presents an alternative approach using normal distributions as a variable selection distribution and transforming to a probability scale using a transform we call the ALN \newabbrev{abbrev:ALN}transform. We call this method the additive logistic variable selection (ALoVaS) method. 
+This chapter shows how the class of methods from Chapter 3 can be used to solve the decision tree variable selection problem using non-Dirichlet priors for the probability of selecting a covariate. Chapter 6 presents a case study of the ALoVaS method applied to the internet ads dataset. Chapter 7 Compares  and contrasts the DiVaS and ALoVaS methods. Finally, Chapter 8 discussed and synthesizes the results and conclusions of the thesis and points to future work. %what is a decision tree 
+
+
+

@@ -2,9 +2,9 @@
 \label{ch:preliminaries}
 This chapter provides an overview of the models used for decision tree induction and variable selection. We begin by discussing the earliest methods of induction: greedy algorithms. With the advance of time (about a decade) greedy induction approaches became fully developed high quality fortran codes. Bayesian approaches to building decision trees were not possible until advances in computing power and the rediscovery of sampling based approaches to Bayesian statistics became popular again. While the work of Breiman et al \cite{breiman1984classification} always contained a Bayesian flavor, no probability measure over trees was ever proposed. That is until the groundbreaking works of Denison, Mallick and Smith \cite{denison1998bayesian} and Chipman, George, and Mcculloch \cite{chipman1998bayesian}.
 
- During the same time (the 1990s and the 2000s), researchers in Machine Learning and Statistics were developing theory beyond that published by Breiman et al. \cite{breiman1984classification}, that ensured decision trees were consistent. In this case consistency means the error rate of the tree converges to the Bayes error. The initial impetus for this work stemmed from the landmark paper of Vapnik and Chervonenkis \cite{vapnik1971uniform}, and subsequent work \cite{vapnik2000nature}, though it would take over a decade for the full power of their combinatorial approach to be widely used in both Machine Learning and Statistics. 
+ During the same time (the 1990s and the 2000s), researchers in Machine Learning and Statistics were developing theory beyond that published by Breiman et al. \cite{breiman1984classification}, that ensured decision trees were consistent. In this case consistency means the error rate of the tree converges to the Bayes error. The initial impetus for this work stemmed from the landmark paper of Vapnik and Chervonenkis \cite{vapnik1971uniform}, and subsequent work by Vapnik\cite{vapnik2000nature}, though it would take over a decade for the full power of their combinatorial approach to be widely used in both Machine Learning and Statistics. 
 
-This chapter collects necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Subsection \ref{ch:p1sub_greedy_ind} and subsection \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
+This chapter collects necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
 
 \subsection{Greedy Induction}
 \label{ch:p1sub_greedy_ind}
@@ -27,19 +27,27 @@ The impurity functions given in Breiman et al. \cite{breiman1984classification} 
 \item Gini: $\phi(p, 1-p)=2p(1-p)$.
 \item Misclass probability: $\phi(p, 1-p)=min(p,1-p).$
 \end{enumerate}
-If a regression tree is to be built/inducted, in place of an impurity function, we use the mean squared error criteria denoted here as  
 
-$$\text{MSE}: \phi(y_i, \bar{y})=\sum_i(y_i-\bar{y})^2.$$
-The greedy approach to decision tree induction always tries to optimize impurity functions. The optimization problems are known to be NP-Hard (for an introduction to complexity theory c.f. Garey and Johnson \cite{garey1979computers}). Briefly NP-Hard optimization problems are considered some of the hardest optimization problems to solve. These optimization problems increase exponentially in the size of the problem. Therefore, exact methods would nearly always take too long to compute and thus greedy strategies are used to approximate the global optimum, assuming one exists, with a local optimum. 
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=.7]{figures/impurity_plot.pdf}
+  \caption{A plot of the three impurity functions: entropy (solid line), Gini (thatched line), and misclass probability (dots).  }
+  \label{fig:impurity}
+\end{figure}
+
+The three impurity functions are plotted in Figure \ref{fig:impurity}. If a regression tree is to be built/inducted, in place of an impurity function, we use the mean squared error criteria denoted
+
+$$\text{MSE}: \phi(y_i, \bar{y})=\frac{\sum_{i=1}^n(y_i-\bar{y})^2}{n}.$$
+The reader should note the greedy approach to decision tree induction always tries to optimize impurity functions. The optimization problems are known to be NP-Hard (for an introduction to complexity theory c.f. Garey and Johnson \cite{garey1979computers}). Briefly NP-Hard optimization problems are considered some of the hardest optimization problems to solve. These optimization problems increase exponentially in the size of the problem. Therefore, exact methods will nearly always take too long to compute and thus greedy strategies are used to approximate the global optimum, assuming one exists, with a local optimum. 
 \subsubsection{Induction}
 The induction of decision trees proceeds by solving the objective function
 
 \begin{equation}
 \underset{t,s}{argmax} \Delta\phi = \phi - \pi_L\phi_L-\pi_R\phi_R.
 \end{equation}
-Here the variable $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$, and similarly defined subscripted impurity functions. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. 
+Here the variables $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$, and similarly defined subscripted impurity functions. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. 
 
-The tree induction process continues until no more data points are incorrectly classified, or a predetermined stopping rule is met. Once the full tree has been built, the second stage of the process now starts. This is known as the pruning stage. Now that the full tree is grown, we progressively prune back terminal nodes of the tree until the root node occurs. Several related approaches have been proposed in the literature to select the optimal tree via pruning. The most common is to select the tree using the regularized risk estimate given in Equation \ref{eqn:reg_risk_est} \newnot{symbol:risk_tree}
+The tree induction process continues until no more data points are incorrectly classified, or a predetermined stopping rule is met. A common stopping rule is to stop when there are less than $5$ observations in a terminal node. Once the full tree has been built, the second stage of the process now starts. This is known as the pruning stage. Now that the full tree is grown, we progressively prune back terminal nodes of the tree until the root node occurs. Several related approaches have been proposed in the literature to select the optimal tree via pruning. The most common is to select the tree using the regularized risk estimate given in Equation \ref{eqn:reg_risk_est} \newnot{symbol:risk_tree}
 
 \begin{equation}\label{eqn:reg_risk_est}
 R(\mathcal{T}_i,\alpha) = R(\mathcal{T}_i) + \alpha \vert \mathcal{T}_i \vert. 
@@ -49,7 +57,7 @@ Here the $\alpha$ parameter is a regularization parameter with larger values of 
 
 Discussion of consistency of this pruning rule can be found in Devroye et al. \cite{devroye1996probabilistic}, Breiman et al. \cite{breiman1984classification}, Gey \cite{gey2005model}, and Suav\'{e} and Tuleau-Malot \cite{sauve2011variable}. All the theoretical results require controlling the complexity of the decision tree, $\vert\mathcal{T}\vert$, and allowing the number of data points $n\to\infty$. However, the results in Devroye et al. \cite{devroye1996probabilistic} also give explicit bounds on the error of decision tree classifiers for finite values of $n$. 
 
-The pruning rule discussed here, and the induction process overall, is an implicit form of model selection. This is implicit because the variables that are selected are considered important and those variables not selected are considered not important. Furthermore, no measure of importance on each variable is defined, so it is difficult to rank variables based on importance. A remedy, called variable importance (abbreviated VIMP) \newabbrev{abbrev:VIMP}was proposed in the literature by Breiman \cite{breiman2001random}, but this is in the context of random forests and not for a single decision tree. We proposed several different methods to perform explicit variable selection for Bayesian decision trees in later chapters.   
+The pruning rule discussed here, and the induction process overall, is an implicit form of model selection. This is implicit because the variables that are selected are the variables left in the tree after pruning. Those variables considered important are the variables that remain and those variables not selected are considered not important. Furthermore, no measure of importance on each variable is defined, so it is difficult to rank variables based on importance. A remedy, called variable importance (abbreviated VIMP) \newabbrev{abbrev:VIMP}was proposed in the literature by Breiman \cite{breiman2001random}, but this is in the context of random forests and not for a single decision tree. We proposed several different methods to perform explicit variable selection for Bayesian decision trees in later chapters.   
 
 \subsubsection{A Simple Example}
 
@@ -86,11 +94,11 @@ Now, because all the data is sorted, the same $\Delta\phi$ values will result fo
 
 \begin{figure}
 \begin{center}
-\tikzset{every tree node/.style={minimum width=2em,draw,circle},
+\tikzset{every tree node/.style={minimum width=4em,draw,circle},
          blank/.style={draw=none},
          edge from parent/.style=
          {draw, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
-         level distance=1.5cm}
+         level distance=3cm}
 \begin{tikzpicture}
 \Tree
 [. $x_1\leq 6.5$     
@@ -105,12 +113,12 @@ Now, because all the data is sorted, the same $\Delta\phi$ values will result fo
 \caption[A simple decision tree]{The decision tree after the first split.}
 \label{fig:dtree_firststep}
 \end{figure}
-We would then continue calculating $\Delta\phi$s for the resulting data that falls into each of the two resultant terminal nodes, continuing until there is only one observation in each terminal node, or until there is some specified number of observations in each terminal node. Although any number is possible, the specified minimum number of observations in each terminal node is usually 5. Once this process is completed, the induction step is finished, and the pruning process begins. 
+If we had more than $3$ observations, we would then continue calculating $\Delta\phi$s for the data that falls into each of the two resultant terminal nodes, continuing until there is only one observation in each terminal node, or until there is some specified number of observations in each terminal node. Although any number is possible, the specified minimum number of observations in each terminal node is usually 5. Once this process is completed, the induction step is finished, and the pruning process begins. 
 
 %\subsection{Bayesian Approaches}
 %\label{ch:p2sub_bayes}
 % the section and label are contained in the file with filepath beneath
-\input{overview_chapter/bayesian_approaches_section/bayes_decision_tree.tex}
+\input{bayes_decision_tree.tex}
 
 \subsection{Previous Variable Selection}
 \label{ch:p4sub_var_sel}
@@ -133,13 +141,13 @@ Taddy, Gramacy and Polson propose using samples and estimating the integrals wit
 \subsection{Derivations}
 \label{ch:p3sub_theory}
 
-This subsection contains the mathematical details for calculating the integrals to get the closed form solutions for the integrated likelihood equations in this chapter.   
+This subsection contains the mathematical details for calculating the integrals to get the closed form solutions for the integrated likelihood equations of the ZIP model described in this chapter.   
 
 %\subsubsection{Normal Derivation}
 
 \subsubsection{ZIP Derivations}
 
-In this section we provide the derivation for the integrated likelihood for the Bayes ZIP\newabbrev{abbrev:ZIP} (zero inflated poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime}$ will index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
+In this section we provide the derivation for the integrated likelihood for the Bayes ZIP\newabbrev{abbrev:ZIP} (zero inflated Poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime}$ will index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
 
 \begin{align*}
 \Pr(Y \vert X, \mathcal{T}) &= \prod_{i=1}^b\int_0^1\int_0^\infty\prod_{j=1}^{n_i}\left[\mathds{1}[y_{ij}=0](\phi+(1-\phi)\exp{(-\lambda)})+\mathds{1}[y_{ij}>0]\frac{\exp{(-\lambda)\lambda^{y_{ij}}}}{y_{ij}!} \right]\pi(\phi_i,\lambda_i )d\lambda_id\phi_i\\
