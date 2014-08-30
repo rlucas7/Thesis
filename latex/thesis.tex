@@ -11,7 +11,8 @@
 \usepackage{amsthm,fullpage}
 \usepackage{graphicx,float,hyperref}
 \usepackage{verbatim}
-
+\usepackage{multirow} % for column and two spanning in tables
+\usepackage{subfigure}
 
 %%%%----------------------------------------- Code for notation list
 % Macro for 'List of Symbols', 'List of Notations' etc...
@@ -24,8 +25,7 @@
 %%%%----------------------------------------- Code for abbreviation list
 % Macro for 'abbreviations' etc...
 \def\listofabbreviations{\input{abbreviations} \clearpage}
-\def\addabbrev #1: #2#3{#1 \> \parbox{7in}{#2 \dotfill \pageref{#3}}\\} 
-\def\newabbrev#1{\label{#1}} 
+\def\addabbrev #1: #2#3{#1 \> \parbox{7in}{#2 \dotfill \pageref{#3}}\\} \def\newabbrev#1{\label{#1}} 
 %%%%%--------------------------------------End of code for notation list
 
 
@@ -49,6 +49,8 @@
 \newcommand{\iid}[0]{$i.i.d.$}
 \newcommand{\invgam}[3]{\text{Inv-Gamma}({#1}\vert{#2},{#3})}
 \newcommand{\Sbeta}[4]{S\beta(#1\vert#2, #3, #4)}
+\newcommand{\ALT}{ALT}
+\newcommand{\ALN}{ALN}
 %\usepackage[mathscr]{euscript} 
 % for less fancy script letters... $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$
 
@@ -61,7 +63,7 @@
 % For letter-size paper: 8.5 in x 11 in
 % Latex Origin is 1''/1'', so measurements are relative to this.
 
-\linespread{1.4} % 1.6 = double space, 1.3 = 1.5 space comment out for regular
+\linespread{1.6} % 1.6 = double space, 1.3 = 1.5 space comment out for regular
 
 
 \topmargin      0.0in
@@ -165,7 +167,9 @@ In this thesis proposal we provide a historical survey of the statistics and com
 
 \input{normal_simplex_transform.tex}
 
-\input{proposed_further_research.tex}
+\input{ALOVAS.tex}
+
+\input{alovas_ex_and_case_study}
 
 \input{synthesis.tex}
 
@@ -185,7 +189,7 @@ In this thesis proposal we provide a historical survey of the statistics and com
 
 
 \bibliographystyle{abbrv}
-\bibliography{tree_biblio,tree_biblio1}
+\bibliography{tree_biblio,tree_biblio1,tree_biblio2}
 
 
 \end{document}

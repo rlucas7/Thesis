@@ -1,6 +1,6 @@
 % previous variable selection details file
 
-\subsection{Normal Distributions Transformed to the Unit Simplex: The ALoVaS method. }\label{sec:ALN_chapter}
+\subsection{Normal Distributions Transformed to the Unit Simplex: ALT and ALN Dynamics. }\label{sec:ALN_chapter}
 
 This chapter outlines the additive logistic transformation, which transforms a $d$ dimensional multivariate normal distribution onto the unit simplex in $d+1$ dimensions. Note that the unit simplex in $d+1$ dimensions actually lies in a subspace of $d$ dimensions because of the constraint that the sum of the probabilities equals one. 
 
@@ -264,29 +264,28 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 Using the results of George and McCulloch we can derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
 
 
-We investigate several priors for use in variable selection with decision trees. They are: 
+We investigate three priors for use in variable selection with decision trees. They are: 
 
 \begin{itemize}
 \item A stochastic search approach (method of George and McCulloch and Cui and George) \cite{cui2008empirical,george1993variable}. 
 \item A lasso prior on the means of the MVN, \newabbrev{abbrev:MVN} probably using parameter expansion to get Gibbs updates \cite{park2008bayesian}. 
 \item A multivariate half-Cauchy prior using parameter expansion (Huang and Wand method) \cite{huang2013simple,polson2011half,carvalho2010horseshoe,carvalhohandling}. 
-\item A `local' prior approach (Valen Johnson and David Rossell JRSS B 2010 approach) \cite{johnson2010use}. 
 \end{itemize}
 
 We will discuss the preliminary details of each method in sequence in this chapter. 
 
 Variable selection with SSVS facilitates a Bayesian approach to variable selection in decision trees. Prior methods have examined bootstrapping approaches and used some complicated math to allow the statistician to peer inside the black box method known as randomForest \cite{ishwaran2010high, ishwaran2007variable}, often with little insight or understanding. The SSVS prior allows us to ``test'' whether the constant prior probability of selecting a covariate for all dimensions is appropriate for the given dataset. This means we can test, for any dataset, whether the CGM model of covariate selection is appropriate.
 
-We will implement and compare our method against other methods such as observed frequency, a na\"{i}ve method, as well as the maximal subtree approach of Ishwaran et al. \cite{ishwaran2010high, ishwaran2007variable}. The SSVS approach involves a prior on the normal means of the form 
+%We will implement and compare our method against other methods such as observed frequency, a na\"{i}ve method, as well as the maximal subtree approach of Ishwaran et al. \cite{ishwaran2010high, ishwaran2007variable}. The SSVS approach involves a prior on the normal means of the form 
 
 \begin{equation}
-\pi(\mu_i\vert \tau_i, p_i, c_i) \propto p_iN(\mu_i, \tau_i^2)+(1-p_i)N(\mu_i, c_i^2\tau_i^2).
+\pi(\mu_i\vert \tau_i, p_i, c_i) \propto p_iN(\mu_i, \tau_i^2)+(1-p_i)N(\mu_i, \psi^2_i+\tau_i^2).
 \end{equation}
 
-Here the $c_i >1$ and $1>\tau_i>0$ is small. Usually $p_i\equiv1/2$ but it is also possible to put a prior on these hyper-parameters. The advantage of a mixture prior in this form is that Gibbs samples are readily available for each of the desired quantities facilitating fast sampling.     
+Here the $\psi_i >0$ and the $\tau_i>0$. Usually $p_i\equiv1/2$ but it is also possible to put a prior on these hyper-parameters. The advantage of a mixture prior in this form is that Gibbs samples are readily available for each of the desired quantities facilitating fast sampling.     
 
-\subsection{A Lasso Prior}
-In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means for each covariate in the normal space. We use the ALN transform to then convert to probabilities. 
+\subsection{Parameter Expansions For the Lasso and Horseshoe Priors}
+In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means ($\mu_j$) for each covariate in the normal space. We use the ALN transform to then convert to probabilities. 
 The key idea we use for parameter expansion is the scale mixture of normals representation of a Laplace prior. This representation is stated here for reference.
 
 If $V \sim \text{Exponential(1)}$ and $Z \sim N(0, 1)$ independent of $V$, then $X = \mu + b \sqrt{2 V}Z \sim \mathrm{Laplace}(\mu,b)$. 
