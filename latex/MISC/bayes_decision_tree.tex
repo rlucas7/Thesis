@@ -153,7 +153,7 @@ If we wanted to model the data using a different data generating process, for ex
  \subsubsection{A Bayesian Zero Inflated Poisson Model}
  %\textbf{Write out the details of this model here and cite applied statistics paper which uses a greedy approach.}
  
- Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero's and Lee and Jin \cite{lee2006decision} propose using a zero inflated (ZIP) Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
+ Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero's and Lee and Jin \cite{lee2006decision} propose using a zero inflated (ZIP)\newabbrev{abbrev:ZIP} Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
  
  The likelihood for a single observation is 
  \begin{equation}
@@ -177,4 +177,6 @@ If we wanted to model the data using a different data generating process, for ex
  \Pr(Y\vert X, \mathcal{T})& = \left[\sum_{j=0}^{n_0} {n_0 \choose j}\frac{\Gamma(\alpha+\beta)\Gamma(\alpha+j)\Gamma(n_0+\beta-j)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha+\beta+n_0)}\left(\frac{n_0-j+\beta_{\lambda}^{-1}}{\beta_{\lambda}}\right)^{\alpha_{\lambda}} \right] \\ \nonumber
  & + \frac{\Gamma(\alpha_{\lambda}+n_+\bar{y}_+)}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}\left(n_+ + 1/\beta_{\lambda} \right)^{\alpha_{\lambda}+n_+\bar{y}_+}.
 \end{align}
+
+A similar calculation may be performed for a response variable that is distributed as a zero-inflated negative binomial random variable (ZINB).\newabbrev{abbrev:ZINB}
  

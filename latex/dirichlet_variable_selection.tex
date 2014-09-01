@@ -1,4 +1,5 @@
-
+ \section{Dirichlet Variable Selection For Decision Trees: The DiVaS method}
+\label{ch:var_select}
 
 %subsection{Introduction}
 Many data analysis procedures, originally designed for inference in low dimensional spaces, create difficulties when dealing with high dimensional data.  Often data analysts use low dimensional intuition and apply similar logic to high dimensional data, which can often lead to erroneous conclusions. The approach outlined in this thesis not only moves around the high dimensional space efficiently, but also indicates with a high degree of probability which covariates are useful in determining the response at the tree nodes. In addition, we retrieve summary data indicating which dimensions are useful assisting the data analyst in the interpretation of results. Our primary focus in this thesis is on inferring a structural relationship between dimensions and the response of interest, with a preference towards interpretability. 
@@ -348,7 +349,7 @@ $\Pr(\text{covariate 2 selected})$ & 0.33806 & 0.10795 & 0.10835 & 0.12376 & 0.0
 
 From Table \ref{tab:sim_study} it is clear that the weighted method outperforms the four other methods in correctly selecting the important covariates. Also, our weighted method selects the correct covariates jointly better than the other methods. Moreover, our weighted method selects incorrect covariates less often. whereas the other methods have a higher frequency of incorrectly selecting covariates. It is important to note that theoretically we do not want the entries in the last line to approach zero. If we did this then the MCMC would get immediately stuck in a local maximum of the likelihood space and would not find many good local maxima. Our weighted method is able to more evenly balance the search for new local maxima with the search for the correct splits and tree topology within the basin of attraction of the current local maximum. This leads to improved searching of the tree space and leads to better trees in terms of inference, which are competitive in terms of prediction.  
 
-\section{A Case Study}\label{sec:real_data}
+\section{A Case Study of the DiVaS Model}\label{sec:real_data}
 In this section we compare our method against the greedy approach and the CGM approach using the publicly available internet ads dataset from the UCI data repository \cite{Frank:2010uq}. The internet ads data set contains 1558 covariates, some numeric and some categorical. The data set was first used in a paper by Kushmerick \cite{kushmerick1999learning} and has since been used in several statistical classification studies. The UCI machine learning repository contains a more complete listing of papers using this dataset. 
 
 As noted by Kushmerick \cite{kushmerick1999learning}, there are several reasons for wanting to remove advertisements from webpages. Some reasons are: Images tend to dominate a page’s total download time, users dislike paying for services indirectly through advertisers, preferring direct payment for services rendered, and malicious software can be unintentionally placed on a user's machine through images masked as advertisements. 

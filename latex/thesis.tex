@@ -17,7 +17,7 @@
 %%%%----------------------------------------- Code for notation list
 % Macro for 'List of Symbols', 'List of Notations' etc...
 \def\listofsymbols{\input{symbols} \clearpage}
-\def\addsymbol #1: #2#3{$#1$ \> \parbox{5.5in}{#2 \dotfill \pageref{#3}}\\} 
+\def\addsymbol #1: #2#3{$#1$ \> \parbox{4.5in}{#2 \dotfill \pageref{#3}}\\} 
 \def\newnot#1{\label{#1}} 
 %%%%%--------------------------------------End of code for notation list
 
@@ -25,7 +25,7 @@
 %%%%----------------------------------------- Code for abbreviation list
 % Macro for 'abbreviations' etc...
 \def\listofabbreviations{\input{abbreviations} \clearpage}
-\def\addabbrev #1: #2#3{#1 \> \parbox{7in}{#2 \dotfill \pageref{#3}}\\} \def\newabbrev#1{\label{#1}} 
+\def\addabbrev #1: #2#3{#1 \> \parbox{6in}{#2 \dotfill \pageref{#3}}\\} \def\newabbrev#1{\label{#1}} 
 %%%%%--------------------------------------End of code for notation list
 
 
@@ -95,7 +95,7 @@ Virginia Tech \\
 
 \pagebreak
 \begin{abstract}
-In this thesis proposal we provide a historical survey of the statistics and computer science research in decision trees. We review both the greedy and Bayesian approaches to decision tree induction and propose a novel modification to previous Bayesian decision tree methods. Our approach facilitates covariate selection explicitly in the model, something not present in most previous research. Covariate selection is facilitated by a transform, which we define,  that allows us to use priors from linear models. Using this transform, we are able to modify many common approaches to variable selection in the linear model and bring these methods to bear on the problem of explicit covariate selection in decision tree models. We also provide theoretical guidelines, including a theorem, which gives necessary and sufficient conditions for consistency of decision trees in infinite dimensional spaces. Our examples and case studies use both simulated and real data cases with moderate to large numbers of covariates. The examples give support to the claim that, in large dimensional covariate datasets, if decision tree methods are to be applied, the approach presented here is to be preferred.   
+In this thesis we provide a historical survey of the statistics and computer science research in decision trees. We review both the greedy and Bayesian approaches to decision tree induction and propose a novel modification to previous Bayesian decision tree methods. Our approach facilitates covariate selection explicitly in the model, something not present in most previous research. We define a transformation that allows us to use priors from linear models tp facilitate covariate selection in decision trees. Using this transform, we modify many common approaches to variable selection in the linear model and bring these methods to bear on the problem of explicit covariate selection in decision tree models. We also provide theoretical guidelines, including a theorem, which gives necessary and sufficient conditions for consistency of decision trees in infinite dimensional spaces. Our examples and case studies use both simulated and real data cases with moderate to large numbers of covariates. The examples support the claim that the approach presented here is to be preferred in large dimensional datasets. Moreover, the approach approach shown here has, as a special case, the most commonly used previous approach.    
 
 %The thesis proposal is a type of contract between the faculty and the student. 
 %An accepted thesis proposal indicates that the work proposed by the student, 
@@ -134,38 +134,16 @@ In this thesis proposal we provide a historical survey of the statistics and com
 \cleardoublepage
 \pagenumbering{arabic}
 
-%\section{Introduction}
-%\label{ch:intro}
-
+% intro chapter
 \input{intro_chapter.tex}
- 
-% input for Chapter \ref{ch:var_select}
- 
+
+% Chapter on Decision trees and on Bayes Decision trees
 \input{overview_chapter.tex}
-\subsection{Related Work}
-\label{ch:related}
 
-\input{stat_lit_review.tex}
-
-\subsubsection{A Brief Overview of Variable Selection Methods}
-
-\input{var_select_section_intro.tex}
-
-
-%The content of your proposal. Each topic occupies one section, each
-%with their own conclusion and future work.
-
-
- \section{Dirichlet Variable Selection For Decision Trees: The DiVaS method}
-\label{ch:var_select}
+%% Chapter on DiVaS method 
 \input{dirichlet_variable_selection.tex}
 
-%\section{Case Studies}
-%\label{ch:case_study_one}
-
-\section{Additive Logistic Variable Selection: The ALoVaS method}
-
-\input{normal_simplex_transform.tex}
+%% Chapter(s) on ALoVaS method
 
 \input{ALOVAS.tex}
 

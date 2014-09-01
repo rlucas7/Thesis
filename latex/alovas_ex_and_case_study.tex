@@ -1,4 +1,4 @@
-\section{Examples}\label{sec:Examples}
+\section{ALoVaS Examples and a Case Study}\label{sec:Examples}
 
 In this section we present simulation studies to illustrate properties of our methods. The two illustrated properties are handling multi-modality and handling highly non-balanced categorical response variable class probabilities. Following these simulation studies we present a case study using the internet ads dataset from the UC-Irvine machine learning database \cite{Frank:2010uq}. 
 
@@ -346,7 +346,7 @@ Logistic-lasso&11.20\%\\ \hline
 		
 		The take home point of this section is that not only is the ALoVaS method a useful conceptual method for performing variable selection when fitting Bayesian decision trees but that the ALoVaS method is also practically useful as a method. Capable of handling data with a large number of covariates and performing covariate filtering by choosing various covariates. As a byproduct of the fitting method we also generate a sampled set of covariate selection probabilities which can be used if the method is to be compared with other methods that perform variable selection and use a similar approach. 
 
-\section{Conclusion}\label{sec:Conclusion}
+\subsection{Conclusion}\label{sec:Conclusion}
 
 A lot of press is given to variable selection methods, both in terms of theoretical properties and practical results. However, these applications are nearly always on linear or generalized linear models. Non-linear models like decisions trees are mathematically less tractable and thus theoretical results are more difficult to derive. Our ALoVaS method facilitates variable selection methods familiar to the researcher and allows their use with decision tree models. In non-sparse settings our method experiences similar difficulties as methods such as the lasso and horseshoe. This is not a limitation of our method \emph{per se} but an effect of model misspecification. 
 

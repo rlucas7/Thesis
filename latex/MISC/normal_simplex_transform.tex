@@ -1,4 +1,4 @@
-% previous variable selection details file
+\section{Additive Logistic Variable Selection: The ALoVaS method}
 
 \subsection{Normal Distributions Transformed to the Unit Simplex: ALT and ALN Dynamics. }\label{sec:ALN_chapter}
 
@@ -308,7 +308,7 @@ What we want to examine here is whether shrinkage along an $L_1$ penalty will ac
 
 The following result will be useful for parameter expansion. If 
 
-$X\vert a \sim \mathrm{Inv-Gamma}(\nu/2, \nu/a)$ and  $a \sim \mathrm{Inv-Gamma}(1/2,A^2)$, then $\sqrt{X}\sim \mathrm{Half-Cauchy}$. 
+$X\vert a \sim \mathrm{Inv\textendash Gamma}(\nu/2, \nu/a)$ and  $a \sim \mathrm{Inv\textendash Gamma}(1/2,A^2)$, then $\sqrt{X}\sim \mathrm{Half\textendash Cauchy}$. 
 
 \begin{align*}
 f(x) &= \int_0^\infty \underbrace{  \frac{\nu^{\nu/2}}{a^{\nu/2}\Gamma(\nu/2)x^{(\nu/2)+1}}\exp{(-\frac{\nu}{ax})}   }_{=f(x\vert a)} \underbrace{\frac{\exp{(-\frac{1}{aA^2})}}{A\sqrt{\pi}a^{3/2}}}_{=f(a)} da\\

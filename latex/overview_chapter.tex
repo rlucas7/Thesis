@@ -1,19 +1,19 @@
 \section{Preliminaries}
 \label{ch:preliminaries}
-This chapter provides an overview of the models used for decision tree induction and variable selection. We begin by discussing the earliest methods of induction: greedy algorithms. With the advance of time (about a decade) greedy induction approaches became fully developed high quality fortran codes. Bayesian approaches to building decision trees were not possible until advances in computing power and the rediscovery of sampling based approaches to Bayesian statistics became popular again. While the work of Breiman et al \cite{breiman1984classification} always contained a Bayesian flavor, no probability measure over trees was ever proposed. That is until the groundbreaking works of Denison, Mallick and Smith \cite{denison1998bayesian} and Chipman, George, and Mcculloch \cite{chipman1998bayesian}.
+This chapter provides an overview of the models used for decision tree induction and variable selection. We begin by discussing the earliest methods of induction, greedy algorithms. With the advance of time (about a decade), greedy induction approaches became fully implemented through high quality Fortran code. Bayesian approaches to building decision trees were not possible until advances in computing power and the rediscovery of sampling based approaches to Bayesian statistics became popular again. While the work of Breiman et al. \cite{breiman1984classification} always contained a Bayesian flavor, no probability measure over trees was ever proposed. That is until the groundbreaking works of Denison, Mallick and Smith \cite{denison1998bayesian} and Chipman, George, and Mcculloch \cite{chipman1998bayesian}.
 
- During the same time (the 1990s and the 2000s), researchers in Machine Learning and Statistics were developing theory beyond that published by Breiman et al. \cite{breiman1984classification}, that ensured decision trees were consistent. In this case consistency means the error rate of the tree converges to the Bayes error. The initial impetus for this work stemmed from the landmark paper of Vapnik and Chervonenkis \cite{vapnik1971uniform}, and subsequent work by Vapnik\cite{vapnik2000nature}, though it would take over a decade for the full power of their combinatorial approach to be widely used in both Machine Learning and Statistics. 
+ During the same time (the 1990s and the 2000s), researchers in Machine Learning and Statistics were developing theory beyond that published by Breiman et al. \cite{breiman1984classification}, that ensured decision trees' consistency. In this case consistency means that the error rate of the tree converges to the Bayes error. The initial impetus for this work stemmed from the landmark paper of Vapnik and Chervonenkis \cite{vapnik1971uniform}, and subsequent work by Vapnik \cite{vapnik2000nature}, though it would take over a decade for the full power of their combinatorial approach to be widely used in both Machine Learning and Statistics. 
 
-This chapter collects necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
+This chapter presents necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
 
 \subsection{Greedy Induction}
 \label{ch:p1sub_greedy_ind}
 
-In this section we answer the question: how does greedy induction work? Once the reader has completed this section they should, with sufficient time, be able to reproduce computer codes that would induct decision trees using greedy strategies. We begin with impurity functions. 
+In this section we answer the question: how does greedy induction work? Once the reader has completed this section they should, with sufficient time, be able to reproduce computer code that implements decision trees using greedy strategies. We begin with impurity functions. 
 
 \subsubsection{Impurity Functions}
 
-An impurity function corresponds to a likelihood function in statistics or to an objective function in machine learning. This function measures in some sense, how many good observations lie in a node of the tree and how many bad observations lie in a node of the tree. Formally an impurity function, denoted $\phi$ must satisfy three axioms. 
+An impurity function corresponds to a likelihood function in statistics or to an objective function in machine learning. This function measures, in some sense, how many good observations lie in a node of the tree and how many bad observations lie in a node of the tree. Formally, an impurity function, denoted $\phi$, must satisfy three axioms:
 
 \begin{enumerate}
 \item $\phi(1/2,1/2) \geq \phi(p, 1-p)$ for any $p\in[0,1]$. 
@@ -21,7 +21,7 @@ An impurity function corresponds to a likelihood function in statistics or to an
 \item $ \phi(p, 1-p)$ non-decreasing for $p\in[0,1/2]$ and non-increasing for $p\in[1/2,1]$. 
 \end{enumerate}
 
-The impurity functions given in Breiman et al. \cite{breiman1984classification} are: 
+Figure \ref{fig:impurity}displays  the impurity functions given in Breiman et al. \cite{breiman1984classification} are: 
 \begin{enumerate}
 \item Entropy: $\phi(p,1-p)= -plog(p) -(1-p)log(1-p)$.
 \item Gini: $\phi(p, 1-p)=2p(1-p)$.
@@ -35,17 +35,17 @@ The impurity functions given in Breiman et al. \cite{breiman1984classification} 
   \label{fig:impurity}
 \end{figure}
 
-The three impurity functions are plotted in Figure \ref{fig:impurity}. If a regression tree is to be built/inducted, in place of an impurity function, we use the mean squared error criteria denoted
+To build a regression tree, in place of an impurity function, we use the mean squared error criteria denoted
 
 $$\text{MSE}: \phi(y_i, \bar{y})=\frac{\sum_{i=1}^n(y_i-\bar{y})^2}{n}.$$
-The reader should note the greedy approach to decision tree induction always tries to optimize impurity functions. The optimization problems are known to be NP-Hard (for an introduction to complexity theory c.f. Garey and Johnson \cite{garey1979computers}). Briefly NP-Hard optimization problems are considered some of the hardest optimization problems to solve. These optimization problems increase exponentially in the size of the problem. Therefore, exact methods will nearly always take too long to compute and thus greedy strategies are used to approximate the global optimum, assuming one exists, with a local optimum. 
+The reader should note that the greedy approach to decision tree induction always tries to optimize impurity functions. The optimization problems are known to be NP-Hard (for an introduction to complexity theory confer Garey and Johnson \cite{garey1979computers}). Briefly, NP-Hard optimization problems are considered some of the hardest optimization problems to solve. These optimization problems increase exponentially with the number of observations in the problem. Therefore, exact methods will nearly always take too long to compute and thus greedy strategies are used to approximate the global optimum, assuming one exists, with a local optimum. 
 \subsubsection{Induction}
 The induction of decision trees proceeds by solving the objective function
 
 \begin{equation}
 \underset{t,s}{argmax} \Delta\phi = \phi - \pi_L\phi_L-\pi_R\phi_R.
 \end{equation}
-Here the variables $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$, and similarly defined subscripted impurity functions. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. 
+Here the variables $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$. The impurity functions are similarly subscripted. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. 
 
 The tree induction process continues until no more data points are incorrectly classified, or a predetermined stopping rule is met. A common stopping rule is to stop when there are less than $5$ observations in a terminal node. Once the full tree has been built, the second stage of the process now starts. This is known as the pruning stage. Now that the full tree is grown, we progressively prune back terminal nodes of the tree until the root node occurs. Several related approaches have been proposed in the literature to select the optimal tree via pruning. The most common is to select the tree using the regularized risk estimate given in Equation \ref{eqn:reg_risk_est} \newnot{symbol:risk_tree}
 
@@ -53,11 +53,11 @@ The tree induction process continues until no more data points are incorrectly c
 R(\mathcal{T}_i,\alpha) = R(\mathcal{T}_i) + \alpha \vert \mathcal{T}_i \vert. 
 \end{equation}
 
-Here the $\alpha$ parameter is a regularization parameter with larger values of $\alpha$ given greater penalty to the number of terminal nodes in the tree, here denoted $\vert \mathcal{T}_i\vert$. The notation $R(\mathcal{T}_i)$ denotes the risk of the tree, which is usually calculated as the sum of squared errors across all terminal nodes in a regression setting or the sum of the impurity function values in each terminal of the tree in the classification case. The choice of $\alpha$ is done over a grid of positive values on holdout data, using a cross validation approach, and the value of $\alpha$ leading to the smallest regularized risk ($R(\mathcal{T}_i,\alpha)$) is chosen.  
+Here the $\alpha$ parameter is a regularization parameter with larger values of $\alpha$ given greater penalty to the number of terminal nodes in the tree, here denoted $\vert \mathcal{T}_i\vert$. The notation $R(\mathcal{T}_i)$ denotes the risk of the tree, which is usually calculated as the sum of squared errors across all terminal nodes in a regression setting or the sum of the impurity function values in each terminal of the tree in the classification case. We choose the value of $\alpha$ leading to the smallest regularized risk ($R(\mathcal{T}_i,\alpha)$).  The value of $\alpha$ is chosen over a grid of positive values by minimizing Equation \ref{eqn:reg_risk_est} on holdout data, using a cross validation approach, 
 
-Discussion of consistency of this pruning rule can be found in Devroye et al. \cite{devroye1996probabilistic}, Breiman et al. \cite{breiman1984classification}, Gey \cite{gey2005model}, and Suav\'{e} and Tuleau-Malot \cite{sauve2011variable}. All the theoretical results require controlling the complexity of the decision tree, $\vert\mathcal{T}\vert$, and allowing the number of data points $n\to\infty$. However, the results in Devroye et al. \cite{devroye1996probabilistic} also give explicit bounds on the error of decision tree classifiers for finite values of $n$. 
+Discussion of consistency of this pruning rule can be found in Devroye et al. \cite{devroye1996probabilistic}, Breiman et al. \cite{breiman1984classification}, Gey \cite{gey2005model}, and Suav\'{e} and Tuleau-Malot \cite{sauve2011variable}. All the theoretical results require controlling the complexity of the decision tree, $\vert\mathcal{T}\vert$, and allowing the number of data points $n\to\infty$. However, the results in Devroye et al. \cite{devroye1996probabilistic} also give explicit bounds for the error of decision tree classifiers for finite values of $n$. 
 
-The pruning rule discussed here, and the induction process overall, is an implicit form of model selection. This is implicit because the variables that are selected are the variables left in the tree after pruning. Those variables considered important are the variables that remain and those variables not selected are considered not important. Furthermore, no measure of importance on each variable is defined, so it is difficult to rank variables based on importance. A remedy, called variable importance (abbreviated VIMP) \newabbrev{abbrev:VIMP}was proposed in the literature by Breiman \cite{breiman2001random}, but this is in the context of random forests and not for a single decision tree. We proposed several different methods to perform explicit variable selection for Bayesian decision trees in later chapters.   
+The pruning rule discussed here, and the induction process overall, is an implicit form of model selection. This is implicit because the selected variables are the variables left in the tree after pruning. Those variables considered important are the variables that remain and those variables not selected are considered not important. Breiman et al. \cite{breiman1984classification} define no measure of importance on each variable, so it is difficult to rank variables based on importance. Breiman \cite{breiman2001random} proposed such a measure, called variable importance (abbreviated VIMP) \newabbrev{abbrev:VIMP} but in the context of random forests and not for a single decision tree. We propose different methods to perform explicit variable selection for Bayesian decision trees in later chapters.   
 
 \subsubsection{A Simple Example}
 
@@ -79,18 +79,16 @@ Consider the following data
 \end{center}
 \end{table}
 
-We have 3 observations and two covariates within each observation. The response is a continuous random variable, so this will be a regression tree approach. We will examine potential split points by looking at the midpoints between two observed values of the covariates. We begin by sorting the data in increasing order for both covariates. Fortunately, in this case, the data is already in such a sorted order for both covariates, so no sorting is necessary. We now examine the possibility of a split point on $x_1$. Using the MSE \newabbrev{abbrev:MSE} impurity we calculate $\phi$, $\phi_L$, and $\phi_R$. A sum of squared error calculation shows $\phi = 26/3$ which is a constant for all calculations we perform. 
-
-Now for a split between observation 1 and 2:
+We have three observations and two covariates within each observation. The response is a continuous random variable, so this will be a regression tree approach. We will examine potential split points by looking at the midpoints between two observed values of the covariates. We begin by sorting the data in increasing order for both covariates. Fortunately, in this case, the data is already in order for both covariates, so no sorting is necessary. We now examine the possibility of a split point on $x_1$. Using the MSE \newabbrev{abbrev:MSE} impurity we calculate $\phi$, $\phi_L$, and $\phi_R$. A sum of squared error calculation shows $\phi = 26/3$, which is a constant value for all calculations we perform. 
+Now for a split between observation 1 and 2,
 $$
-\Delta\phi=26/3- (1/3)(1-1)^2 - (2/3)((2-7/2)^2+(5-7/2)^2)=26/3-9/3=17/3
+\Delta\phi=26/3- (1/3)(1-1)^2 - (2/3)((2-7/2)^2+(5-7/2)^2)=26/3-9/3=17/3.
 $$ 
-
-and for a split between observation 2 and 3: 
+For a split between observation 2 and 3, 
 $$
 \Delta\phi=26/3 - (2/3)( (1-3/2)^2 + (2-3/2)^2)  - (5-5)^2(1/3)= 26/3-1/3=25/3 
 $$ 
-Now, because all the data is sorted, the same $\Delta\phi$ values will result for potential splits on $x_2$. Therefore, we (somewhat arbitrarily) choose to split on the covariate with the smaller index ($x_1$). Thus, our first split is on the value $\{x_1: x_1 \leq 6.5\}$ and the tree at this point looks like that in Figure \ref{fig:dtree_firststep}. Note the mean of the values in each terminal node is given in Figure \ref{fig:dtree_firststep}. The mean value would be the predicted value for observations falling into the given terminal node.
+Now, because the data is sorted, the same $\Delta\phi$ values will result for potential splits on $x_2$. Therefore, we, somewhat arbitrarily, choose to split on the covariate with the smaller index, $x_1$. Thus, our first split is on the value $\{x_1: x_1 \leq 6.5\}$ and the tree at this point looks like that in Figure \ref{fig:dtree_firststep}. Note that Figure \ref{fig:dtree_firststep} displays the mean of the values in each terminal node. The mean value is the predicted value for observations falling into the given terminal node.
 
 \begin{figure}
 \begin{center}
@@ -115,11 +113,187 @@ Now, because all the data is sorted, the same $\Delta\phi$ values will result fo
 \end{figure}
 If we had more than $3$ observations, we would then continue calculating $\Delta\phi$s for the data that falls into each of the two resultant terminal nodes, continuing until there is only one observation in each terminal node, or until there is some specified number of observations in each terminal node. Although any number is possible, the specified minimum number of observations in each terminal node is usually 5. Once this process is completed, the induction step is finished, and the pruning process begins. 
 
-%\subsection{Bayesian Approaches}
-%\label{ch:p2sub_bayes}
-% the section and label are contained in the file with filepath beneath
-\input{bayes_decision_tree.tex}
+\subsection{Bayesian Approaches}
+\label{ch:p2sub_bayes}
 
+This section describes a Bayesian approach to decision trees. In the previous chapter we presented a greedy algorithm to fit decision trees. Besides the observed error in a greedy decision tree, there is nothing to describe the fit of the model, or to  provide a measure over the decision tree. This section provides both of these quantities. We begin by defining the CGM model and calculating necessary quantities for the algorithm. Furthermore, there is no explicit model selection, which will be the main contribution of this thesis.    
+
+\subsubsection{The CGM approach}
+We begin by defining notation and measures on each quantity of the tree. 
+We assume that the tree topology and split rules are conditionally independent. Based on fundamentals of probability we have the following relationships
+
+\begin{align}
+ \Pr(\mathcal{T}_i \vert \yvec, X ) &\propto \Pr(\mathcal{T}_i)\Pr(\yvec \vert \mathcal{T}_i, X)\nonumber \\
+  &\propto \Pr(\mathcal{T}_i)\int_{\Theta}\Pr(\yvec \vert \mathcal{T}_i, X, \theta)\pi(\theta)d\theta,
+\end{align}
+where $\Pr(\mathcal{T}_i)$ denotes the prior measure on trees and $\Pr(\yvec \vert \mathcal{T}_i, X)$ denotes the integrated likelihood of the tree. Finally, $\Pr(\yvec \vert \mathcal{T}_i, X, \theta)$ and $\pi(\theta)$ denote the tree likelihood and the prior measure on node parameters, respectively. CGM \cite{chipman1998bayesian} defined this  conditional decomposition and showed how to use this to construct an algorithm to sample Bayesian decision trees. We now define the aspects of the model described in the CGM paper \cite{chipman1998bayesian}. 
+
+The decision tree model has two main components, the tree $\mathcal{T}$ with $b$ terminal nodes, and the parameters in each terminal node, $(\theta_1,\dots,\theta_b)$. 
+The two main likelihoods in each terminal node are the normal and the multinomial, for continuous and categorical responses, respectively. 
+We denote the responses in each terminal node as the vector  of vectors $Y\equiv (Y_1, \dots, Y_b)$. Then $Y_i = (y_{i1}, \dots y_{in_i})$ and the main relation is the independence breakdown 
+\begin{equation}
+f(Y\vert \mathcal{T}, X, \theta) =\prod_{i=1}^b f(Y_i\vert \mathcal{T}, X, \theta_i) = \prod_{i=1}^b \prod_{j=1}^{n_i} f(y_{ij} \vert \mathcal{T}, X, \theta_i).
+\end{equation}
+The two likelihoods are given by
+\begin{equation}
+f(y_{ij} \vert \mathcal{T}, X, \theta_i) = N(\mu_i,\sigma_i),
+\end{equation}
+and the multinomial likelihood is
+\begin{equation}\label{eqn:mult_lhood}
+f(y_{i1}, \dots ,y_{in_i} \vert \mathcal{T}, X, \theta_i) = \prod_{j=1}^{n_i}\prod_{k=1}^K p_{ik}^{\mathds{1}(y_{ij}=k)}.
+\end{equation}
+In Equation \ref{eqn:mult_lhood}, $p_{ik}$ denotes the probability $y_{ij}$ of being in category $k$ in terminal node $i$ and $\mathds{1}(A)$ denotes the indicator function for the set $A$. 
+
+We now proceed to define the tree prior. We start with a tree consisting of a single node, the root node. We then imagine the tree growing by randomly choosing terminal nodes to split on. To grow a tree we must specify two functions, the growing function and the splitting function.  The splitting function is denoted $p_{\text{split}}(\eta, \mathcal{T})$ and the rule function is denoted $p_{\text{rule}}(\rho \vert \eta, \mathcal{T})$. The rule function provides a criteria to determine which of the two child nodes the observed data go into. If the observed covariate value is less than the rule value, then the observation go into the left child node. Similarly, if the observed covariate value is greater than the rule value, then that observation goes into the right child node. Growing a tree (called induction) consists of iterating these steps. creating two new children from a terminal node and assigning a rule to the terminal node (now a parent of two terminal nodes). 
+
+\begin{center}\huge{\textbf{Add a figure with before and after a node is split}} \end{center}
+
+The probability measure on the potential splits of the tree is
+\begin{equation}\label{eqn:psplit}
+p_{\text{split}}(\eta, \mathcal{T})=\alpha(1+d_{\eta})^{-\beta}, \ \ \alpha>0, \beta\geq 0,\\
+\end{equation}
+where $d_{\eta}$ denotes the depth of the node $\eta$ and $\alpha$, and $\beta$ are scalars. The probability of the specific rule, denoted $\rho$ is 
+\begin{equation}\label{eqn:prule}
+p_{\text{rule}}(\rho \vert \eta, \mathcal{T}) \propto \underbrace{\Pr(\text{split on covariate})}_{=p_{\text{split}}}\underbrace{\Pr(\text{split on a value given a covariate})}_{=p_{\text{rule}}}. 
+\end{equation}
+
+Here CGM recommends using a discrete uniform prior on $p_{\text{split}}$ and splitting uniformly amongst the splitting values (in $p_{\text{rule}}$) that do not result in an empty terminal node. While we choose the same proposal mechanism for the $p_{\text{rule}}$ quantity, the main point of this thesis is to examine and propose alternate specifications for $p_{\text{split}}$. The data sets modeled in CGM \cite{chipman1998bayesian} and DMS \cite{denison1998bayesian}, and other modifications in the literature, deal with data with a small number of predictors. In this thesis we are concerned with a large number of predictors, so we will focus on variable selection, which will ultimately explain how we specify quantity $p_{\text{split}}$ in Equation \ref{eqn:prule}. 
+
+\subsubsection{Integrated Likelihood}
+We will now focus on the integrated likelihood, which is the quantity 
+
+\begin{equation}\label{eqn:int_lhood}
+\Pr(Y_i \vert \mathcal{T}, X) = \int_{\Theta}\Pr(Y_i \vert \mathcal{T}_i, X, \theta)\pi(\theta)d\theta.
+\end{equation}
+To evaluate the integral in Equation \ref{eqn:int_lhood} we must first define a prior, denoted $\pi(\theta)$, for the parameters in each terminal node. 
+There are two possible priors for the case of the normal likelihood that will result in a conjugate prior/posterior. These are normal and normals-gamma distributions, or equivalently, normal-inverse gamma distributions depending upon the given parametrization. 
+
+\subsubsection{The Process Prior}
+
+Assuming we have a closed form solution for the integral in Equation \ref{eqn:int_lhood}, we can use Bayes' rule to determine 
+\begin{equation}\label{eqn:tree_post}
+\Pr(\mathcal{T} \vert Y , X) \propto \Pr(Y \vert X ,\mathcal{T})\Pr(\mathcal{T}).
+\end{equation} 
+We now have an effective means of searching the posterior space over trees to determine the high posterior trees. We can do so by using the Metropolis-Hastings rule 
+
+\begin{equation}\label{eqn:MHrule}
+\mathcal{T}^{i+1} =\begin{cases}
+\mathcal{T}^*, & \text{with probability}\ \alpha(\mathcal{T}^*, \mathcal{T}^i) = \text{min}\left(\frac{q(\mathcal{T}^*, \mathcal{T}^i)}{q(\mathcal{T}^i, \mathcal{T}^*)}\frac{\Pr(Y\vert X, \mathcal{T}^*)}{\Pr(Y\vert X,\mathcal{T}^i)}\frac{\Pr(\mathcal{T}^{*})}{\Pr(\mathcal{T}^i)},1 \right) \\
+\mathcal{T}^{i}, & \text{with probability}\ 1-\alpha(\mathcal{T}^*, \mathcal{T}^i).
+\end{cases} \end{equation}
+
+To evaluate the normalization constant would require summing Equation \ref{eqn:tree_post} across all possible trees. This sum includes $\mathcal{O}(nd\frac{4^h}{h^{3/2}})$ terms, with $h$ denoting the maximum height of the trees, $n$ denoting the number of observations, and $d$ denoting the number of covariates. This is an infeasible sum for most data sets, and for all data sets examined in this thesis. For the function $q(-\vert-)$, which is called the proposal function, we use $q$ to propose a new tree $\mathcal{T}^*$.   
+In Equation \ref{eqn:MHrule}, $q(\mathcal{T}^*\vert\mathcal{T})$ denotes proposing a new tree $\mathcal{T}^*$, starting from the current tree $\mathcal{T}$. 
+ Our proposal mechanism is as follows:
+  \begin{itemize}
+ \item The grow step chooses at random one of the terminal nodes and proposes to append two new child nodes with a certain probability that could depend on the tree depth, splitting on a chosen covariate.
+ \item The prune step works in reverse of the grow. A terminal node is selected at random and that node and the node's sibling are pruned to the immediate parent of the two child nodes.
+ \item The change step randomly picks an internal node and attempts to change the split rule at the node with that of another observation, possibly on a different covariate.
+  \item The swap step randomly selects an internal node that is not the root node and proposes to swap the split rules of the parent-child pair. If both child nodes split on the same covariate, then both the children and the parent node's rules are swapped.
+  \item The rotate step randomly chooses a left or right rotation move. Then this step randomly chooses an admissible internal node and rotates.
+ \end{itemize}
+  The rotate operation for binary trees was first introduced in Sleater and Tarjan \cite{sleator1985self} and was introduced into Bayesian decision trees in GL \cite{gramacy2008bayesian}. A good introduction and several practical uses of the rotate move can be found in Cormen, Lieserson, Rivest and Stein \cite{cormen2001introduction}. The proposal of Gramacy and Lee \cite{gramacy2008bayesian} only allows a rotate move for the specific case when a swap move is proposed and the parent child pair both split on the same covariate. We modify this rule and allow rotate to be a separate operation of the transition kernel and not a special swap move case. The proposal mechanism of CGM uses the grow, prune, change and swap moves only. We also allow swap moves in our proposal. In addition, neither of CGM nor Gramacy and Lee \cite{gramacy2008bayesian} included weights on each covariate in their examples or model specifications. CGM sampled each covariate and split value uniformly, at random. 
+  
+ The probability measure on the tree is  
+ 
+ \begin{equation}
+ \Pr(\mathcal{T}) = \prod_{\eta \in \mathcal{N}} p_{\text{rule}}(\rho \vert \eta, \mathcal{T})p_{\text{split}}(\eta, \mathcal{T}),
+\end{equation}
+where $\mathcal{N}$ denotes the set of nodes in tree $\mathcal{T}$.
+The probability measure on each split, here denoted $p_{\text{split}}(\eta, \mathcal{T})$, uses Equation \ref{eqn:psplit}. Similarly, the measure on each rule, here denoted $p_{\text{rule}}(\rho \vert \eta, \mathcal{T})$, uses Equation \ref{eqn:prule}. 
+All that is left to specify is the likelihood in each node and the prior structure for the parameters in each node, both of which are done in the next subsection. 
+
+\subsubsection{Node Likelihoods and Priors}
+
+CGM discuss three models. Two of the models use Gaussian priors and Gaussian likelihoods and one of the models uses a Dirichlet prior and a multinomial likelihood. The two Gaussian models differ in that one has a single variance and the other has a different variance for each node. As noted by Lee \cite{lee2006decision}, in a greedy optimization context, sometimes the data suggest a different model than either a Gaussian or a multinomial-Dirichlet. If the experiment suggests analyzing data using an alternate model, the Bayesian context easily handles these alterations, once the corresponding likelihood and prior are specified. Lee \cite{lee2006decision}, proposed a zero inflated poisson (ZIP) model to analyze the solder data. Note our Bayesian model can easily handle extensions such as ZIP response data and also permits covariate selection, provided the integrated likelihood is available in closed form.
+
+We begin with the Gaussian likelihood and Gaussian prior model. We define the likelihood as 
+\begin{equation}\label{eqn:norm_lhood1}
+N[y_{ij} \vert \mu_i, \sigma^2].
+\end{equation}
+Also, we define the prior for $\mu_i$ as 
+\begin{equation}\label{eqn:norm_prior1}
+N[\mu_i\vert \bar{\mu}, \sigma^2 ].
+\end{equation}
+Furthermore, we define the prior for $\sigma^2$ as 
+\begin{equation}\newnot{symbol:inv_gamma}
+\text{Inv-Gamma}(\sigma^2\vert \alpha, \beta).
+\end{equation}
+All that remains is to evaluate the integral 
+\begin{equation}\label{eqn:int_model1}
+\prod_{i=1}^b \int_0^\infty \int_{-\infty}^{\infty} \prod_{j=1}^{n_i} N[y_{ij} \vert \mu_i, \sigma^2]N[\mu_i\vert \bar{\mu}, \sigma^2 ]\text{Inv-Gamma}(\sigma^2\vert \nu/2, \nu\lambda/2)d\mu_id\sigma^2.
+\end{equation}
+For the Gaussian prior and likelihood we can explicitly calculate the marginal likelihood. Being able to marginalize the node parameters explicitly allows us to implement a Metropolis-Hastings algorithm without resorting to complicated, specialized algorithms, or numerical integrations. Straightforward analytic manipulations yield the solution to Equation \ref{eqn:int_model1} written in Equation \ref{eqn:int_model1_soln}
+\begin{equation}\label{eqn:int_model1_soln}
+\frac{ca^{b/2}}{\prod_{i=1}^b\sqrt{n_i+a}}\times \left(\sum_{i=1}^b\left(\sum_{j=1}^{n_{i}}(y_{ij}-\bar{y}_i)^2\right)+ \frac{(\bar{y}_i -\bar{\mu})^2(n_ia)}{n_i+a} \right)^{-(\nu+n)/2}\hspace{-1.4cm}.
+\end{equation}
+If we assume instead that the variances might change from node to node, then the stated model is misspecified. Let us denote the variance in each node as $\sigma_i^2$ and keep all other notations from the stated model specification. Then the model is specified using 
+\begin{equation}\label{eqn:normal_likelihood_many_variance}
+N[y_{ij} \vert \mu_i, \sigma_i^2].
+\end{equation}
+Also, we define the prior for $\mu_i$ as 
+\begin{equation}\label{eqn:multi_variance_prior}
+N[\mu_i\vert \bar{\mu}, \sigma_i^2 ].
+\end{equation}
+Furthermore, we define the prior for the $\sigma_i^2$s as 
+\begin{equation}\label{eqn:sigma_priors}
+\text{Inv-Gamma}(\sigma_i^2\vert\nu/2, \nu\lambda/2)
+\end{equation}
+ and now we evaluate the integral equation 
+ \begin{equation}\label{eqn:int_model2}
+\prod_{i=1}^b \int_0^\infty \int_{-\infty}^{\infty} \prod_{j=1}^{n_i} N[y_{ij} \vert \mu_i, \sigma_i^2]N[\mu_i\vert \bar{\mu}, \sigma_i^2 ]\text{Inv-Gamma}(\sigma_i^2\vert \nu/2, \nu\lambda/2)d\mu_id\sigma_i^2. 
+\end{equation}
+The result of computing the integrals in Equation \ref{eqn:int_model2} is 
+\begin{equation}\label{eqn:int_model3}
+\prod_{i=1}^b\pi^{n_i/2}(\lambda\nu)^{\nu/2}\sqrt{\frac{a}{n_i+a}}\frac{\Gamma((n_i+\nu)/2)}{\Gamma(\nu/2)}\times \left( \sum_{j=1}^{n_{i}}(y_{ij}-\bar{y}_i)^2+ \frac{(\bar{y}_i -\bar{\mu})^2(n_ia)}{n_i+a}+\nu\lambda  \right)^{(n_i+\nu)/2}.
+\end{equation}
+These are the two ``regression'' models for the Bayesian decision trees given in CGM \cite{chipman1998bayesian}. 
+
+The classification model discussed in CGM \cite{chipman1998bayesian} defines the likelihood, prior, and integrated likelihood as
+\begin{equation}
+y_{i1}, \dots, y_{in_i} \vert \mathcal{T} \sim \text{Multinomial}(Y_i \vert \vec{n}, \vec{p}),\newnot{symbol:mult}
+\end{equation} 
+\begin{equation}
+\vec{p} \vert \mathcal{T} \sim \text{Dirichlet}(\vec{p}\vert \vec{\alpha}), \newnot{symbol:dirichlet}
+\end{equation} 
+and
+\begin{equation}\label{eqn:int_model4}
+\Pr(Y\vert \mathcal{T}, X)=\left(\frac{\Gamma(\sum_{k=1}^K\alpha_k)}{\prod_{k=1}^K\Gamma(\alpha_k)} \right)^b \prod_{i=1}^b\left( \frac{\prod_{k=1}^K\Gamma(n_{ik}+\alpha_k)}{\Gamma(n_i +\sum_{k=1}^K\alpha_k)} \right),
+\end{equation} 
+respectively. 
+ 
+If we wanted to model the data using a different data generating process, for example a zero-inflated Poisson, we could do so by specifying a different likelihood, prior, and by computing the integrated likelihood. For a zero-inflated Poisson model defining a likelihood, prior, and calculating the integrated likelihood is possible using gamma priors for the rate ($\lambda$) and beta priors for zero inflation components ($\phi$). 
+ 
+ \subsubsection{A Bayesian Zero Inflated Poisson Model}
+ %\textbf{Write out the details of this model here and cite applied statistics paper which uses a greedy approach.}
+ 
+ Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero's and Lee and Jin \cite{lee2006decision} propose using a zero inflated (ZIP)\newabbrev{abbrev:ZIP} Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
+ 
+ The likelihood for a single observation is 
+ \begin{equation}
+ f(y\vert \lambda, \phi) \propto \mathds{1}(y=0)\left(\phi + (1-\phi)\exp{(-\lambda)}\right) + \mathds{1}(y>0)\left(\exp{(-\lambda)}\frac{\lambda^y}{y!}\right).
+ \end{equation}
+ The priors for $\lambda$ and $\phi$ are
+ \begin{equation}
+ \pi(\phi, \lambda)\propto \underbrace{\frac{\phi^{\alpha-1}(1-\phi)^{\beta-1}\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}}_{=\text{A beta prior }} \times \underbrace{\frac{ \lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})} }{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}}_{=\text{A gamma prior}}.
+ \end{equation}
+
+ Now we need to calculate the integrated likelihood, which means we must evaluate 
+ \begin{align} \hspace{-.9in}
+ &\int_0^1\int_0^\infty \left(\mathds{1}(y=0)\left(\phi + (1-\phi)\exp{(-\lambda)}\right) + \mathds{1}(y>0)\left(\exp{(-\lambda)}\frac{\lambda^y}{y!}\right)\right) \\ \nonumber
+ & \frac{\phi^{\alpha-1}(1-\phi)^{\beta-1}\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \times \frac{ \lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})} }{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}d\lambda d\phi.
+ \end{align}
+ 
+ Let $j$ index the observed zero counts. Furthermore, let $\bar{y}_{+}$ denote the average of the non-zero counts and $n_0$ and $n_+$ denote the number of zeros and non-zeros in the data respectively. 
+ Now we assume that the observations are $i.i.d.$ and simple calculations lead to the conclusion that
+ 
+ \begin{align}\label{eqn:zip_int_lhood}\hspace{-.7in}
+ \Pr(Y\vert X, \mathcal{T})& = \left[\sum_{j=0}^{n_0} {n_0 \choose j}\frac{\Gamma(\alpha+\beta)\Gamma(\alpha+j)\Gamma(n_0+\beta-j)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha+\beta+n_0)}\left(\frac{n_0-j+\beta_{\lambda}^{-1}}{\beta_{\lambda}}\right)^{\alpha_{\lambda}} \right] \\ \nonumber
+ & + \frac{\Gamma(\alpha_{\lambda}+n_+\bar{y}_+)}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}\left(n_+ + 1/\beta_{\lambda} \right)^{\alpha_{\lambda}+n_+\bar{y}_+}.
+\end{align}
+
+A similar calculation may be performed for a response variable that is distributed as a zero-inflated negative binomial random variable (ZINB).\newabbrev{abbrev:ZINB}
+ 
 \subsection{Previous Variable Selection}
 \label{ch:p4sub_var_sel}
 
@@ -147,7 +321,7 @@ This subsection contains the mathematical details for calculating the integrals 
 
 \subsubsection{ZIP Derivations}
 
-In this section we provide the derivation for the integrated likelihood for the Bayes ZIP\newabbrev{abbrev:ZIP} (zero inflated Poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime}$ will index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
+In this section we provide the derivation for the integrated likelihood for the Bayes ZIP (zero inflated Poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime}$ will index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
 
 \begin{align*}
 \Pr(Y \vert X, \mathcal{T}) &= \prod_{i=1}^b\int_0^1\int_0^\infty\prod_{j=1}^{n_i}\left[\mathds{1}[y_{ij}=0](\phi+(1-\phi)\exp{(-\lambda)})+\mathds{1}[y_{ij}>0]\frac{\exp{(-\lambda)\lambda^{y_{ij}}}}{y_{ij}!} \right]\pi(\phi_i,\lambda_i )d\lambda_id\phi_i\\
@@ -183,14 +357,150 @@ Now with the first piece simplified we move on to piece $(2)$.
  
  And the result is shown. 
 
-%%%%%---------------------- Miscellaneous Notes --------------------------------------
+\section{Bayesian Decision Tree Models}\label{sec:Model}
 
+In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT to link sparse linear models with covariate selection probabilities facilitating sparse Bayesian decision trees. In Section \ref{subsec:the_tp} we describe the tree prior and the local updates we use to explore the graph of permissible trees. Finally, in Section \ref{subsec:Regularization Priors} we give several examples of regularization priors we will study in our simulated examples.
 
-% Np-hardness of decision tree induction-> Some Rivest 1980's papers (i think there are two different ones.)
+	\subsection{The Likelihood}\label{sec:lhood}
 
-% need to define P, NP, NP hard, NP-complete any others? P#? 
+We begin by reviewing the model proposed in Chipman et al. \cite{chipman1998bayesian}, and show how our approaches generalize upon their model. 
 
-%consistency of decision trees. Define consistency, 
+The response data is usually assumed to be observed from a normal or multinomial likelihood function. Nonetheless, other forms of response data such as zero inflated models are possible \cite{Roberts:2014fk}. The likelihood is denoted 
 
+\begin{equation}\label{eqn:cgm_likelihood}
+\mathcal{L}(\mathcal{T}, \vec{q}, \vec{\theta} \vert \vec{y} X)=\Pr(\vec{y} \vert X, \mathcal{T}, \vec{q}, \vec{\theta}).
+\end{equation} 
+		
+\noindent Here the $\vec{y}$ denotes the vector of responses, $X$ denotes the matrix of covariates, and $\mathcal{T}$ denotes the tree. The vector $\vec{q}$ is the vector of covariate selection probabilities and $\vec{\theta}$ denotes the vector of parameters in the terminal nodes of the tree. The parameters that we are interested in are: $\mathcal{T}$, $\vec{\theta}$, and $\vec{q}$. We factorize the prior in a similar fashion to Chipman et al. using the breakdown 
 
-% want to include the works of Suave and Tuleau-Mallot, Gey and Nedelic, Breiman, Devroye, Gyorfi, Lugosi, Biau and Devroye, Biau 
+\begin{equation}\label{eqn:prior}
+\Pr(\mathcal{T}, \vec{q}, \vec{\theta}) \propto \Pr(\vec{\theta} \vert \mathcal{T}) \Pr(\vec{q} \vert \mathcal{T})\Pr(\mathcal{T}).
+\end{equation} 
+
+The framework in Chipman et al. \cite{chipman1998bayesian} proposed assumed $\vec{q} \propto 1/p$. Although we find this prior to be a strong \emph{a priori} assumption to take with a large dimensional covariate space, this prior will be seen as a special case of the SSVS prior presented in Section \ref{sec:ALoVaS_model}. Practical difficulties with the uniform prior were already noted in the discussion of Chipman et al. \cite{knight1998bayesian}, although, little work has been done in the interim to remedy this drawback. We modify the framework of Chipman et al. to allow the $\vec{q}$ to vary, depending on their relevance. We specify a prior on the $\mu_j$, a linear space, and use the \ALT\ to determine (indirectly) the prior on the probability space of the $\vec{q}$. This prior specification on the $\mu_j$ allows one to use the methods of the sparse linear model literature but instead apply these methods to decision trees. 
+
+The prior density for $\vec{q}$, the covariate selection probabilities, is defined in Subsection \ref{subsec:alt}. Similar to Chipman et al., we place the uniform prior, denoted $\Pr(\mathcal{T})$, on the decision tree space. We sample the decision trees using the stochastic process defined in Section \ref{subsec:the_tp}.  To monitor the convergence of the Markov chain used to sample the space of decision trees, it is necessary to be able to calculate the marginal density for $\mathcal{T}$ given the covariate selection probabilities $\vec{q}$. This requires choosing conjugate priors for the vector $\vec{\theta}$ so that a closed form marginal density, $\Pr(\vec{y}\vert X,\vec{q},\mathcal{T})$ is available. Thus, if the response data are continuous, we choose a Gaussian density for the prior on $\vec{\theta}$. Similarly, if the response data are categorical, we choose a Dirichlet density as the prior density for $\vec{\theta}$.  
+
+	\subsection{The Additive Logistic Transform}\label{subsec:alt}
+	
+	The ALT, defined in Equation \ref{eqn:alt}, is a mapping from a Euclidean space to a probability space. 
+	%We define our model on a Euclidean space and then, once the draw from the posterior is simulated, we transform the draw to a probability scale using the ALT. 
+	The ALT was proposed previously as a fundamental transform for use in compositional data analysis \cite{aitchison1986statistical}. 
+	
+	The additive logistic normal (ALN) density is obtained as a result of transforming a multivariate normal density using the ALT. The ALN density is given in Equation \ref{eqn:aln}, however we will rarely find use for this equation. Rather, the density on $\vec{\mu}$ is a multivariate normal density with a linear scale. When a probability scale is needed, we apply the ALT to the normal random variates, $\vec{\mu}$, to obtain probabilities. 	
+\begin{equation}\label{eqn:aln}
+f(\vec{q}\vert \mu, \Sigma) = \left[(2\pi)^p\vert\Sigma\vert\left(\prod_{j=1}^{p}q_j\right)^2\right]^{-1/2}\exp\left[ -\frac{1}{2}(log(\vec{q}_{(p)}/q_{p}) - \vec{\mu})^T \Sigma^{-1}(log(\vec{q}_{(p)}/q_{p}) - \vec{\mu}) \right].
+\end{equation} 
+In Equation \ref{eqn:aln} the notation $\vec{q}_{(p)}$ indicates a vector with the $p$th entry removed. This density is the result of applying the transformation $q_j = \frac{e^{\mu_j}}{1+\sum_{i=1}^{p-1}e^{\mu_i}}$, for $i=1,\dots,p-1$, and the $p$-dimensional vector, $\vec{\mu}$, has a multivariate normal density with mean vector $\vec{\mu}^\prime$ and covariance matrix $\Sigma$. 
+The ALN distribution is defined on the $p-1$ dimensional simplex so that $\sum_{j=1}^{p}q_j =1$. Various settings of the parameters $\vec{\mu}^\prime$ and $\Sigma$ correspond to probabilities concentrated on different regions of the $p-1$ simplex. In practice we do not make use of Equation \ref{eqn:aln}, instead we sample from multivariate normals and transform our random variables using the \ALT. Thus the transformed sampled variates, now representing covariate selection probabilities, have a density defined by Equation \ref{eqn:aln}. To help the reader gain intuition into this distribution, we generate plots for the cases where $\vec{q}$ is a $3$-dimensional vector. The simplex plots illustrate the effect of changes in the multivariate normal parameters on the density in the simplex space. 
+
+In Figure \ref{fig:aln_plots}, the four sub-figures represent sampled observations from a normal distribution after applying the ALT. The extreme points in the simplex correspond to sparse covariate selection probabilities and therefore result in sparse decision trees. In (c), we see data concentrated mostly around the point of the simplex $(1/3,1/3,1/3)$, corresponding to independent standard normals. In sub-figure (d), we see the effect of increasing the variance of the normal densities while maintaining zero means. The larger variances make the draws more likely to come from regions near the edge of the simplex.  In sub-figure (e), we see the effect of adding correlation to the multivariate normal density while keeping the mean vector equal to zero. In this parametrization the density lies close to a plane and after transformation to the simplex space the density is concentrated around a line. In sub-figure (f), we see the result of shifting the mean from the zero to the point $(-2,2,0)$. In our simulation studies the parameter changes will be less pronounced and less isolated. Often we will have the four types of changes presented in these images occurring simultaneously. 
+
+\begin{figure}
+\begin{center} 
+\begin{tabular}{cc}
+  \subfigure[]{\includegraphics[scale=0.25]{figures/mu0_0_bw.pdf}}
+    & \subfigure[]{\includegraphics[scale=0.25]{figures/sigma3_3_bw.pdf}} \\
+  \subfigure[]{\includegraphics[scale=0.25]{figures/mu2_0_bw.pdf}}
+    & \subfigure[]{\includegraphics[scale=0.25]{figures/sigma1_9_9_1_bw.pdf}} \\
+\end{tabular}
+\caption{ALN plots with various multivariate normal parameters. Subfigure (a) contains multivariate standard normal draws. Subfigure (b) plots multivariate normal draws with zero mean and large independent variances. In subfigure (c), contains unit independent variances with mean vector $\mu = (-2,2,0)$. Finally, in subfigure (d) we add correlations while keeping the mean vector as a zero vector. }
+\label{fig:aln_plots}
+\end{center}
+\end{figure}
+
+\subsection{The Tree Prior}\label{subsec:the_tp}	
+This section reviews the tree prior first described in Chipman et al. \cite{chipman1998bayesian}, for those readers that are not familiar with the model. Those readers familiar with the paper may safely skip this subsection. 
+
+The tree prior is defined as
+
+\begin{equation} \label{eqn:tree_prior}
+\Pr(\mathcal{T}\vert \vec{q}) = \prod_{\eta\in N} \Pr{_{\text{split}}} (\eta) \Pr{_{\text{rule}}}(\eta,j,r_j \vert \vec{q} ),
+\end{equation}
+
+\noindent where $\eta$ ranges over all nodes in the tree, denoted by the index set $N$, and the two probabilities in Equation \ref{eqn:tree_prior} are the probabilities of a split at the node $\eta$ and the probability of selecting a specific split rule at node $\eta$ respectively. Also, $r_j$ denotes the splitting value of the split rule at node $\eta$ on the $j$th covariate. The probability of a split in a tree at node $\eta$ is defined by 
+ 
+ \begin{equation}\label{eqn:psplit}
+ \Pr{_\text{split}}(\eta)= \alpha(1+d_\eta)^{-\beta},
+ \end{equation}
+ 
+\noindent where the quantities $\alpha>0$ and $\beta\geq0$ are fixed values specified \emph{a priori} and $d_\eta = \lfloor lg(\eta)\rfloor$ is the depth of the node $\eta$ ($\lfloor - \rfloor$ denotes the floor function). In this paper $lg$ denotes base 2 logarithms and $log$ denotes base $e$ logarithms. We number the nodes in the tree according to the binary heap node numbering scheme used in many binary tree applications. For a good review of the binary heap node numbering system see Cormen, Lieserson, Rivest, and Stein \cite{cormen2001introduction}. We define the root node, labeled node number one, to have depth zero. Furthermore,  nodes two and three are the left and right child nodes of node one respectively. Both nodes two and three are defined to have depth one. The depths of other nodes in the tree follow similarly.   
+
+  \begin{figure}
+  \begin{center}
+\begin{tikzpicture}
+ \node [circle,draw]{$\eta=1,d_{\eta} =0$} [level distance=25mm,sibling distance=50mm]
+child { node [circle,draw]{$\eta=2, d_{\eta} =1$} [level distance=25mm ,sibling distance=25mm]
+child {node [circle,draw] {$\eta=4, d_{\eta} =2$}}
+child {node [circle,draw]{$\eta=5, d_{\eta} =2$}}
+}
+child {node [circle,draw] {$\eta=3, d_{\eta} =1$} [level distance=25mm ,sibling distance=25mm]
+child {node [circle,draw] {$\eta=6, d_{\eta} =2$}}
+child {node [circle,draw]{$\eta=7, d_{\eta} =2$}}
+};
+\end{tikzpicture}
+
+\caption{The binary heap node numbering system used in our simulations. }
+\label{fig:tree_node_nums}  
+\end{center}
+\end{figure}
+In addition to the process prior defined on the tree, we define a process prior on the selection of covariates for split rules within a tree. The function $\Pr{_{\text{rule}}}(\eta,j,r_j \vert \vec{q} )$ is decomposed into two components, one selecting the $j$th covariate which we use to propose a split at the node, and a second component selecting a specific split value ($r_j$). This corresponds to the conditional probability decomposition 
+
+\begin{equation}\label{eqn:decomp}
+\Pr{_\text{rule}}(\eta,j,r_j\vert \vec{q}) = \underbrace{\Pr{_\text{cov}}(j,\eta \vert \vec{q})}_{\text{ALN density}} \underbrace{\Pr{_\text{split value}}(r_j \vert j, \eta)}_{\text{Uniform}}.
+\end{equation}
+
+\noindent The tree prior, denoted $\Pr(\mathcal{T})$, is defined uniformly over the space of admissible trees. Exact enumeration of all admissible trees is only possible for very small values of $n$, the number of observations. The number of admissible trees is a cumulative sum of Catalan numbers less than or equal to a given depth. This sum grows at the rate $\mathcal{O}(4^n/n^{3/2})$ \cite{mattarei2009asymptotics}, the same rate as the Catalan numbers themselves, displayed in Figure \ref{fig:asymptotics}, and becomes intractable quickly. Fortunately, Markov chain Monte Carlo sampling allows us to sample from the space of trees using a Metropolis-Hastings rule with local proposals on the space of trees. We now detail the structure of the proposal functions. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=4in]{figures/asymptotics_plot_bw.pdf}
+  \caption{Plots of the log of the number of possible trees (solid line) less than or equal to a given depth $n$, compared to exponential (45 degree line), quadratic (dash-dotted line) and linear functions (even-dashed line). Note the vertical axis is on a log scale.  }
+  \label{fig:asymptotics}
+\end{figure}
+
+Given a tree $\mathcal{T}$, we sample a new tree adjacent to $\mathcal{T}$ by proposing local updates. The local updates we use are the following: 
+
+\begin{itemize}
+ \item The Grow step: choose at random one of the terminal nodes and propose to append two new child nodes with probabilities given by Equation \ref{eqn:psplit}. 
+ \item The Prune step: the reverse of the grow step, a terminal node is selected at random and the selected node and that selected node's sibling are both pruned to the immediate parent of the two child nodes. The parent node becomes a terminal node. 
+ \item The Change step: randomly pick an internal node and propose to change the split rule at the selected node with that of another observation, possibly on a different covariate.
+  \item The Swap step: randomly select an internal node that is not the immediate parent of any terminal node and proposes to swap the split rules of the parent-child pair. Otherwise, when both child nodes split on the same covariate, both child node's rules and the parent node's rules are swapped.
+  \item The Rotate step: randomly choose a left or right rotation move, each with probability $1/2$. Then a rotatable node is chosen and a rotate move is performed.
+ \end{itemize}
+  The rotate operation for binary trees was first introduced in Sleator and Tarjan \cite{sleator1985self} and was implemented with Bayesian decision trees by Gramacy and Lee \cite{gramacy2008bayesian}. The rotate move was originally suggested by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} as another possible move that might improve mixing. A good introduction and several practical uses of the rotate move can be found in Cormen, Lieserson, Rivest, and Stein \cite{cormen2001introduction}. The proposal functions in Gramacy and Lee \cite{gramacy2008bayesian} perform a rotate move only when a swap move is proposed and the parent-child pair both split on the same covariate. We modify this and allow rotate moves to be a separate proposal function and not a special swap move case. The proposal mechanism of Chipman et al. uses the grow, prune, change and swap moves only. In addition, neither Chipman et al. \cite{chipman1998bayesian}, Denison et al. \cite{denison1998bayesian}, nor Gramacy and Lee \cite{gramacy2008bayesian} included weights on each covariate in their examples or model specifications. They sampled each covariate and each split value uniformly across all covariates. 
+
+	\subsection{Regularization Posteriors}\label{subsec:Regularization Priors}
+		While this paper is focused on regularized trees, we will show the connection to various regularization frameworks used for regression models. In essence, the ALoVaS method can incorporate any model based regularization method. We briefly describe a few popular approaches for the sake of completeness. 
+		
+		Regularization, originally defined as a constrained optimization problem, has been a popular topic of research in the sparse linear model literature. The lasso model \cite{tibshirani1996regression}, a popular regularization technique, seeks to optimize an $L_1$ constrained least squares problem. The negative of the log posterior density of the lasso is given by Equation \ref{eqn:lasso_obj}
+		
+		\begin{equation}\label{eqn:lasso_obj}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\lambda \sum_{j=1}^p \vert \mu_j \vert}_{\text{$-log$ Laplace prior}}\hspace{-0.5cm}.
+		\end{equation}
+		
+\noindent Interpreted in a Bayesian setting, the $L_1$ constraint is viewed as a double exponential or Laplace prior on the coefficients, $\mu_j$. A nice property of the lasso model is that the \emph{maximum a posteriori} estimated coefficients form a sparse vector, with $\lambda$ controlling the degree of sparsity. Thus, one of the models that we will use in our simulations uses a lasso prior to constrain the covariate selection probabilities. 
+
+Since the publication of the lasso model, several other regularization techniques have been published. One that predates the lasso by several years is the Stochastic Search Variable Selection method (SSVS) \cite{george1993variable}, given in Equation \ref{eqn:ssvs} beneath
+	\begin{equation}\label{eqn:lasso_obj}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \pi, \sigma, \psi )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \sum_{j=1}^p log\left\{\underbrace{ \pi_jN(0, \sigma^2)+(1-\pi_j)N(0, \sigma^2+ \psi^2)}_{\text{Spike \& slab prior}}  \right\},
+		\end{equation}
+with $\sigma < \psi$ and where $N(A,B)$ denotes the likelihood of a normal random variate with mean $A$ and variance $B$. This Bayesian method posits a prior distribution that is a point mass mixture prior. The point mass is at zero and the density is a normal distribution, with a Bernoulli random variable mixing the two. %Although this method is often useful in practice, recently some theoretical arguments have called the use of normal densities in to question when compared to other priors studied by Johnson and Rossell \cite{johnson2010use} called moment priors. Moment priors are defined in the Appendix in Equation \ref{eqn:moment_prior}.  We do not advocate the use of either the moment or SSVS prior over the other. However, 
+We present simulation studies that use the SSVS model. In addition to these two methods, SSVS and lasso, we also study another prior known as the horseshoe prior, originally proposed by Carvalho, Polson, and Scott \cite{carvalho2010horseshoe} and further studied in Polson and Scott \cite{polson2010shrink}. This prior may also be viewed as a constraint on the unknown coefficients, although the objective function is usually viewed in a Bayesian context as a posterior distribution over the coefficients. The horseshoe model has the following negative log posterior, 
+\begin{equation}\label{eqn:horseshoe}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \sigma, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\sum_{j=1}^p\left(\frac{\mu_j}{\lambda_j\sigma} \right)^2 + \frac{p+1}{2}log\left(1+ \frac{\lambda_j^2}{p}\right)}_{ \text{$-log$ Horseshoe prior} }.\end{equation}
+\noindent Although Carvalho et al.  \cite{carvalho2010horseshoe} state that the horseshoe prior is the case when $\sigma^2=1$, in their paper they refer to the general case of $\sigma^2$ as the horseshoe prior and we also call the general case the horseshoe prior. Also, $\lambda^2$ has a central half-t density with $p$ degrees of freedom. Here for completeness, we write out the the priors, including the hierarchical form of the horseshoe prior which is the commonly used way to represent the horseshoe prior:
+\begin{equation}\label{eqn:ssvs}
+\pi(\mu_j) \propto N(0,\sigma_j^2)p_j+(1-p_j)N(0,\sigma_j^2+\psi),
+\end{equation}
+\begin{equation}\label{eqn:lasso}
+\pi(\mu_j) \propto \exp(-\lambda\vert \mu_j\vert),
+\end{equation}
+\begin{align}\label{eqn:horseshoe}
+\pi(\mu_j\vert \lambda_j) &\propto N(0, \lambda^2\sigma^2),\\
+\pi(\lambda_j | a)&\propto \text{Inv-}\Gamma(a,b),\nonumber \\ \nonumber
+\pi(a)&\propto \text{Inv-}\Gamma(c,d).
+\end{align}
+The reader should note that the Laplace prior in the model indicates that this is a lasso type model and the lasso prior is in fact a double exponential, or Laplace prior. Other priors on the $\mu_j$ are possible and we consider the SSVS, or spike and slab prior given in Equation \ref{eqn:ssvs}, and the horseshoe prior given in Equation \ref{eqn:horseshoe}, in addition to the lasso prior of Equation \ref{eqn:lasso}. 
+
+Recall, if $X$ is distributed according to a t-distribution with $p$ degrees of freedom, then $Y=\vert X\vert$ is distributed according to a half-t distribution with $p$ degrees of freedom \cite{johnson1995continuous}. For our simulations, we use the mixture representation of the half-t distribution given in Huang and Wand \cite{huang2013simple} and given in Appendix \ref{sec:appendix} for completeness. Interestingly, the three models can be interpreted as scale mixtures of normal priors. The Lasso is equivalent to a exponential scale mixture of normals, the SSVS is a point mass scale mixture of normals, and the horseshoe is a half-t scale mixture of normals. In all three cases we have a global regularization parameter, $\lambda$, $\psi$, and $\sigma$ represent the regularization parameters for the lasso, SSVS and horseshoe priors respectively.    
