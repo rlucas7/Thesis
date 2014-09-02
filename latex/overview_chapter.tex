@@ -473,38 +473,3 @@ Given a tree $\mathcal{T}$, we sample a new tree adjacent to $\mathcal{T}$ by pr
   \item The Rotate step: randomly choose a left or right rotation move, each with probability $1/2$. Then a rotatable node is chosen and a rotate move is performed.
  \end{itemize}
   The rotate operation for binary trees was first introduced in Sleator and Tarjan \cite{sleator1985self} and was implemented with Bayesian decision trees by Gramacy and Lee \cite{gramacy2008bayesian}. The rotate move was originally suggested by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} as another possible move that might improve mixing. A good introduction and several practical uses of the rotate move can be found in Cormen, Lieserson, Rivest, and Stein \cite{cormen2001introduction}. The proposal functions in Gramacy and Lee \cite{gramacy2008bayesian} perform a rotate move only when a swap move is proposed and the parent-child pair both split on the same covariate. We modify this and allow rotate moves to be a separate proposal function and not a special swap move case. The proposal mechanism of Chipman et al. uses the grow, prune, change and swap moves only. In addition, neither Chipman et al. \cite{chipman1998bayesian}, Denison et al. \cite{denison1998bayesian}, nor Gramacy and Lee \cite{gramacy2008bayesian} included weights on each covariate in their examples or model specifications. They sampled each covariate and each split value uniformly across all covariates. 
-
-	\subsection{Regularization Posteriors}\label{subsec:Regularization Priors}
-		While this paper is focused on regularized trees, we will show the connection to various regularization frameworks used for regression models. In essence, the ALoVaS method can incorporate any model based regularization method. We briefly describe a few popular approaches for the sake of completeness. 
-		
-		Regularization, originally defined as a constrained optimization problem, has been a popular topic of research in the sparse linear model literature. The lasso model \cite{tibshirani1996regression}, a popular regularization technique, seeks to optimize an $L_1$ constrained least squares problem. The negative of the log posterior density of the lasso is given by Equation \ref{eqn:lasso_obj}
-		
-		\begin{equation}\label{eqn:lasso_obj}
-		-log(\pi(\vec{\mu} \vert \vec{y}, X, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\lambda \sum_{j=1}^p \vert \mu_j \vert}_{\text{$-log$ Laplace prior}}\hspace{-0.5cm}.
-		\end{equation}
-		
-\noindent Interpreted in a Bayesian setting, the $L_1$ constraint is viewed as a double exponential or Laplace prior on the coefficients, $\mu_j$. A nice property of the lasso model is that the \emph{maximum a posteriori} estimated coefficients form a sparse vector, with $\lambda$ controlling the degree of sparsity. Thus, one of the models that we will use in our simulations uses a lasso prior to constrain the covariate selection probabilities. 
-
-Since the publication of the lasso model, several other regularization techniques have been published. One that predates the lasso by several years is the Stochastic Search Variable Selection method (SSVS) \cite{george1993variable}, given in Equation \ref{eqn:ssvs} beneath
-	\begin{equation}\label{eqn:lasso_obj}
-		-log(\pi(\vec{\mu} \vert \vec{y}, X, \pi, \sigma, \psi )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \sum_{j=1}^p log\left\{\underbrace{ \pi_jN(0, \sigma^2)+(1-\pi_j)N(0, \sigma^2+ \psi^2)}_{\text{Spike \& slab prior}}  \right\},
-		\end{equation}
-with $\sigma < \psi$ and where $N(A,B)$ denotes the likelihood of a normal random variate with mean $A$ and variance $B$. This Bayesian method posits a prior distribution that is a point mass mixture prior. The point mass is at zero and the density is a normal distribution, with a Bernoulli random variable mixing the two. %Although this method is often useful in practice, recently some theoretical arguments have called the use of normal densities in to question when compared to other priors studied by Johnson and Rossell \cite{johnson2010use} called moment priors. Moment priors are defined in the Appendix in Equation \ref{eqn:moment_prior}.  We do not advocate the use of either the moment or SSVS prior over the other. However, 
-We present simulation studies that use the SSVS model. In addition to these two methods, SSVS and lasso, we also study another prior known as the horseshoe prior, originally proposed by Carvalho, Polson, and Scott \cite{carvalho2010horseshoe} and further studied in Polson and Scott \cite{polson2010shrink}. This prior may also be viewed as a constraint on the unknown coefficients, although the objective function is usually viewed in a Bayesian context as a posterior distribution over the coefficients. The horseshoe model has the following negative log posterior, 
-\begin{equation}\label{eqn:horseshoe}
-		-log(\pi(\vec{\mu} \vert \vec{y}, X, \sigma, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\sum_{j=1}^p\left(\frac{\mu_j}{\lambda_j\sigma} \right)^2 + \frac{p+1}{2}log\left(1+ \frac{\lambda_j^2}{p}\right)}_{ \text{$-log$ Horseshoe prior} }.\end{equation}
-\noindent Although Carvalho et al.  \cite{carvalho2010horseshoe} state that the horseshoe prior is the case when $\sigma^2=1$, in their paper they refer to the general case of $\sigma^2$ as the horseshoe prior and we also call the general case the horseshoe prior. Also, $\lambda^2$ has a central half-t density with $p$ degrees of freedom. Here for completeness, we write out the the priors, including the hierarchical form of the horseshoe prior which is the commonly used way to represent the horseshoe prior:
-\begin{equation}\label{eqn:ssvs}
-\pi(\mu_j) \propto N(0,\sigma_j^2)p_j+(1-p_j)N(0,\sigma_j^2+\psi),
-\end{equation}
-\begin{equation}\label{eqn:lasso}
-\pi(\mu_j) \propto \exp(-\lambda\vert \mu_j\vert),
-\end{equation}
-\begin{align}\label{eqn:horseshoe}
-\pi(\mu_j\vert \lambda_j) &\propto N(0, \lambda^2\sigma^2),\\
-\pi(\lambda_j | a)&\propto \text{Inv-}\Gamma(a,b),\nonumber \\ \nonumber
-\pi(a)&\propto \text{Inv-}\Gamma(c,d).
-\end{align}
-The reader should note that the Laplace prior in the model indicates that this is a lasso type model and the lasso prior is in fact a double exponential, or Laplace prior. Other priors on the $\mu_j$ are possible and we consider the SSVS, or spike and slab prior given in Equation \ref{eqn:ssvs}, and the horseshoe prior given in Equation \ref{eqn:horseshoe}, in addition to the lasso prior of Equation \ref{eqn:lasso}. 
-
-Recall, if $X$ is distributed according to a t-distribution with $p$ degrees of freedom, then $Y=\vert X\vert$ is distributed according to a half-t distribution with $p$ degrees of freedom \cite{johnson1995continuous}. For our simulations, we use the mixture representation of the half-t distribution given in Huang and Wand \cite{huang2013simple} and given in Appendix \ref{sec:appendix} for completeness. Interestingly, the three models can be interpreted as scale mixtures of normal priors. The Lasso is equivalent to a exponential scale mixture of normals, the SSVS is a point mass scale mixture of normals, and the horseshoe is a half-t scale mixture of normals. In all three cases we have a global regularization parameter, $\lambda$, $\psi$, and $\sigma$ represent the regularization parameters for the lasso, SSVS and horseshoe priors respectively.    

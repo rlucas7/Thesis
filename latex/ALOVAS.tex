@@ -1,4 +1,38 @@
-\section{Additive Logistic Variable Selection: The ALoVaS method}
+\section{Additive Logistic Variable Selection: The ALoVaS method}\label{sec:Introduction}
+
+In this chapter we describe a decision tree method to explicitly handle variable selection in high-dimensional data, called the Additive Logistic Variable Selection  (ALoVaS) method. This method allows us to reuse regularization approaches, prominent in the linear model literature, and apply them to decision trees. Although Bayesian methods have been available for use with decision trees since the seminal papers of Chipman, George, and McCulloch \cite{chipman1998bayesian}  and Denison, Mallick, and Smith \cite{denison1998bayesian}, there has been little work to alleviate the practical difficulties of applying Bayesian decision trees for high-dimensional data. A notable exception is the approach of Roberts and Leman \cite{Roberts:2013uq} who used a Dirichlet prior on the covariate selection probabilities. Also, the non-Bayesian approaches described by Ishwaran and coauthers \cite{ishwaran2011random,ishwaran2010high,ishwaran2007variable} deserve mentioning these authors use an initial bootstrap sample to determine the covariate selection probabilities and then use these estimated covariate selection probabilities in a subsequent random forest algorithm. Moreover, in the discussion of Chipman et al., it is noted by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} that the Bayesian approach to decision trees breaks down as the number of covariates increases. 
+
+In contrast to the literature on decision tree variable selection, the literature on variable selection for linear models is voluminous. Textbooks have been written on variable selection for linear models \cite{miller2002subset}. Each year several papers are published in major statistical journals developing properties of various variable selection methods and proposing modifications to improve known deficiencies. 
+
+Let us start with the linear model
+\begin{equation}\label{def:linear_model}
+\vec{y} = X\vec{\mu} + \vec{\epsilon},
+\end{equation}
+where $\vec{\epsilon}$ is an $n \times 1$ vector of random errors, typically assumed to follow a multivariate normal distribution. Also, $X$ is an $n \times p$ matrix, also called the design matrix, which determines the mean value associated with each observed response, the associated element of the $n\times 1$ vector $\vec{y}$. It should be noted that in this section and throughout this paper we use the cell means model to describe the ANOVA linear model. Thus here $X$ denotes an incidence matrix of full rank. It is well known that if $n$, the number of observations, is less than $p$, the number of covariates, then the estimated values of the $\mu_j$, for $j=1,\dots,p$, denoted $\hat{\mu}_j$, are not estimable. However, regularizing, or equivalently, putting a prior on the $\mu_j$, results in estimable values for the $\hat{\mu}_j$. Moreover, a nice property of the linear model is that covariates deemed not useful can have their coefficients coded as zero, whereas useful covariates can be encoded with non-zero coefficients. Thus, a sparse linear model indicates knowledge that certain covariates are not useful. Sparse linear models are typically necessary when dealing with high-dimensional data, especially in the $p>n$ case. 
+
+The Additive Logistic Transform (\ALT), is used as the canonical inverse link function \cite{mccullagh1989generalized} with multi-category response data in a multi class logistic regression. The \ALT\ is referred to as the softmax function in the machine learning literature \cite{bishop2006pattern}. Additionally, the \ALT\ is fundamental to the analysis of compositional data \cite{aitchison1986statistical}. The \ALT\ is defined by the vector valued function given in Equation \ref{eqn:alt}, 
+\begin{equation}\label{eqn:alt}
+\vec{q} = \left[ q_1, q_2,\dots, q_{p-1}, q_p \right] =\vec{g}^{-1}(\vec{\mu})= \left[ \frac{e^{\mu_1}}{1+S_{p-1}},\frac{e^{\mu_2}}{1+S_{p-1}}, \dots,\frac{e^{\mu_{p-1}}}{1+S_{p-1}},\frac{1}{1+S_{p-1}} \right],\end{equation} 
+where $S_{p-1}=\sum_{j=1}^{p-1}e^{\mu_j}$. Moreover, the \ALT\ is an invertible mapping from the $p$ dimensional real number system to a probability simplex. This allows us to calculate the distribution of the random variables obtained by the \ALT\ via a change of variables. In this paper we focus on the Additive Logistic Normal (\ALN) density, obtained by applying the \ALT\ to a random vector with a multivariate normal density. The \ALN\ density has proved successful in the correlated topic model \cite{blei2007correlated,lafferty2005correlated}.  Additionally, for our applications the \ALN\ density allows us to model covariate selection probabilities that have both positive and negative correlations, whereas distributions like the Dirichlet density only permit negative correlations.
+
+By focusing on the \ALT, we are able to transform the decision tree variable selection problem into a problem of variable selection in a linear model. The upshot of this is that we may use variable selection methods, prevalent in the linear model literature, with decision trees. Thus, we can sample from a posterior distribution of the covariate selection probabilities and determine the utility of covariates, simultaneously performing variable selection and decision tree fitting. 
+ 
+\begin{figure}[H]
+  \centering
+  \begin{tabular}{ccc}
+ \subfigure[]
+ {\includegraphics[trim={3cm 16cm 5cm 1cm},clip,scale=0.5]{figures/prob_plot_tikz_bw.pdf}}
+%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/real_space_tikz.png}} 
+    & \subfigure[]{\includegraphics[trim={2cm 11cm 8cm 10.1cm},clip,scale=0.7]{figures/simple_tree_tikz.pdf}} \\
+\end{tabular}
+  \caption{In (a) we plot the points in the Euclidean space and the primed points represent the points mapped to the probability simplex, represented in the plot by the surface of the triangular plane given by the equation $x+y+z=1, x,y,z >0$. The primes indicate points on the probability simplex after applying the additive logistic transformation to the split counts. In (b) we plot an example decision tree splitting on two of three possible covariates.}
+  \label{fig:trees_and_probability}
+\end{figure}
+ 
+Figure \ref{fig:trees_and_probability} shows a plot of a decision tree and a plot of the probabilities associated with the tree on a two-dimensional simplex and the three-dimensional Euclidean space. If the observed data has only three covariates and we only observe the first two covariates, $x_1$ and $x_2$ in the estimated tree, then the covariate selection probability vector is approximately $\vec{p} = [0.50, 0.31, 0.19]$. The covariate that has no observed splits receives a lower assigned probability for the subsequent iteration, whereas the two covariates with larger numbers of splits receive proportionally higher covariate selection probabilities for the following iteration of the algorithm. Note the point $\vec{0}^\prime$ in Figure \ref{fig:trees_and_probability} is the point $(1/3,1/3,1/3)$ which functions as the origin on the simplex in 3 dimensions. 
+
+This chapter proceeds as follows: subection \ref{sec:Model} contains a description of the models used in this paper. The reader may find it helpful to reread the material of Chapter \ref{sec:Model}, we state the likelihood function and review the Chipman et al. Bayesian CART \cite{chipman1998bayesian} model for completeness.  In Section \ref{sec:ALoVaS_model}, we present the ALoVaS model, we show the relation with the CGM model, and detail the simulation algorithms used. Then in Section \ref{sec:Examples}, we present simulated examples where we study the efficacy of our proposed method using the regularization priors we describe in Section \ref{sec:Model}. Concluding Section \ref{sec:Examples}, we give an example classifying webpages according to whether those webpages contain ads or not. Finally, in Section \ref{sec:Conclusion} we summarize our findings and discuss the limitations, extensions, and possible variations of our work.      
+
 
 \subsection{Normal Distributions Transformed to the Unit Simplex: ALT and ALN Dynamics. }\label{sec:ALN_chapter}
 
@@ -261,7 +295,7 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 
 %%%%---------END OF: Graphics from preliminary simulations using the simple sampler approach
 
-\subsection{A Stochastic Search Variable Selection Approach}
+\subsection{A Stochastic Search Variable Selection Approach}\label{sec:PX_1}
 
 Using the results of George and McCulloch we derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
 
@@ -286,7 +320,7 @@ Variable selection with SSVS facilitates a Bayesian approach to variable selecti
 
 Here the $\psi_i >0$ and the $\tau_i>0$. Usually $p_i\equiv1/2$ but it is also possible to put a prior on these hyper-parameters. The advantage of a mixture prior in this form is that Gibbs samples are readily available for each of the desired quantities facilitating fast sampling.     
 
-\subsection{Parameter Expansions For the Lasso and Horseshoe Priors}
+\subsection{Parameter Expansions For the Lasso and Horseshoe Priors}\label{sec:PX_2}
 In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means ($\mu_j$) for each covariate in the normal space. We use the ALN transform to convert the $\mu_j$ to probabilities using the ALT transform. 
 We use the scale mixture of normals representation to write the Laplace prior is parameter expanded form. This representation is stated here for reference.
 
@@ -306,11 +340,11 @@ V \sim \text{Exponential}(1), \text{ and}
 X \sim \text{Laplace}(\mu, \sigma).
 \end{equation}
 
-What we want to examine here is whether shrinkage along an $L_1$ penalty will achieve similar results to the SSVS approach and give us meaningful results. The belief here is the same as in the SSVS approach, shrinkage will shrink means toward zero in the multivariate normal. These sampled values from the multivariate normal will then be transformed into something on the $[0,1]$ (probability) scale using the ALN transform. Values of zero, or near zero, on the normal space transform into values of approximately $1/(d+1)$. The probabilities with values around $1/(d+1)$ correspond to covariates we are indifferent about. A confounding aspect of interpreting the probabilities is that they must all sum to 1. Therefore if some values are excessively small this may push all the other probabilities to be larger. If something like this happens it is then difficult to determine which covariates are non-informative. Further simulations regarding selecting covariates using the rule of Equation \ref{eqn:cov_inclusion_rule} will be conducted using the ALN transform and will be done on several simulated and real data examples.    
+What we want to examine here is whether shrinkage along an $L_1$ penalty will achieve similar results to the SSVS approach and give us meaningful results. The belief here is the same as in the SSVS approach, shrinkage will shrink means toward zero in the multivariate normal. These sampled values from the multivariate normal will then be transformed into something on the $[0,1]$ (probability) scale using the ALN transform. Values of zero, or near zero of the $\mu_j$, transform from the Euclidean space into values of approximately $1/(d+1)$ in the simplex space. The probabilities with values around $1/(d+1)$ correspond to covariates that we are indifferent about. Recall that all probabilities must sum to 1, adding some difficulty to interpreting the estimated probabilities. Therefore if some values are excessively small this may coerce all the other probabilities to be larger. In this case it is then difficult to determine which covariates are non-informative. Further simulations regarding selecting covariates using the rule of Equation \ref{eqn:cov_inclusion_rule} will be conducted using the ALN transform and will be done on several simulated and real data examples.    
 
 The following result will be useful for parameter expansion. If 
 
-$X\vert a \sim \mathrm{Inv\textendash Gamma}(\nu/2, \nu/a)$ and  $a \sim \mathrm{Inv\textendash Gamma}(1/2,A^2)$, then $\sqrt{X}\sim \mathrm{Half\textendash Cauchy}$. 
+$X\vert a \sim \mathrm{Inv\textendash Gamma}(\nu/2, \nu/a)$ and  $a \sim \mathrm{Inv\textendash Gamma}(1/2,A^2)$, then $\sqrt{X}\sim \mathrm{Half\textendash Cauchy}$. This is expressed symbolically in the integral equation,
 
 \begin{align*}
 f(x) &= \int_0^\infty \underbrace{  \frac{\nu^{\nu/2}}{a^{\nu/2}\Gamma(\nu/2)x^{(\nu/2)+1}}\exp{(-\frac{\nu}{ax})}   }_{=f(x\vert a)} \underbrace{\frac{\exp{(-\frac{1}{aA^2})}}{A\sqrt{\pi}a^{3/2}}}_{=f(a)} da\\
@@ -320,8 +354,7 @@ f(x) &= \int_0^\infty \underbrace{  \frac{\nu^{\nu/2}}{a^{\nu/2}\Gamma(\nu/2)x^{
 & =\frac{1}{\sqrt{x}(\nu+x/A^2)^{(\nu+1)/2}  }\\
 &=\frac{1}{\sqrt{x}(\nu+x/A^2)^{(\nu+1)/2}  }.
 \end{align*}
-
-Making the change of variable $x=y^2$, which implies $dx/(2\sqrt{x})=dy$, shows us that 
+Making the change of variable $x=y^2$, which implies $dx/(2\sqrt{x})=dy$, and substituting $y$ and $dy$ shows us that 
 
 \begin{equation}
 f(y) \propto (1+(y/A)^2/\nu)^{-(\nu+1)/2},
@@ -331,45 +364,45 @@ for $y>0$ which is the definition of a half-Cauchy density.
 Huang and Wand \cite{huang2013simple} indicate that using an inverse-Wishart prior on the variances, with each standard deviation having a half-Cauchy prior, gives a scaled beta marginal for each correlation. At this point it is worth recalling that the t and half-t distributions have as special cases, the Cauchy and half-Cauchy distributions when the degrees of freedom parameter ($\nu$) in the t and half-t is set to $\nu=1$. 
 
 
+\subsection{Regularization Posteriors}\label{subsec:Regularization Priors}
+		While this paper is focused on regularized trees, we will show the connection to various regularization frameworks used for regression models. In essence, the ALoVaS method can incorporate any model-based regularization method. We briefly describe a few popular approaches for the sake of completeness. 
+		
+		Regularization, originally defined as a constrained optimization problem, has been a popular topic of research in the sparse linear model literature. The lasso model \cite{tibshirani1996regression}, a popular regularization technique, seeks to optimize an $L_1$ constrained least squares problem. The negative of the log posterior density of the lasso is given by Equation \ref{eqn:lasso_obj}
+		
+		\begin{equation}\label{eqn:lasso_obj}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\lambda \sum_{j=1}^p \vert \mu_j \vert}_{\text{$-log$ Laplace prior}}\hspace{-0.5cm}.
+		\end{equation}
+		
+\noindent Interpreted in a Bayesian setting, the $L_1$ constraint is viewed as a double exponential or Laplace prior on the coefficients, $\mu_j$. A nice property of the lasso model is that the \emph{maximum a posteriori} estimated coefficients form a sparse vector, with $\lambda$ controlling the degree of sparsity. Thus, one of the models that we will use in our simulations uses a lasso prior to constrain the covariate selection probabilities. 
 
-\section{The ALoVaS Model}\label{sec:Introduction}
-	
-In this paper we describe a decision tree method to explicitly handle variable selection in high-dimensional data, called the Additive Logistic Variable Selection  (ALoVaS) method. This method allows us to reuse regularization approaches, prominent in the linear model literature, and apply them to decision trees. Although Bayesian methods have been available for use with decision trees since the seminal papers of Chipman, George, and McCulloch \cite{chipman1998bayesian}  and Denison, Mallick, and Smith \cite{denison1998bayesian}, there has been little work to alleviate the practical difficulties of applying Bayesian decision trees for high-dimensional data. A notable exception is the approach of Roberts and Leman \cite{Roberts:2013uq} who used a Dirichlet prior on the covariate selection probabilities. Also, the non-Bayesian approaches described by Ishwaran and coauthers \cite{ishwaran2011random,ishwaran2010high,ishwaran2007variable} deserve mentioning these authors use an initial bootstrap sample to determine the covariate selection probabilities and then use these estimated covariate selection probabilities in a subsequent random forest algorithm. Moreover, in the discussion of Chipman et al., it is noted by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} that the Bayesian approach to decision trees breaks down as the number of covariates increases. 
-
-In contrast to the literature on decision tree variable selection, the literature on variable selection for linear models is voluminous. Textbooks have been written on variable selection for linear models \cite{miller2002subset}. Each year several papers are published in major statistical journals developing properties of various variable selection methods and proposing modifications to improve known deficiencies. 
-
-Let us start with the linear model
-\begin{equation}\label{def:linear_model}
-\vec{y} = X\vec{\mu} + \vec{\epsilon},
+Since the publication of the lasso model, several other regularization techniques have been published. One that predates the lasso by several years is the Stochastic Search Variable Selection method (SSVS) \cite{george1993variable}, given in Equation \ref{eqn:ssvs} beneath
+	\begin{equation}\label{eqn:lasso_obj}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \pi, \sigma, \psi )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \sum_{j=1}^p log\left\{\underbrace{ \pi_jN(0, \sigma^2)+(1-\pi_j)N(0, \sigma^2+ \psi^2)}_{\text{Spike \& slab prior}}  \right\},
+		\end{equation}
+with $\sigma < \psi$,s and $N(A,B)$ denotes the likelihood of a normal random variate with mean $A$ and variance $B$. This Bayesian method posits a prior distribution that is a point mass mixture prior. The point mass is at zero and the density is a normal distribution, with a Bernoulli random variable mixing the two. %Although this method is often useful in practice, recently some theoretical arguments have called the use of normal densities in to question when compared to other priors studied by Johnson and Rossell \cite{johnson2010use} called moment priors. Moment priors are defined in the Appendix in Equation \ref{eqn:moment_prior}.  We do not advocate the use of either the moment or SSVS prior over the other. However, 
+We present simulation studies that use the SSVS model. In addition to these two methods, SSVS and lasso, we also study another prior known as the horseshoe prior, originally proposed by Carvalho, Polson, and Scott \cite{carvalho2010horseshoe}, and further studied in Polson and Scott \cite{polson2010shrink}. This prior may also be viewed as a constraint on the unknown coefficients, although the objective function is usually viewed in a Bayesian context as a posterior distribution over the coefficients. The horseshoe model has the following negative log posterior, 
+\begin{equation}\label{eqn:horseshoe}
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \sigma, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\sum_{j=1}^p\left(\frac{\mu_j}{\lambda_j\sigma} \right)^2 + \frac{p+1}{2}log\left(1+ \frac{\lambda_j^2}{p}\right)}_{ \text{$-log$ Horseshoe prior} }.\end{equation}
+\noindent Although Carvalho et al.  \cite{carvalho2010horseshoe} state that the horseshoe prior is the case when $\sigma^2=1$, in their paper they refer to the general case of $\sigma^2$ as the horseshoe prior. We also call the general case the horseshoe prior. Additionally, $\lambda^2$ has a central half-t density with $p$ degrees of freedom. For completeness, we write out the priors, including the hierarchical form of the horseshoe prior, which is the commonly used way to represent the horseshoe prior:
+\begin{equation}\label{eqn:ssvs}
+\pi(\mu_j) \propto N(0,\sigma_j^2)p_j+(1-p_j)N(0,\sigma_j^2+\psi),
 \end{equation}
-where $\vec{\epsilon}$ is an $n \times 1$ vector of random errors, typically assumed to follow a multivariate normal distribution. Also, $X$ is an $n \times p$ matrix, also called the design matrix, which determines the mean value associated with each observed response, the associated element of the $n\times 1$ vector $\vec{y}$. It should be noted that in this section and throughout this paper we use the cell means model to describe the ANOVA linear model. Thus here $X$ denotes an incidence matrix of full rank. It is well known that if $n$, the number of observations, is less than $p$, the number of covariates, then the estimated values of the $\mu_j$, for $j=1,\dots,p$, denoted $\hat{\mu}_j$, are not estimable. However, regularizing, or equivalently putting a prior on the $\mu_j$, results in estimable values for the $\hat{\mu}_j$. Moreover, a nice property of the linear model is that covariates deemed not useful can have their coefficients coded as zero, whereas useful covariates can be encoded with non-zero coefficients. Thus, a sparse linear model indicates knowledge that certain covariates are not useful. Sparse linear models are typically necessary when dealing with high-dimensional data, especially in the $p>n$ case. 
+\begin{equation}\label{eqn:lasso}
+\pi(\mu_j) \propto \exp(-\lambda\vert \mu_j\vert),
+\end{equation}
+\begin{align}\label{eqn:horseshoe}
+\pi(\mu_j\vert \lambda_j) &\propto N(0, \lambda^2\sigma^2),\\
+\pi(\lambda_j | a)&\propto \text{Inv-}\Gamma(a,b),\nonumber \\ \nonumber
+\pi(a)&\propto \text{Inv-}\Gamma(c,d).
+\end{align}
+The reader should note that the Laplace prior in the model indicates that this is a lasso type model and the lasso prior is in fact a double exponential, or Laplace prior. Other priors on the $\mu_j$ are possible and we consider the SSVS, or spike and slab prior given in Equation \ref{eqn:ssvs}, and the horseshoe prior given in Equation \ref{eqn:horseshoe}, in addition to the lasso prior of Equation \ref{eqn:lasso}. 
 
-The Additive Logistic Transform (\ALT), when employed with a multi-category logistic regression, is used as the canonical inverse link function \cite{mccullagh1989generalized}. The \ALT\ is referred to as the softmax function in the machine learning literature \cite{bishop2006pattern}. Additionally, the \ALT\ is fundamental to the analysis of compositional data \cite{aitchison1986statistical}. The \ALT\ is defined by the vector valued function given in Equation \ref{eqn:alt}, 
-\begin{equation}\label{eqn:alt}
-\vec{q} = \left[ q_1, q_2,\dots, q_{p-1}, q_p \right] =\vec{g}^{-1}(\vec{\mu})= \left[ \frac{e^{\mu_1}}{1+S_{p-1}},\frac{e^{\mu_2}}{1+S_{p-1}}, \dots,\frac{e^{\mu_{p-1}}}{1+S_{p-1}},\frac{1}{1+S_{p-1}} \right],\end{equation} 
-where $S_{p-1}=\sum_{j=1}^{p-1}e^{\mu_j}$. Moreover, the \ALT\ is an invertible mapping from the $p$ dimensional real number system to a probability simplex. This allows us to calculate the distribution of the random variables obtained by the \ALT\ via a change of variables. In this paper we focus on the Additive Logistic Normal (\ALN) density, obtained by applying the \ALT\ to a random vector with a multivariate normal density. The \ALN\ density has proved successful in the correlated topic model \cite{blei2007correlated,lafferty2005correlated}.  Additionally, for our applications the \ALN\ density allows us to model covariate selection probabilities that have both positive and negative correlations, whereas distributions like the Dirichlet density only permit negative correlations.
+Recall, if $X$ is distributed according to a t-distribution with $p$ degrees of freedom, then $Y=\vert X\vert$ is distributed according to a half-t distribution with $p$ degrees of freedom \cite{johnson1995continuous}. For our simulations, we use the mixture representation of the half-t distribution given in Huang and Wand \cite{huang2013simple} and given in Subsection \ref{sec:PX_2}. Interestingly, the three models can be interpreted as scale mixtures of normal priors. The Lasso is equivalent to a exponential scale mixture of normals, the SSVS is a point mass scale mixture of normals, and the horseshoe is a half-t scale mixture of normals. In all three cases we have a global regularization parameter, $\lambda$, $\psi$, and $\sigma$ represent the regularization parameters for the lasso, SSVS and horseshoe priors respectively.    
 
-By focusing on the \ALT, we are able to transform the decision tree variable selection problem into a problem of variable selection in a linear model. The upshot of this is that we may use variable selection methods, prevalent in the linear model literature, with decision trees. Thus, we can sample from a posterior distribution of the covariate selection probabilities and determine the utility of covariates, simultaneously performing variable selection and decision tree fitting. 
- 
-\begin{figure}[H]
-  \centering
-  \begin{tabular}{ccc}
- \subfigure[]
- {\includegraphics[trim={3cm 16cm 5cm 1cm},clip,scale=0.5]{figures/prob_plot_tikz_bw.pdf}}
-%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/real_space_tikz.png}} 
-    & \subfigure[]{\includegraphics[trim={2cm 11cm 8cm 10.1cm},clip,scale=0.7]{figures/simple_tree_tikz.pdf}} \\
-\end{tabular}
-  \caption{In (a) we plot the points in the Euclidean space and the primed points represent the points mapped to the probability simplex, represented in the plot by the surface of the triangular plane given by the equation $x+y+z=1, x,y,z >0$. The primes indicate points on the probability simplex after applying the additive logistic transformation to the split counts. In (b) we plot an example decision tree splitting on two of three possible covariates.}
-  \label{fig:trees_and_probability}
-\end{figure}
- 
- Consider Figure \ref{fig:trees_and_probability}; in this figure we have a plot of a decision tree and a plot of the probabilities associated with the tree on a two-dimensional simplex and the three-dimensional Euclidean space. If the observed data has only three covariates and we only observe the first two covariates, $x_1$ and $x_2$ in the estimated tree, then the covariate selection probability vector is approximately $\vec{p} = [0.50, 0.31, 0.19]$. The covariate that has no observed splits receives a lower assigned probability for the subsequent iteration, whereas the two covariates with larger numbers of splits receive proportionally higher covariate selection probabilities for the following iteration of the algorithm. Note the point $\vec{0}^\prime$ in Figure \ref{fig:trees_and_probability} is the point $(1/3,1/3,1/3)$ which functions as the origin on the simplex in 3 dimensions. 
-
-This paper proceeds as follows: Section \ref{sec:Model} contains a description of the models used in this paper. Also in Section \ref{sec:Model}, we state the likelihood function and review the Chipman et al. Bayesian CART \cite{chipman1998bayesian} model for completeness.  In Section \ref{sec:ALoVaS_model}, we present the ALoVaS model, we show the relation with the CGM model, and detail the simulation algorithms used. Then in Section \ref{sec:Examples}, we present simulated examples where we study the efficacy of our proposed method using the regularization priors we describe in Section \ref{sec:Model}. Concluding Section \ref{sec:Examples}, we give an example classifying webpages according to whether those webpages contain ads or not. Finally, in Section \ref{sec:Conclusion} we summarize our findings and discuss the limitations, extensions, and possible variations of our work.      
 
 \subsection{The Model}\label{sec:ALoVaS_model}
 
-In this section we detail the ALoVaS model in the most general form. Then we detail the model for an arbitrary choice of priors for the means and variances. This allows the reader to see concrete examples of the ALoVaS method for clarity while preserving the general applicability of the method. 
+In this section we detail the ALoVaS model in the most general form. Then we detail the model for an arbitrary choice of priors for the means and variances. This allows the reader to see concrete examples of the ALoVaS method for clarity, while preserving the general applicability of the method. 
 
 We begin the model description by stating our posterior, 
 \begin{equation}\label{eqn:post}
@@ -377,11 +410,11 @@ We begin the model description by stating our posterior,
 \end{equation}
 where $Y$ denotes the response vector, $X$ is the design matrix or the collection of covariates, $\mathcal{T}$ denotes the decision tree, and $\vec{q}$ denotes the vector of covariate selection probabilities. 
 
-Instead of defining $\pi(\vec{q} \vert \mathcal{T})$ in terms of $\vec{q}$ we define on a linear scale, and once we have the linear scale parameters we convert to a probability using the \ALT
+Instead of defining $\pi(\vec{q} \vert \mathcal{T})$ in terms of $\vec{q}$, we define it on a linear scale, and once we have the linear scale parameters, we convert to a probability using the \ALT
 \begin{equation}\label{eqn:alt}
 \vec{q} = \left[ q_1, q_2,\dots, q_{p-1}, q_p \right] =\vec{g}^{-1}(\vec{\mu})= \left[ \frac{e^{\mu_1}}{1+S_{p-1}},\frac{e^{\mu_2}}{1+S_{p-1}}, \dots,\frac{e^{\mu_{p-1}}}{1+S_{p-1}},\frac{1}{1+S_{p-1}} \right],
 \end{equation} 
-where the notation is the same as in Section \ref{sec:Introduction}. The parameters on the linear scale are denoted $\mu_j$ and can be interpreted as log-odds of selecting covariate $j$. The number of splits on each covariate at each iteration are denoted as $s_{jt}$. We assume these to have an approximately normal distribution once multiplied by a parameter $c_j$. The parameter $c_j$ is distributed on the support $[-1,1]$ and has a scaled-beta prior scaled and shifted to cover the support of $c_j$. This framework is written succinctly in Equations \ref{eqn:alovas1} and \ref{eqn:alovas2}. These equations are written out here for completeness
+where the notation is the same as in Section \ref{sec:Introduction}. The parameters on the linear scale are denoted $\mu_j$ and can be interpreted as log-odds of selecting covariate $j$. The number of splits on each covariate at each iteration are denoted as $s_{jt}$. We assume these counts, $s_{jt}$ to have an approximately normal distribution once multiplied by a parameter $c_j$. The parameter $c_j$ is distributed on the support $[-1,1]$ and has a scaled-beta prior scaled and shifted to cover the support of $c_j$. This framework is written succinctly in Equations \ref{eqn:alovas1} and \ref{eqn:alovas2}. The equations for $s_{jt}$, $c_j$, and $\mu_j$ are written out here for completeness
 
 \begin{equation}\label{eqn:alovas1}
 c_js_{jt} \vert c_j \sim N\left(\mu_j=log(q_j/q_p),\sigma_j^2\right),
@@ -395,31 +428,146 @@ c_j \sim \text{ ScaledBeta}(-1,1,\alpha, \beta), \text{   and}
 \mu_j \sim g(\mu_j). 
 \end{equation}
 
-Here the density function $g$ can be specified by the analyst. In this paper we detail the specification of $g$ as a double exponential (Equation \ref{eqn:lasso}) prior, SSVS (Equation \ref{eqn:ssvs}) prior, and horseshoe (Equation \ref{eqn:horseshoe}) prior. The form of $g$ should now be recognized as a regularization prior. In Appendix \ref{sec:appendix} we include details for each of the three stated priors. Namely, the pseudocode for the lasso, SSVS, and horseshoe priors may be found in Sections \ref{sec:lasso_app}, \ref{sec:ssvs_app}, and \ref{sec:horseshoe_app}, respectively.
+Here the density function $g$ can be specified by the analyst. We detail the specification of $g$ as a Laplace (Equation \ref{eqn:lasso}) prior, SSVS (Equation \ref{eqn:ssvs}) prior, and horseshoe (Equation \ref{eqn:horseshoe}) prior. The form of $g$ should now be recognized as a regularization prior. In previous Subsections \ref{sec:PX_1}-\ref{sec:PX_2}, we included details for each of the three stated priors. Namely, the pseudocode for the lasso, SSVS, and horseshoe priors may be found in Sections \ref{sec:lasso_app}, \ref{sec:ssvs_app}, and \ref{sec:horseshoe_app}, respectively.
 Finally, we assume the usual Jeffreys' prior for the variances, 
 \begin{equation}
 \pi(\sigma^2_j) \propto \ \  \sigma^{-2}_j. 
 \end{equation}
 
-In practice inference should not be conducted on all the parameters in the model. There are many additional parameters in this model compared to the CGM version. For us, the main parameters of interest are $\mathcal{T}_i$, the $i$th decision tree and $\vec{q}$, the covariate selection probabilities. The probabilities are a function of the parameters $\vec{\mu},\vec{c},\vec{\sigma}$ and any other hyper-parameters estimated or sampled over. For full implementation details of the ALoVaS methods we study we include pseudocode in Appendix \ref{sec:appendix} for the SSVS, lasso, and horseshoe methods we implement. However, as noted in this section, different choices of $g(\mu_j)$ priors that regularize will result in different types of ALoVaS methods so the careful reader should be able to tailor the existing methods to whatever specific regularization prior they desire. 
+In practice inference should not be conducted on all the parameters in the model. There are many additional parameters in this model compared to the CGM version. For us, the main parameters of interest are $\mathcal{T}_i$, the $i$th decision tree, and $\vec{q}$, the covariate selection probabilities. The probabilities are a function of the parameters $\vec{\mu},\vec{c},\vec{\sigma}$ and any other hyper-parameters estimated or sampled over. For full implementation details of the ALoVaS methods we include pseudocode in Subsection \ref{sec:pseudo} for the SSVS, lasso, and horseshoe methods. However, as noted in this section, different choices of $g(\mu_j)$ priors that regularize will result in different types of ALoVaS methods so the careful reader should be able to tailor the existing methods to whatever desired regularization prior. 
 
  %We now describe the detailed balance criteria and give the equation that must be satisfied for this criteria to hold in our model. 
- The proposed trees are accepted or rejected based on the usual Metropolis-Hastings rule which is written here for completeness
+ The proposed trees are accepted or rejected based on the usual Metropolis-Hastings rule, which is written here for completeness
  
  \begin{equation}
 \alpha(\mathcal{T}\vert \mathcal{T}^\prime) = \text{min}\left(\frac{\Pr(\mathcal{T}^\prime \vert X, \vec{q}, \vec{y} )\Pr(\mathcal{T}| \mathcal{T}^\prime) }{ \Pr(\mathcal{T} \vert X, \vec{q}, \vec{y})\Pr(\mathcal{T}^\prime \vert \mathcal{T}) } ,1\right)
  \end{equation}
  
-Detailed balance is a formal property imposed on Markov Chains after convergence. Intuitively, the detailed balance equation indicates that after convergence the process has the same distribution when run forwards in time as when run backwards in time. Formally, this is represented in Equation \ref{eqn:detailed_balance}, 
+Detailed balance is a formal property imposed on Markov Chains after convergence. Intuitively, the detailed balance equation indicates that, after convergence, the process has the same distribution when run forwards in time as when run backwards in time. Formally, this is represented in Equation \ref{eqn:detailed_balance}, 
 \begin{equation}\label{eqn:detailed_balance}
 \alpha (\mathcal{T}^{(t)} \vert \mathcal{T}^{(t-1)}, \vec{q}^{(t-1)})\pi(\mathcal{T}^{(t)}\vert \vec{q}^{(t-1)})\pi(\vec{q}^{(t-1)}) = \pi(\vec{q}^{(t)}\vert \mathcal{T}^{(t-1)})\pi(\mathcal{T}^{(t-1)})\alpha(\mathcal{T}^{(t-1)} \vert \mathcal{T}^{(t-1)}, \vec{q}^{(t)} ),
 \end{equation}
-where the superscripts denote the (discrete time) nature of the Markov Chain. Where we are holding the $\vec{q}$ constant while transitioning from $\mathcal{T}^{(t)}$ to $\mathcal{T}^{(t-1)}$. Once the transition on $\mathcal{T}$ has been made we update $\vec{q}$ using a Gibbs step. Thus, our algorithm is a Metropolics within Gibbs algorithm. The Metropolis step updates $\mathcal{T}$ and the Gibbs step updates $\vec{q}$ and we iterate until convergence. It can be shown that any algorithm satisfying the detailed balance criteria is guaranteed to converge to the stationary distribution \cite{robert1999monte}. 
+where the superscripts denote the (discrete time) nature of the Markov Chain. We are holding the $\vec{q}$ constant while transitioning from $\mathcal{T}^{(t)}$ to $\mathcal{T}^{(t-1)}$. Once the transition on $\mathcal{T}$ has been made, we update $\vec{q}$ using a Gibbs step. Thus, our algorithm is a Metropolis within Gibbs algorithm. The Metropolis step updates $\mathcal{T}$, the Gibbs step updates $\vec{q}$, and we iterate until convergence. It can be shown that any algorithm satisfying the detailed balance criteria is guaranteed to converge to the stationary distribution \cite{robert1999monte}. 
 
-The Markov Transition Density (MTD),  for $q_j$ is given by Equation \ref{eqn:markov_trans_density}
+The Markov Transition Density (MTD) for $q_j$ is given by Equation \ref{eqn:markov_trans_density}
 \begin{equation}\label{eqn:markov_trans_density}
 \Pr(q_j^{(t)}\vert q_j^{(t-1)})=\sum_{\mathcal{T}}\Pr(q_j^{(t)}\vert \mathcal{T}^{(t-1)})\Pr(\mathcal{T}^{(t-1)} \vert q_j^{(t-1)}).
 \end{equation}
 A similar MTD can be formulated for $\mathcal{T}$. When closed forms exist for these MTDs, and minorization and drift conditions are also satisfied, geometric convergence may be established. For examples and more details on this line of study, see the very readable introduction by Jones and Hobert \cite{jones2001honest}. For our example, the MTD for $\vec{q}$ involves evaluating an NP-Hard sum, thus exact convergence rates seem unlikely to be found. 
 
-In this section we write out the ALoVaS model for a specific regularization prior. In general, the prior on the set $\{\mu_j,\sigma^2_j\}_{j=1}^{p}$ will change, giving us different flavors of the ALoVaS method. In this paper we include a study of the lasso, horseshoe, and SSVS priors, but other variations are certainly possible. Moreover, we do not claim optimality of our results. Indeed, many of these priors are optimal only in specific circumstances. If a model is not optimal in a linear model, this will carry over to our ALoVaS model and therefore, the ALoVaS method will be sub-optimal as well. This is not a drawback of our proposed ALoVaS method but is a drawback of the choice of the regularization prior in the given situation.  
+In this section we write out the ALoVaS model for a specific regularization prior. In general, the prior on the set $\{\mu_j,\sigma^2_j\}_{j=1}^{p}$ will change, giving us different flavors of the ALoVaS method. In this paper we include a study of the lasso, horseshoe, and SSVS priors, but other variations are certainly possible. Moreover, we do not claim optimality of our results. Indeed, many of these priors are optimal only in specific circumstances. If a model is not optimal in a linear model, this will carry over to our ALoVaS model. Therefore, the ALoVaS method will be sub-optimal as well. This is not a drawback of our proposed ALoVaS method but is a drawback of the choice of the regularization prior in the given situation.  
+
+\subsection{ALoVaS Algorithms Pseudocode}\label{sec:pseudo}
+
+This subsection contains some technical details of regularization priors described in Section \ref{sec:Model}.
+Also in this appendix we explain the hierarchical expansions that we employ to facilitate Gibbs sampling. 
+
+		\subsubsection{The Lasso Prior}\label{sec:lasso_app}
+		The lasso prior, also referred to as $L_1$ regularization, was described in \cite{tibshirani1996regression} and has the posterior density
+\begin{equation}\label{eqn:l1_prior}
+ -log(\pi(\vec{\mu} \vert -)) \propto \sum_{j=1}^p (c_j s_{jt} -\mu_j)^2 +\lambda\sum_{j=1}^p \vert \mu_j \vert.
+ \end{equation} 
+ 
+ Sampling from this density directly is difficult, instead we work in a larger parameter space and recover this density marginally. 	
+The scale mixture of normal representation of the Laplace distribution was used in \cite{park2008bayesian} and is a convenient way to represent the $L_1$ prior in an expanded form. 
+ We expand the $L_1$ prior to be a scale mixture of normals where the scale density is an exponential density. We then have the posterior density proportional to 
+ \begin{equation}%\label{eqn:lasso_expand}
+ -log(\pi(\vec{\mu}, \tau^2 \vert -)) \propto \sum_{j=1}^p (c_js_{jt}-\mu_j)^2 + \lambda^2\sum_{j=1}^p \left(\frac{\mu_j}{\tau}\right)^2 +\frac{\lambda^2\tau^2}{2}.\nonumber
+ \end{equation}
+To sample from this joint posterior density we need to sample an additional parameter $\tau$ which has a generalized inverse Gaussian (GIG) density \cite{chhikara1989inverse,devroye1986non}. Note that integrating the prior over $\tau^2$ allows us to recover the marginal $L_1$ prior on the $\mu_j$. A GIG density can be easily and efficiently sampled using an accept-reject algorithm given by Devroye \cite{devroye1986non}.  Sampling from $\mu_j$ is now accomplished by Gibbs sampling conditional on the previously sampled value of $\tau$. 
+
+%%%=============================Start of pseudo code for laplace sampler ==============================================		
+			\begin{algorithm}[H]
+			%\dontprintsemicolon
+			\KwData{ $\mathcal{T}_1,\vec{c}_1,\vec{\sigma}_1^2,\vec{\tau}^2_1,\vec{\mu}_1,\vec{q}_1$}
+% \KwResult{how to write algorithm with \LaTeX2e }
+% \SetAlgoLined
+\For{ $i=2, \dots, \# \text{samples}$}{
+	$\mathcal{T}_{i} \sim  \text{ Tree Sampler}(\mathcal{T}_{i-1}, \vec{q}_{i-1})$\;
+	$\vec{c}_{i} \sim N_{[-a,a]}(m, V)$\;
+	$\vec{\sigma}^2 \sim \text{ Inv-Gamma}\small{\left( \frac{2a+6}{2}, \frac{ (c_{ij}s_{ij} -\mu_j)^2}{2} + \lambda^2\frac{(\mu_j-\mu_j^p)^2}{\tau_j^2}+\theta\right)}$\; 
+	$\vec{\tau}^2 \sim \text{ GIG}(\chi=\lambda^2\mu_j, \psi = \lambda^2, \lambda^\prime=0)$\; 
+	$\vec{\mu} \sim \text{ Normal}\left(\frac{c_{ij}s_{ij}}{\sigma_i^2\tau_{ij}^2}, \frac{\sigma_i^2\tau_{ij}^2}{\lambda^2+\tau_{ij}^2} \right)$\; 
+	$\vec{q}_i = \left[\frac{e^{\mu_1}}{1+\sum_{j=1}^{p-1}e^{\mu_j}}, \dots, 1-\sum_{j=1}^{p-1}q_j \right]$\; 
+}
+\caption{Laplace Sampler}\label{psd:laplace_sampler}
+			\end{algorithm}
+%%%=============================End of pseudo code for laplace sampler ==============================================		
+		
+		\subsubsection{The Horseshoe Prior}\label{sec:horseshoe_app}
+The hierarchical representation of the horseshoe prior \cite{carvalho2010horseshoe} is given by the following equations
+
+ \begin{equation}\label{eqn:horseshoe1}
+ y_j\vert\mu_j, \sigma^2 \sim N(\mu_j, \sigma^2),
+ \end{equation}  
+ \begin{equation}\label{eqn:horseshoe2}
+ \mu_j\vert\lambda_j,\tau \sim N(0, \lambda_j^2 \tau^2 ),
+ \end{equation}  
+  \begin{equation}\label{eqn:horseshoe3}
+  \pi(\lambda_j)\propto \frac{1}{1+\lambda_j^2}\mathds{1}[\lambda_j\geq 0],
+ \end{equation} 
+   \begin{equation}\label{eqn:horseshoe4}
+  \pi(\tau)\propto \frac{1}{1+\tau^2}\mathds{1}[\tau\geq 0].
+ \end{equation} 
+ This is a global-local scale mixture of normals \cite{polson2010shrink}. Additionally, we may describe the Inv-$\Gamma$ scale mixture representation of half-t densities \cite{gelman2006prior} 
+
+\begin{align}\label{eqn:half-t-mixture}
+f(\sigma^2 \vert \nu, a) & = \frac{ (\nu/a)^{\nu/2} }{ \Gamma(\nu/2) } (\sigma^{2})^{-(\nu/2 +1)}
+\exp \left[- \frac{\nu}{a \sigma^2} \right] \\
+f(a\vert 1/2,c) & =\frac{c}{\Gamma(1/2)}a^{-3/2}\exp\left[-1/(ac^{2})\right]  \\
+\text{then,} & \\
+f(\sigma \vert\nu,c) & = \text{Half-t($\nu,c$)}. 
+\end{align}  
+It is worth noting that this scale mixture result given above in Equation \ref{eqn:half-t-mixture} has the measure specified on $\sigma^2$, but the half-Cauchy is defined on $\sigma$. 
+			
+	%		\begin{center} \textbf{Include Pseudo-Code to sample the horseshoe prior.} \end{center}
+	
+%%%=============================Start of pseudo code for the horseshoe sampler ==============================================		
+			\begin{algorithm}[H]
+			%\dontprintsemicolon
+			\KwData{ $\mathcal{T}_1,\vec{c}_1,\vec{\sigma}_1^2,\vec{\tau}^2_1,\vec{\mu}_1,\vec{q}_1,\vec{\lambda}^2, a_{\tau},c_{\tau},a$}
+% \KwResult{how to write algorithm with \LaTeX2e }
+ %\SetAlgoLined
+\For{ $i=2, \dots, \# \text{samples}$}{
+	$\mathcal{T}_{i} \sim  \text{ Tree Sampler}(\mathcal{T}_{i-1}, \vec{q}_{i-1})$\;
+	$\vec{c}_{i} \sim N_{[-a,a]}(\mu_j/s_{ij}, \sigma^2_j/s_{ij})$\;
+	$\lambda_j^2 \sim \text{Inv-$\Gamma$}(\nu_j +1/2, \mu_j^2/2\tau^2+1/a_j)$\;
+	$a_j \sim \text{Inv-$\Gamma$}(1/2,1/\lambda_j^2 + 1/c_j)$\;
+	$\tau^2 \sim \text{Inv-$\Gamma$}(\nu_{\tau}+p/2, \sum_{j=1}^p\left(\frac{\mu_j}{\lambda_j}\right)^2+1/a_{\tau} )$\;
+	$a_{\tau} \sim \text{Inv-$\Gamma$}(1/2,1/\tau^2 +1/c_{\tau})$\;
+	$\mu_j \sim \text{ Normal}\left(\frac{c_{ij}s_{ij}\mu_jV}{\sigma_i^2}, V=\frac{\sigma_{ij}^2\tau_{i}^2\lambda_j^2}{\lambda^2\tau_{ij}^2+\sigma^2_j} \right)$\; 
+	$\vec{q}_i = \left[\frac{e^{\mu_1}}{1+\sum_{j=1}^{p-1}e^{\mu_j}}, \dots, 1-\sum_{j=1}^{p-1}q_j \right]$\; 
+	}
+\caption{Horseshoe prior Sampler}\label{psd:horseshoe_prior_sampler}
+			\end{algorithm}
+%%%=============================End of pseudo code for the horseshoe sampler==============================================		
+		
+		\subsubsection{The Stochastic Search Prior}\label{sec:ssvs_app}
+
+The point mass mixture prior is defined by Equation \ref{eqn:ssvs} \cite{george1993variable},
+\begin{equation}\label{eqn:ssvs_appendix}
+\pi(\mu_j) = \pi_0N(0, \sigma_0^2) +(1-\pi_0)N(0, \sigma^2).
+\end{equation}
+Note the normal density limit $\lim_{\sigma_0 \to 0} N(0, \sigma_0^2) \overset{d}{\to} \delta(\beta_j)$ where $\delta(f)$ is the Dirac delta functional with point masses at the roots of the function $f$. 
+					
+%%%=============================Start of pseudo code for SSVS sampler ==============================================		
+			\begin{algorithm}[H]
+			%\dontprintsemicolon
+			\KwData{ $\mathcal{T}_1,\vec{c}_1,\vec{\sigma}_1^2,\vec{\tau}^2_1,\vec{\mu}_1,\vec{q}_1$}
+% \KwResult{how to write algorithm with \LaTeX2e }
+ %\SetAlgoLined
+\For{ $i=2, \dots, \# \text{samples}$}{
+	$\mathcal{T}_{i} \sim  \text{ Tree Sampler}(\mathcal{T}_{i-1}, \vec{q}_{i-1})$\;
+	$\sigma_j^2 \sim \text{Inv-}\Gamma\left(\alpha_{\sigma}+1/2, (c_js_{ij}-\mu_j)^2+1/\beta_{\sigma} \right)$\;
+	$y_j \sim \text{Bernoulli}\left(\frac{1}{1+\frac{N(\mu_j;0,\sigma^2_{\neq 0})(1-\pi_{j0})}{N(\mu_j;0,\sigma^2_{0})\pi_{j0}}} \right)$\;
+	\If{$y_j==1$}{
+	$\mu_j\sim  N(\frac{c_js_{ij}\sigma^2_{\neq 0}}{\sigma^2_{\neq 0}+\sigma_j^2}, \frac{\sigma^2_{\neq 0}\sigma_j^2}{\sigma^2_{\neq 0}+\sigma_j^2})$\;
+	}
+	\Else($y_j==0$ case){
+	$\mu_j \sim N(\frac{c_js_{ij}\sigma^2_{0}}{\sigma^2_{0}+\sigma_j^2}, \frac{\sigma^2_{0}\sigma_j^2}{\sigma^2_{0}+\sigma_j^2})$\;
+	}
+	$\pi_{j0} \sim \text{Beta}(y_j+\alpha_{\pi}, 1-y_j+\beta_{\pi})$\;
+	$\vec{q}_i = \left[\frac{e^{\mu_1}}{1+\sum_{j=1}^{p-1}e^{\mu_j}}, \dots, 1-\sum_{j=1}^{p-1}q_j \right]$\; 
+}
+\caption{SSVS sampler.}\label{psd:SSVS_sampler}
+			\end{algorithm}
