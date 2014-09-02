@@ -267,7 +267,7 @@ If we wanted to model the data using a different data generating process, for ex
  \subsubsection{A Bayesian Zero Inflated Poisson Model}
  %\textbf{Write out the details of this model here and cite applied statistics paper which uses a greedy approach.}
  
- Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero's and Lee and Jin \cite{lee2006decision} propose using a zero inflated (ZIP)\newabbrev{abbrev:ZIP} Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
+ Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero values and Lee and Jin \cite{lee2006decision} proposed using a zero inflated (ZIP)\newabbrev{abbrev:ZIP} Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem, we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
  
  The likelihood for a single observation is 
  \begin{equation}
@@ -278,7 +278,7 @@ If we wanted to model the data using a different data generating process, for ex
  \pi(\phi, \lambda)\propto \underbrace{\frac{\phi^{\alpha-1}(1-\phi)^{\beta-1}\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}}_{=\text{A beta prior }} \times \underbrace{\frac{ \lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})} }{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}}_{=\text{A gamma prior}}.
  \end{equation}
 
- Now we need to calculate the integrated likelihood, which means we must evaluate 
+ Now we need to calculate the integrated likelihood, which means that we must evaluate 
  \begin{align} \hspace{-.9in}
  &\int_0^1\int_0^\infty \left(\mathds{1}(y=0)\left(\phi + (1-\phi)\exp{(-\lambda)}\right) + \mathds{1}(y>0)\left(\exp{(-\lambda)}\frac{\lambda^y}{y!}\right)\right) \\ \nonumber
  & \frac{\phi^{\alpha-1}(1-\phi)^{\beta-1}\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \times \frac{ \lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})} }{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}d\lambda d\phi.
@@ -299,14 +299,16 @@ A similar calculation may be performed for a response variable that is distribut
 
 Previous approaches to variable selection have focused primarily on the linear model or GLM or GLMM models, all of which we briefly reviewed in Chapter \ref{ch:intro}. Hereafter we will refer to all three types of models as linear. The correspondence between variable selection in linear models and in Bayesian decision trees is a simple correspondence between zeros in the linear model, or zero means of the normal and transformed values on the unit simplex. This correspondence will be detailed in the next subsection of this chapter.   
 
-Ishwaran et al. \cite{ishwaran2010high} propose a modification to Variable important (VIMP) criteria that allows some very basic theory to describe the VIMP's analytical properties. VIMP was first proposed by Breiman \cite{breiman2001random} as a method to assess which covariates are important in a dataset. The difficulty with both Ishwaran et al's method and Breiman's method is that they are both very much black box techniques. VIMP basically takes a split in a decision tree on a specific covariate and randomly decides if the observation should go to the left or the right child node. This is done for a collection of observations and the random predictions are averaged against the actual predictions. The resulting numeric estimates for each covariate are the VIMP estimates. A ranking of these values provides a ranking of the covariates. 
+Ishwaran et al. \cite{ishwaran2010high} propose a modification to Variable Importance (VIMP) criteria that allows some very basic theory to describe the VIMP's analytical properties. VIMP was first proposed by Breiman \cite{breiman2001random} as a method to assess which covariates are important in a dataset. The difficulty with both Ishwaran et al's method and Breiman's method is that they are both very much black box techniques. VIMP basically takes a split in a decision tree on a specific covariate and randomly decides if the observation should go to the left or the right child node. This is done for a collection of observations and the random predictions are averaged against the actual predictions. The resulting numeric estimates for each covariate are the VIMP estimates. A ranking of these values provides a ranking of the covariates. 
 
-A similar method of ranking covariates was proposed by Taddy, Gramacy and Polson \cite{taddy2011dynamic}. Taddy, Gramacy and Polson proposed a Bayesian approach and used the Bayesian equivalent to $\Delta\phi$ from this chapter. In the Bayesian approach the quantity $\Delta\phi$ really has little meaning, because we are using an MCMC approach to search across trees. The resulting estimates of the covariate's importance will be basically the same as the greedy approach. Something we find undesirable for many reasons. These methods are worth comparing against our approach and we will do so in future work.
- 
+A similar method of ranking covariates was proposed by Taddy, Gramacy, and Polson \cite{taddy2011dynamic}. Taddy, Gramacy and Polson proposed a Bayesian approach and used the Bayesian equivalent to $\Delta\phi$ from this chapter, written here for clarity, 
 \begin{equation}
 \Delta\phi = \int\phi ds - \pi_L\int\phi ds -\pi_R \int \phi_Rds. 
  \end{equation}
-Taddy, Gramacy and Polson propose using samples and estimating the integrals with Monte Carlo approximations. In this case the approach is using a greedy measure on a Bayesian problem, something we find confusing.
+Taddy, Gramacy and Polson proposed using samples and estimating the integrals with Monte Carlo approximations. In this case the approach is using a greedy measure on a Bayesian problem, something we find confusing.
+In the Bayesian approach the quantity $\Delta\phi$ has little meaning, because we are using an MCMC approach to search across trees. The resulting estimates of the covariates' importance will be the same as the greedy approach, which we find undesirable for many reasons. The method proposed by Taddy, Gramacy, and Polson is worth comparing against our approach because it will have similar difficulties to CGM in high-dimensional data. We will do compare their approach to a time series version of our model in future work.
+ 
+
  
 %\textbf{Write in a brief description of both Ishwaran et al approach and Gramacy and Lee approach}. 
 
@@ -321,30 +323,28 @@ This subsection contains the mathematical details for calculating the integrals 
 
 \subsubsection{ZIP Derivations}
 
-In this section we provide the derivation for the integrated likelihood for the Bayes ZIP (zero inflated Poisson) tree model. Now let us define some notation: $j$ will index either all observations or only the observed zero count observations if the upper limit is $n_0$ then $j$ will index observed zero counts only, if the upper index limit is $n$ then all observations are indexed. Also $j^{\prime}$ will index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$. Finally let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
+In this section we provide the derivation for the integrated likelihood for the Bayes ZIP (zero inflated Poisson) tree model. Now let us define our notation, $j$ will index all observations or only the observed zero observations with the upper limit being $n$ or  $n_0$ if the index is all observations or observed zero counts only, respectively.  Also $j^{\prime}$ will exclusively index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$, the total number of observations. Finally, let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
 
+The integrated likelihood is:
 \begin{align*}
 \Pr(Y \vert X, \mathcal{T}) &= \prod_{i=1}^b\int_0^1\int_0^\infty\prod_{j=1}^{n_i}\left[\mathds{1}[y_{ij}=0](\phi+(1-\phi)\exp{(-\lambda)})+\mathds{1}[y_{ij}>0]\frac{\exp{(-\lambda)\lambda^{y_{ij}}}}{y_{ij}!} \right]\pi(\phi_i,\lambda_i )d\lambda_id\phi_i\\
 &=\prod_{i=1}^b \int_0^1\int_0^\infty\underbrace{\prod_{j=1}^{n_0}(\phi + (1-\phi)\exp{(-\lambda)})\pi(\phi_i,\lambda_i )d\lambda_id\phi_i}_{=(1)}\\ 
 &+ \prod_{i=1}^b \int_0^1\int_0^\infty \underbrace{\prod_{j^\prime=1}^{n_+}\frac{\exp{(-\lambda)}\lambda^{y_{ij^\prime}} }{y_{ij^\prime}!}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i}_{=(2)}.\\ 
 \end{align*} 
-
-We will first tackle $(1)$, then tackle $(2)$. 
+We will first tackle $(1)$, then $(2)$. 
 
 \begin{align*}
 (1)&= \int_0^1\int_0^\infty\prod_{j=1}^{n_0}(\phi + (1-\phi)\exp{(-\lambda)})\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
 &= \int_0^1\int_0^\infty(\phi + (1-\phi)\exp{(-\lambda)})^{n_0}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
 &= \int_0^1\int_0^\infty\sum_{j=1}^{n_0}{n_0\choose j}\phi^{j}(1-\phi)^{n_0-j}\exp{(-(n_0-j)\lambda)})\pi(\phi_i)\pi(\lambda_i )d\lambda_id\phi_i. \\
 \end{align*}
- 
- Now we take $\pi(\phi_i)$ to be a beta($\alpha, \beta$) prior and $\pi(\lambda_i)$ to be a gamma($\alpha_{\lambda}, \beta_{\lambda}$) prior. This simplifies matters greatly. 
- 
+Now, we take $\pi(\phi_i)$ to be a beta($\alpha, \beta$) prior and $\pi(\lambda_i)$ to be a gamma($\alpha_{\lambda}, \beta_{\lambda}$) prior. This simplifies matters greatly. The last equation above with a double integral becomes:
  \begin{align*}
  & \int_0^1\int_0^\infty\sum_{j=1}^{n_0}{n_0\choose j}\phi^{j}(1-\phi)^{n_0-j}\exp{(-(n_0-j)\lambda)})\frac{\Gamma(\alpha+\beta)\phi^{\alpha-1}(1-\phi)^{\beta-1}}{\Gamma(\alpha)\Gamma(\beta)}\frac{\lambda^{\alpha_{\lambda}-1}\exp{(-\lambda/\beta_{\lambda})}}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} d\lambda_id\phi_i \\
 &=\sum_{j=1}^{n_0}{n_0\choose j}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} \underbrace{\int_0^1\phi^{j+\alpha-1}(1-\phi)^{\beta+n_0-j-1}d\phi_i}_{\text{a beta kernel}}  \underbrace{\int_0^\infty \lambda^{\alpha_{\lambda}-1} \exp{(-(n_0-j+\beta_{\lambda}^{-1})\lambda)} d\lambda_i}_{\text{a gamma kernel}}\\
 &=\underbrace{\sum_{j=1}^{n_0}{n_0\choose j}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}} \frac{\Gamma(\alpha+j)\Gamma(\beta+n_0-j)\Gamma(\alpha_{\lambda})}{\Gamma(\alpha+\beta+n_0)}(n_0-j+\beta_{\lambda}^{-1})^{\alpha_{\lambda}}}_{=(1)}.
 \end{align*} 
-Now with the first piece simplified we move on to piece $(2)$. 
+Now with the first piece simplified, we move on to piece $(2)$. 
  
  \begin{align*}
  (2) &= \int_0^1\int_0^\infty\prod_{j^\prime=1}^{n_+}\frac{\exp{(-\lambda)}\lambda^{y_{ij^\prime}} }{y_{ij^\prime}!}\pi(\phi_i,\lambda_i )d\lambda_id\phi_i \\
@@ -354,8 +354,12 @@ Now with the first piece simplified we move on to piece $(2)$.
  &= \frac{\int_0^\infty\exp{(-(n_+ +\beta_{\lambda}^{-1})\lambda)}\lambda^{n_+\bar{y}_{i+} +\alpha_{\lambda}-1} d\lambda_i}{\Gamma(\alpha_{\lambda})\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!} \\
  &= \underbrace{\frac{\Gamma(n_+\bar{y}_{i+}+\alpha_{\lambda})(n_+ +\beta_{\lambda}^{-1})^{n_+\bar{y}_{i+}+\alpha_{\lambda}}}{\Gamma(\alpha_{\lambda})\prod_{j^\prime=1}^{n_+}y_{ij^\prime}!}}_{=(2)}. \\
  \end{align*}
- 
- And the result is shown. 
+This is all the result we need putting the two parts together now gives the closed form for the integrated likelihood. We rewrite Equation \ref{eqn:zip_int_lhood} here for completeness, 
+
+\begin{align}\nonumber
+ \Pr(Y\vert X, \mathcal{T})& = \left[\sum_{j=0}^{n_0} {n_0 \choose j}\frac{\Gamma(\alpha+\beta)\Gamma(\alpha+j)\Gamma(n_0+\beta-j)}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\alpha+\beta+n_0)}\left(\frac{n_0-j+\beta_{\lambda}^{-1}}{\beta_{\lambda}}\right)^{\alpha_{\lambda}} \right] \\ \nonumber
+ & + \frac{\Gamma(\alpha_{\lambda}+n_+\bar{y}_+)}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}\left(n_+ + 1/\beta_{\lambda} \right)^{\alpha_{\lambda}+n_+\bar{y}_+}.
+\end{align}
 
 \section{Bayesian Decision Tree Models}\label{sec:Model}
 

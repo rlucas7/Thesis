@@ -11,7 +11,7 @@ Define the notation $\yvec$, for the normal random variables that reside in the 
 \begin{equation}\label{eqn:simplex_transform}
 x_i = \frac{e^{y_i}}{1+\displaystyle{\sum_{j=1}^de^{y_j}}}. \\
 \end{equation}
-The Jacobian of the transform is defined as
+Define the Jacobian of the transformation as
 \newnot{symbol:jacobian}
 \begin{equation}\label{eqn:jacobian}
 J(\yvec \vert \xvec) = \left( \prod_{j=1}^{d+1}x_j \right)^{-1}.
@@ -44,7 +44,7 @@ We now wish to understand how the specification of the mean vector $\muvec$ and 
 \item If $\Sigma = \text{Diag}(\sigma^2_j)$,\newnot{symbol:diag} as the $\sigma^2_j$ entries become smaller, the probabilities approach the CGM specification.    
 \end{itemize}
 
-Using the transformation defined in Equation \ref{eqn:simplex_transform} and the fact that it is relatively simple to simulate from the vector normal distribution, the ALN density can be simulated. 
+The ALN density can be simulated using the transformation defined in Equation \ref{eqn:simplex_transform} and the fact that it is easy to simulate from the vector normal distribution. 
 
 \begin{figure}[ht]
 \begin{minipage}[b]{0.45\linewidth}
@@ -129,11 +129,11 @@ Using the transformation defined in Equation \ref{eqn:simplex_transform} and the
 \end{minipage}
 \end{figure}
 
- The simulations indicate that we can scale everything at approximately an $\mathcal{O}(d)$\newnot{symbol:big_oh} rate because of the diagonality of the variance covariance matrix, no matrix inversions are required. The step that remains is to link this portion of the model with the (currently) observed data in the tree, so that better trees are favored over trees that are worse, when each is observed in the Markov chain. We will first work in the space $\Rsp{d}$ and then translate to probabilities by using Equation \ref{eqn:simplex_transform}.  
+ The simulations indicate that we can scale everything at approximately an $\mathcal{O}(d)$\newnot{symbol:big_oh} rate because of the diagonality of the variance covariance matrix, and no matrix inversions are required. The step that remains is to link this portion of the model with the (currently) observed data in the tree, so that better trees are favored over trees that are worse, when each is observed in the Markov chain. We will first work in the space $\Rsp{d}$ and then translate to probabilities by using Equation \ref{eqn:simplex_transform}.  
  
- If we are to focus on the means and a collection of variances in a multivariate normal i.i.d. model, then we must fully specify the likelihood and the prior to form our posterior. 
+ If we focus on the means and a collection of variances in a multivariate normal i.i.d. model, then we must fully specify the likelihood and the prior to form our posterior. 
  
- The likelihood of the tree is defined as follows: the tree's selected covariates are counted and summed across all observed splits, leading to a likelihood taking on discrete values for the observed data. Let us define a multiplier that can take on an arbitrary positive or negative value in a compact region. We then multiply the counts of splits on each covariate by this quantity, effectively creating a mean which can take on arbitrary values in $\Rsp{}$. 
+We define the likelihood of the tree by counting the tree's selected covariates and summing across all observed splits. The counting leads to the likelihood taking on discrete values for the observed data. Let us define a multiplier that can take on an arbitrary positive or negative value in a compact region. We then multiply the counts of splits on each covariate by this quantity, effectively creating a mean which can take arbitrary values in $\Rsp{}$. 
 
 \subsection{A Simple Sampler Approach}
 
@@ -164,7 +164,7 @@ S\beta(c_j\vert \alpha_j, \beta_j, -a, a)\equiv\pi(c_j\vert \alpha_j, \beta_j, -
 
 A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform r.v.'s on the region  $[-a,a]$. 
 For each $j=1, \dots, d$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
-Through basic Bayesian calculations we find that the full conditionals are 
+Through basic Bayesian calculations we find that the full conditional distributionss are 
 
 \begin{equation}
 \pi(c_j\vert \mu_j, \sigma_j^2, a) \sim N_{[-a,a]}(c_js_j\vert \mu_j, \sigma^2_j) \text{(a normal truncated to the region $(-a,a)$),}
@@ -178,6 +178,8 @@ Through basic Bayesian calculations we find that the full conditionals are
 \pi(\mu_j\vert \mu_j^p, c_j, \sigma^2_j)\sim N[c_js_j+\mu_j^p, \sigma_j^2].
 \end{equation}
 
+\subsection{Slice Sampling Gibbs Updates}
+
 Ideally we would like everything to be a Gibbs step. This can be accomplished numerically using numerical approximations to the cumulative density of the standard normal distribution, here denoted $\Phi$, and $\Phi^{-1}$, the quantile function of the standard normal cumulative density. \newnot{symbol:sncdf} However, we can accomplish this directly using the technique of parameter expansion set forth in Damien and Walker \cite{damien2001sampling}, which we review here for completeness. 
  
 We begin with the joint density of two random variables 
@@ -188,14 +190,14 @@ f(x,y) \propto \mathds{1}[0, \exp{(-x^2/2)}](y).
 The marginal of $x$ is a standard normal density. Through elementary probability calculations we find 
 
 \begin{equation}\newnot{symbol:unif}
-f(y\vert X=x) \propto Unif(0, \exp{(-x^2/2)}).
+f(y\vert X=x) \propto Unif(0, \exp{(-x^2/2)}),
 \end{equation}
  and 
  
  \begin{equation}
-f(x\vert Y=y) \propto Unif(-\sqrt{-2log(y)}, \sqrt{-2log(y)})
+f(x\vert Y=y) \propto Unif(-\sqrt{-2log(y)}, \sqrt{-2log(y)}).
 \end{equation}
- The region upon which $X$ is defined arises from the solution of the inequalities $\{0\leq y \leq \exp{(-x^2/2)} \} $ for $X$, which is a quadratic equation in $X$. Similarly, if we have a truncated distribution truncated to the region $[a,b]$, we write the joint density 
+The region upon which $X$ is defined arises from the solution of the inequalities $\{0\leq y \leq \exp{(-x^2/2)} \} $ for $X$, which is a quadratic equation in $X$. Similarly, if we have a truncated distribution truncated to the region $[a,b]$, we write the joint density 
  
  \begin{equation}
  f(x,y)=Unif((0\leq y\leq \exp{(-x^2/2)})\times (a,b)).
@@ -210,7 +212,7 @@ which results in the region for $x$
 \begin{equation}
  \{\text{max}(a,-\sqrt{-2log(y)}), \text{min}(b,\sqrt{-2log(y)} )\} .
  \end{equation}
- Simulating from a truncated normal is equivalent to simulating from two uniforms on the appropriate regions and evaluating a natural logarithm and a square root. 
+ Simulating from a truncated normal is equivalent to simulating from two uniforms on the appropriate regions and evaluating a natural logarithm and a square root function at each iteration. 
  
  A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform random variables on the region $[-a,a]$. 
 For each $j=1, \dots, d$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
@@ -232,7 +234,7 @@ Through basic Bayesian calculations we find the full conditionals in closed form
 \pi(\mu_j\vert \mu_j^p, c_j, \sigma^2_j)\sim N[c_js_j+\mu_j^p, \sigma_j^2].
 \end{equation}
 
- The Gibbs sampling step, nested within the MH sampler, proceeds by sampling from Equations \ref{eqn:u_given_cjsj}-\ref{eqn:muj_given_cj}
+ The Gibbs sampling step, nested within the MH sampler, proceeds by sampling from Equations \ref{eqn:u_given_cjsj}-\ref{eqn:muj_given_cj}.
 At each iteration, once samples are drawn in sequence from the distributions given in Equations \ref{eqn:u_given_cjsj}- \ref{eqn:muj_given_cj}, we take the posterior samples of $\mu_j$ and transform these onto the $[0,1]$ scale, by using the ALN transform given in Equation \ref{eqn:simplex_transform}. 
 
 We show results from a preliminary coding of the stated algorithm. We use two specificications for the prior means $\vec{\mu}^p$. One specification uses  $\vec{\mu}^p = \vec{0}$ (Figure \ref{fig:simple_sampler2}) and another uses $\vec{\mu}^p=(-2,-2,2,\dots,2)$ (Figure \ref{fig:simple_sampler1}). The difference in the results of sampled weights indicates that, if we can move from a negative to a positive value for the prior mean, we can greatly influence the selection of covariates. The graphic of posterior weights shown in Figure \ref{fig:simple_sampler1} is the correct set of weights for the data. 
@@ -261,14 +263,14 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 
 \subsection{A Stochastic Search Variable Selection Approach}
 
-Using the results of George and McCulloch we can derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
+Using the results of George and McCulloch we derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
 
 
 We investigate three priors for use in variable selection with decision trees. They are: 
 
 \begin{itemize}
-\item A stochastic search approach (method of George and McCulloch and Cui and George) \cite{cui2008empirical,george1993variable}. 
-\item A lasso prior on the means of the MVN, \newabbrev{abbrev:MVN} probably using parameter expansion to get Gibbs updates \cite{park2008bayesian}. 
+\item A stochastic search approach using method of George and McCulloch \cite{cui2008empirical,george1993variable}. 
+\item A lasso prior on the means of the MVN, \newabbrev{abbrev:MVN} using parameter expansion to use Gibbs updates \cite{park2008bayesian}. 
 \item A multivariate half-Cauchy prior using parameter expansion (Huang and Wand method) \cite{huang2013simple,polson2011half,carvalho2010horseshoe,carvalhohandling}. 
 \end{itemize}
 
@@ -285,8 +287,8 @@ Variable selection with SSVS facilitates a Bayesian approach to variable selecti
 Here the $\psi_i >0$ and the $\tau_i>0$. Usually $p_i\equiv1/2$ but it is also possible to put a prior on these hyper-parameters. The advantage of a mixture prior in this form is that Gibbs samples are readily available for each of the desired quantities facilitating fast sampling.     
 
 \subsection{Parameter Expansions For the Lasso and Horseshoe Priors}
-In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means ($\mu_j$) for each covariate in the normal space. We use the ALN transform to then convert to probabilities. 
-The key idea we use for parameter expansion is the scale mixture of normals representation of a Laplace prior. This representation is stated here for reference.
+In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means ($\mu_j$) for each covariate in the normal space. We use the ALN transform to convert the $\mu_j$ to probabilities using the ALT transform. 
+We use the scale mixture of normals representation to write the Laplace prior is parameter expanded form. This representation is stated here for reference.
 
 If $V \sim \text{Exponential(1)}$ and $Z \sim N(0, 1)$ independent of $V$, then $X = \mu + b \sqrt{2 V}Z \sim \mathrm{Laplace}(\mu,b)$. 
 
@@ -301,7 +303,7 @@ V \sim \text{Exponential}(1), \text{ and}
 \end{equation}
 
 \begin{equation}\newnot{symbol:laplace_dist}
-X \sim \text{Laplace}(\mu, \sigma)
+X \sim \text{Laplace}(\mu, \sigma).
 \end{equation}
 
 What we want to examine here is whether shrinkage along an $L_1$ penalty will achieve similar results to the SSVS approach and give us meaningful results. The belief here is the same as in the SSVS approach, shrinkage will shrink means toward zero in the multivariate normal. These sampled values from the multivariate normal will then be transformed into something on the $[0,1]$ (probability) scale using the ALN transform. Values of zero, or near zero, on the normal space transform into values of approximately $1/(d+1)$. The probabilities with values around $1/(d+1)$ correspond to covariates we are indifferent about. A confounding aspect of interpreting the probabilities is that they must all sum to 1. Therefore if some values are excessively small this may push all the other probabilities to be larger. If something like this happens it is then difficult to determine which covariates are non-informative. Further simulations regarding selecting covariates using the rule of Equation \ref{eqn:cov_inclusion_rule} will be conducted using the ALN transform and will be done on several simulated and real data examples.    
