@@ -108,6 +108,7 @@ Now, because the data is sorted, the same $\Delta\phi$ values will result for po
 ]
 \end{tikzpicture}
 \end{center}
+\vspace{-3.5cm}
 \caption[A simple decision tree]{The decision tree after the first split.}
 \label{fig:dtree_firststep}
 \end{figure}
@@ -146,7 +147,57 @@ In Equation \ref{eqn:mult_lhood}, $p_{ik}$ denotes the probability $y_{ij}$ of b
 
 We now proceed to define the tree prior. We start with a tree consisting of a single node, the root node. We then imagine the tree growing by randomly choosing terminal nodes to split on. To grow a tree we must specify two functions, the growing function and the splitting function.  The splitting function is denoted $p_{\text{split}}(\eta, \mathcal{T})$ and the rule function is denoted $p_{\text{rule}}(\rho \vert \eta, \mathcal{T})$. The rule function provides a criteria to determine which of the two child nodes the observed data go into. If the observed covariate value is less than the rule value, then the observation go into the left child node. Similarly, if the observed covariate value is greater than the rule value, then that observation goes into the right child node. Growing a tree (called induction) consists of iterating these steps. creating two new children from a terminal node and assigning a rule to the terminal node (now a parent of two terminal nodes). 
 
-\begin{center}\huge{\textbf{Add a figure with before and after a node is split}} \end{center}
+\begin{figure}
+\begin{center}
+\subfigure{
+\begin{tikzpicture}[
+    scale = 1.5, transform shape, thick,
+    every node/.style = {draw, circle, minimum size = 10mm},
+    grow = down,  % alignment of characters
+    level 1/.style = {sibling distance=3cm},
+    level 2/.style = {sibling distance=4cm}, 
+    level 3/.style = {sibling distance=2cm}, 
+    level distance = 1.25cm
+  ]
+  \node[shape = rectangle, rounded corners,
+    minimum width = 4cm, font = \sffamily] {Ancestral nodes} 
+  child { node (Start){}};
+  \begin{scope}[nodes = {draw = none}]
+    \begin{scope}[nodes = {below = 11pt}]
+      \end{scope}
+  \end{scope}
+\end{tikzpicture}
+}
+\subfigure{
+\begin{tikzpicture}[
+    scale = 1.5, transform shape, thick,
+    every node/.style = {draw, circle, minimum size = 10mm},
+    grow = down,  % alignment of characters
+    level 1/.style = {sibling distance=3cm},
+    level 2/.style = {sibling distance=4cm}, 
+    level 3/.style = {sibling distance=2cm}, 
+    level distance = 1.25cm
+  ]
+  \node[shape = rectangle, rounded corners,
+    minimum width = 4cm, font = \sffamily] {Ancestral nodes} 
+  child { node (Start){\tiny{$x_1 \leq 3$}}
+   child {   node (A) {}
+       }
+   child {   node  (D) {}
+     }
+  };
+  \begin{scope}[nodes = {draw = none}]
+    \path (Start) -- (A) node [near start, left]  {};
+      \path (Start) -- (D) node [near start, right] {};
+    \begin{scope}[nodes = {below = 11pt}]
+      \end{scope}
+  \end{scope}
+\end{tikzpicture}
+}
+\end{center}
+\caption[Illustrating the induction process]{A terminal node in the decision tree before (left) and after (right) a split on a terminal node.}
+\label{fig:induction_firststep}
+\end{figure}
 
 The probability measure on the potential splits of the tree is
 \begin{equation}\label{eqn:psplit}
@@ -361,6 +412,8 @@ This is all the result we need putting the two parts together now gives the clos
  & + \frac{\Gamma(\alpha_{\lambda}+n_+\bar{y}_+)}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}\left(n_+ + 1/\beta_{\lambda} \right)^{\alpha_{\lambda}+n_+\bar{y}_+}.
 \end{align}
 
+\newpage
+
 \section{Bayesian Decision Tree Models}\label{sec:Model}
 
 In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT to link sparse linear models with covariate selection probabilities facilitating sparse Bayesian decision trees. In Section \ref{subsec:the_tp} we describe the tree prior and the local updates we use to explore the graph of permissible trees. Finally, in Section \ref{subsec:Regularization Priors} we give several examples of regularization priors we will study in our simulated examples.
@@ -433,12 +486,12 @@ The tree prior is defined as
   \begin{figure}
   \begin{center}
 \begin{tikzpicture}
- \node [circle,draw]{$\eta=1,d_{\eta} =0$} [level distance=25mm,sibling distance=50mm]
-child { node [circle,draw]{$\eta=2, d_{\eta} =1$} [level distance=25mm ,sibling distance=25mm]
+ \node [circle,draw]{$\eta=1,d_{\eta} =0$} [level distance=35mm,sibling distance=65mm]
+child { node [circle,draw]{$\eta=2, d_{\eta} =1$} [level distance=35mm ,sibling distance=35mm]
 child {node [circle,draw] {$\eta=4, d_{\eta} =2$}}
 child {node [circle,draw]{$\eta=5, d_{\eta} =2$}}
 }
-child {node [circle,draw] {$\eta=3, d_{\eta} =1$} [level distance=25mm ,sibling distance=25mm]
+child {node [circle,draw] {$\eta=3, d_{\eta} =1$} [level distance=35mm ,sibling distance=35mm]
 child {node [circle,draw] {$\eta=6, d_{\eta} =2$}}
 child {node [circle,draw]{$\eta=7, d_{\eta} =2$}}
 };
@@ -473,3 +526,5 @@ Given a tree $\mathcal{T}$, we sample a new tree adjacent to $\mathcal{T}$ by pr
   \item The Rotate step: randomly choose a left or right rotation move, each with probability $1/2$. Then a rotatable node is chosen and a rotate move is performed.
  \end{itemize}
   The rotate operation for binary trees was first introduced in Sleator and Tarjan \cite{sleator1985self} and was implemented with Bayesian decision trees by Gramacy and Lee \cite{gramacy2008bayesian}. The rotate move was originally suggested by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} as another possible move that might improve mixing. A good introduction and several practical uses of the rotate move can be found in Cormen, Lieserson, Rivest, and Stein \cite{cormen2001introduction}. The proposal functions in Gramacy and Lee \cite{gramacy2008bayesian} perform a rotate move only when a swap move is proposed and the parent-child pair both split on the same covariate. We modify this and allow rotate moves to be a separate proposal function and not a special swap move case. The proposal mechanism of Chipman et al. uses the grow, prune, change and swap moves only. In addition, neither Chipman et al. \cite{chipman1998bayesian}, Denison et al. \cite{denison1998bayesian}, nor Gramacy and Lee \cite{gramacy2008bayesian} included weights on each covariate in their examples or model specifications. They sampled each covariate and each split value uniformly across all covariates. 
+  
+\newpage

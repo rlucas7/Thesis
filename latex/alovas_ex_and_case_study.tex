@@ -77,7 +77,7 @@ For this simulated example we take $x_{i1} \sim \text{Unif}(.1,.4)$, for $i=1,\d
 
 We run our algorithm using the regularized methods on the number of splits and then transform all the sampled $\mu_j$ using the \ALT. In this simulation, varying the sparsity is not something easily parametrized. Whereas in the next simulation we can vary the number of active covariates, in this simulation we must fix the number of active covariates to $3$ and vary the total number of covariates to accomplish a varying of the percentage of sparsity. Similarly to the next simulation, we compare the linear model methods: lasso, horseshoe, and SSVS. These various methods correspond to the rows within a sparsity level in Table \ref{tab:rashomon_study_results}.  
 \vspace{-1cm}
-\begin{table}[h]
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{cc|c|c|c|}
   \\ \cline{3-3}
@@ -123,7 +123,7 @@ We run our algorithm using the regularized methods on the number of splits and t
 \end{center}
 \end{table}
 
- \begin{figure}
+ \begin{figure}[H]
   \begin{center}
 \begin{tikzpicture}
  \node [circle,draw]{$X_1 \leq 0.5$} [level distance=25mm,sibling distance=50mm]

@@ -118,7 +118,7 @@ We begin with a few definitions originally provided by Vapnik and Chervonekis \c
 
 \begin{figure}[h]
 \centering
-  \includegraphics[scale=0.7]{figures/phase_change_shatter_dynamics.pdf}
+  \includegraphics[scale=0.7]{figures/phase_change_shatter_dynamics2.pdf}
   \caption[A shatter coefficient plot]{The shatter coefficient function for half spaces in $\mathbb{R}^d$, as a function of $n$. In this plot $d=10$.}\label{fig:phase_change_shatter_dynamics}
 \end{figure}
 
@@ -144,39 +144,39 @@ s(\mathcal{A},n)\leq \exp[n\mathcal{H}(V_\mathcal{A}/n)],
 For decision trees with two splits on halfspaces, the shatter coefficient is bounded above by $2^{2n}=4^n$, for sample sizes less than $d$. For sample sizes larger than $d$ we will have consistency as $n\to\infty$, provided that the decision tree does not grow arbitrarily large. As a simple requirement we ensure that the trees do not grow arbitrarily large, by ensuring that trees are shallower than $K$, for some constant $K$. Note that this constraint was also required by Denison, Mallick and Smith's reversible jump algorithm \cite{denison1998bayesian}. Our simulation studies indicate that there is little to no sensitivity in the specification of $K$. Figures \ref{fig:depth2} -\ref{fig:depth10} show the results of simulating from the posterior distribution over trees and varying the maximum depth, $K$. We evaluate for values of $K=2,3,4,5,6,7,10$. For small values of $K$ such as 2 or 3, the setting of maximum depth appears to limit the sampler from exploring possible trees.  However, once $K$ is set larger than 6, there appears to be little impact restricting the sampler from exploring certain trees. Of course, for any given data set the value of $K$ that is acceptable will likely change, so our conclusion is that $K$ should be large enough. Our assumption is $K=20$ or $K=30$ should be enough for most problems. Simply stated, $K$ should be large. Too small values of $K$ can cause problems. A value of $K=10$ appears sufficient for our purposes and causes no problems. 
 
   \begin{figure}[h]
-  \minipage{0.35\textwidth}%
+  \minipage{0.4\textwidth}%
   \centering
   \includegraphics[scale=0.4]{mdepth2.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 2.]{Maximum depth of samplers trees with maximum depth set at 2.}\label{fig:depth2}
 \endminipage\hfill
-\minipage{0.35\textwidth}%
-  \centering
+\minipage{0.4\textwidth}%
+\hspace{-1cm}
  \includegraphics[scale=0.4]{mdepth3.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 3.]{Maximum depth of samplers trees with maximum depth set at 3.}\label{fig:depth3}
 \endminipage
 \end{figure}
 
   \begin{figure}[h]
-  \minipage{0.35\textwidth}%
+  \minipage{0.4\textwidth}%
   \centering
   \includegraphics[scale=0.4]{mdepth4.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 4.]{Maximum depth of samplers trees with maximum depth set at 4.}\label{fig:depth4}
 \endminipage\hfill
-\minipage{0.35\textwidth}%
-  \centering
+\minipage{0.4\textwidth}%
+\hspace{-1cm}
  \includegraphics[scale=0.4]{mdepth5.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 5.]{Maximum depth of samplers trees with maximum depth set at 5.}\label{fig:depth4}
 \endminipage
 \end{figure}
 
   \begin{figure}[h]
-  \minipage{0.35\textwidth}%
+  \minipage{0.4\textwidth}%
   \centering
   \includegraphics[scale=0.4]{mdepth6.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 6.]{Maximum depth of samplers trees with maximum depth set at 6.}\label{fig:depth6}
 \endminipage\hfill
-\minipage{0.35\textwidth}%
-  \centering
+\minipage{0.4\textwidth}%
+\hspace{-1cm}
  \includegraphics[scale=0.4]{mdepth7.png}
   \caption[Maximum depth of samplers trees with maximum depth set at 7.]{Maximum depth of samplers trees with maximum depth set at 7.}\label{fig:depth7}
 \endminipage
@@ -228,13 +228,13 @@ The probability of being the majority class in any of the four regions of the Fi
   \caption{The tree found by a greedy optimization.}\label{fig:awesome_image1}
   \end{figure}
   \begin{figure}[h]
-  \minipage{0.35\textwidth}%
+  \minipage{0.4\textwidth}%
   \centering
   \includegraphics[scale=0.4]{figures/simul_example_map_tree_USE.png}
   \caption{The best tree using the weighted method.}\label{fig:awesome_image4}
 \endminipage\hfill
-\minipage{0.35\textwidth}%
-  \centering
+\minipage{0.4\textwidth}%
+\hspace{-1cm}
  \includegraphics[scale=0.4]{figures/cgm_tree_simul.pdf}
   \caption{The best tree found by the CGM method.}\label{fig:awesome_image3}
 \endminipage
@@ -242,13 +242,13 @@ The probability of being the majority class in any of the four regions of the Fi
 \begin{figure}[h]
 \centering
 \label{fig:3fig_tree}
-\minipage{0.35\textwidth}
+\minipage{0.4\textwidth}
 \centering
   \includegraphics[scale=0.4]{figures/weight_simulated_example_USE1.png}
   \caption[Covariate inclusion probabilities for the 100 covariate example.]{Covariate weights on the 100 dimensional example. Note the first two covariates are selected with high probability and the rest with miniscule probability.}\label{fig:awesome_image5}
 \endminipage\hfill
-\minipage{0.35\textwidth}
-\centering
+\minipage{0.4\textwidth}
+\hspace{-1cm}
   \includegraphics[scale=0.4]{figures/my_method1.png}
   \caption[Covariate inclusion probabilities for the 400 covariate example.]{Covariate weights on the 400 dimension simulated example. Note the first two covariates are selected with high probability and the rest with negligible probability.}\label{fig:awesome_image6}
 \endminipage\hfill
@@ -347,6 +347,8 @@ $\Pr(\text{covariate 2 selected})$ & 0.33806 & 0.10795 & 0.10835 & 0.12376 & 0.0
 
 From Table \ref{tab:sim_study} it is clear that the weighted method outperforms the four other methods in correctly selecting the important covariates. Also, our weighted method selects the correct covariates jointly better than the other methods. Moreover, our weighted method selects incorrect covariates less often than the other method. It is important to note that theoretically we do not want the entries in the last line to approach zero. If we did this then the MCMC would get immediately stuck in a local maximum of the likelihood space and would not find many good local maxima. Our weighted method is able to more evenly balance the search for new local maxima with the search for the correct splits and tree topology within the basin of attraction of the current local maximum. Weighting the covariates leads to improved searching of the tree space and leads to better trees in terms of inference, which are competitive in terms of prediction.  
 
+\newpage
+
 \section{A Case Study of the DiVaS Model}\label{sec:real_data}
 In this section we compare our method against the greedy approach and the CGM approach using the publicly available internet ads dataset from the UCI data repository \cite{Frank:2010uq}. The internet ads data set contains 1558 covariates, some numeric and some categorical. The data set was first used in a paper by Kushmerick \cite{kushmerick1999learning} and has since been used in several statistical classification studies. The UCI machine learning repository contains a more complete listing of papers using this dataset. 
 
@@ -355,21 +357,23 @@ As noted by Kushmerick \cite{kushmerick1999learning}, there are several reasons 
 We used a random subset of internet advertisements data to fit a greedy tree, a CGM tree, and a tree fit using our weighted method. We first removed all observations that contain missing values. We then took a 50\% random sample of training and test data. Figures \ref{fig:ads_image1}-\ref{fig:ads_image3} plot the fitted trees. The misclassification probabilities are calculated by dropping all data points from the test data set through the trees built using the training data. The resulting trees are fit using only the training data.  
 \begin{figure}[h]
 \label{fig:3fig_tree}
-\minipage{0.35\textwidth}
+\minipage{0.4\textwidth}
   \includegraphics[scale=0.4]{ad_tree.pdf}
   \caption[The greedy algorithm tree for the internet ads dataset]{The greedy tree.}\label{fig:ads_image1}
 \endminipage\hfill
-\minipage{0.35\textwidth}
+\hspace{-1cm}
+\minipage{0.4\textwidth}
   \includegraphics[scale=0.4]{CGM.png}
   \caption[The CGM algorithm tree for the internet ads dataset]{The tree found by the CGM algorithm on the internet ads dataset.}\label{fig:ads_image2}
 \endminipage\hfill
 \end{figure}
 \begin{figure}
-\minipage{0.35\textwidth}%
+\minipage{0.4\textwidth}%
   \includegraphics[scale=0.4]{estim2_tree.png}
   \caption[The weighted method tree for the internet ads dataset]{Best tree using the weighted method on the internet ads dataset.}\label{fig:ads_image3}
 \endminipage\hfill
-\minipage{0.35\textwidth}%
+\minipage{0.4\textwidth}%
+\hspace{-1cm}
   \includegraphics[scale=0.4]{weights_estim2.png}
   \caption[Estimated covariate weights for the internet ads dataset]{Estimated covariate weights using the internet ads dataset.}\label{fig:ads_image4}
 \label{fig:uci_cov_weights}
@@ -429,3 +433,4 @@ Finally, we note that our approach to sparsity is different from the approach in
 %We would like to thank Dr. Robert Gramacy for clarification of several aspects of his papers and for the referees for their comments which improved on an early draft of this paper. 
 %\subsubsection*{References}
 
+\newpage
