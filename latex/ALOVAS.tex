@@ -90,8 +90,10 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \hspace{0.5cm}
 \begin{minipage}[b]{0.45\linewidth}
 \centering
+
 \includegraphics[width=\textwidth]{mu-1-1.pdf}
-\caption[ALN plot with a negative one mean vector]{In this figure, $\vec{\mu}=(-1,-1)^T$, with $\Sigma=I$, corresponds to moving towards a sparser set of covariates. }
+%\vspace{.9cm}
+\caption[ALN plot with a negative one mean vector]{In this figure, $\vec{\mu}=(-1,-1)^T$, with $\Sigma=I$. Here, moving the mean vector of the normal density  corresponds to moving towards a sparser set of covariates. }
 \label{fig:figure10}
 \end{minipage}
 \end{figure}
@@ -141,7 +143,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma10_0_01.pdf}
-\caption[Similar to the case in Figure \ref{fig:figure4} but with the variances reversed]{Similar to the case in Figure \ref{fig:figure4} but with the variances reversed.}
+\caption[Similar to the case in Figure \ref{fig:figure4} but with the variances reversed]{This figure presents a display of the ALN density similar to the case in Figure \ref{fig:figure4} but with the variances reversed. The density lies nearly on a line.}
 \label{fig:figure6}
 \end{minipage}
 \end{figure}
@@ -151,14 +153,14 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \centering
 \includegraphics[width=\textwidth]{Sigma100_100.pdf}
 \caption[ALN plot with a zero vector mean and $\Sigma=\text{Diag}(100,100)$]{$\vec{\mu}=\vec{0}$, with
- $\Sigma= \text{diag}(100, 100)$, corresponds to encouraging sparse representations \emph{a priori}.  }
+ $\Sigma= \text{diag}(100, 100)$, corresponds to encouraging sparse representations \emph{a priori}. The sparse representation is agnostic in which covariates to select.  }
 \label{fig:figure7}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma01_01.pdf}
-\caption[ALN plot approximating the CGM model]{Here $\Sigma=0.1I$, and $\muvec=\vec{0}$, corresponds to roughly the CGM specification.}
+\caption[ALN plot approximating the CGM model]{Here $\Sigma=0.1I$, and $\muvec=\vec{0}$, corresponds to roughly the CGM specification. As the variances approach zero, the model approaches the CGM model.}
 \label{fig:figure8}
 \end{minipage}
 \end{figure}
