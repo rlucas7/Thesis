@@ -13,21 +13,14 @@ Define $\small{\mathcal{T}^0}$ as the initialized tree, $n$ as the number of ite
 \CASE {(X=3)} $ \mathcal{T}^\prime \GETS Change(\mathcal{T}^i);$\\
 \CASE {(X=4)} $ \mathcal{T}^\prime \GETS Swap(\mathcal{T}^i);$\\
 \CASE {(X=5)} $ \mathcal{T}^\prime \GETS Rotate(\mathcal{T}^i);$\\
-$\ \ N \GETS  log(\Pr(D \vert \mathcal{T}^\prime)); \\
-$\ \ O \GETS log(\Pr(D \vert \mathcal{T}^{i-1}));\\
-\CASE {(X=1)} $\ \ log(R) \GETS N-O+log(b);\\
-\CASE {(X=2)} $\ \ log(R) \GETS N-O+log(b+1);\\ 
-\CASE {(X=3)} $\ \ log(R) \GETS N-O+log(p_j)\ -\ log(p_{j^\prime});\\
-\CASE {(X=4 \OR X=5)} $\ \ log(R) \GETS  N\ -\ O;\\
-$\ \ U\GETS Continuous\_Uniform(0,1);\\
-\IF \{$log(U) < log(R)$\}  $\ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; \\
-\ELSE{ $ \mathcal{T}^{i} \GETS \mathcal{T}^{i-1}$ };\\
-$ \underline{\alpha}^{i} \GETS \underline{\alpha}^{i-1} + \widetilde{\alpha}\underline{s};$ \newline
-$ \underline{p}^i \GETS Dirichlet(\underline{\alpha}^{i});$ \newline
- $\widetilde{\alpha} \GETS C \sum_{j=1}^d\alpha_j / \sum_{i,j}s_{ij};$ \\
+\IF \{$log(U) < log(R)$\}  $\ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; $\\
+$\textbf{else}  \mathcal{T}^{i} \GETS \mathcal{T}^{i-1};$\\
+$ \underline{\alpha}^{i} \GETS \underline{\alpha}^{i-1} + \widetilde{\alpha}\underline{s};$\\
+$ \underline{p}^i \GETS Dirichlet(\underline{\alpha}^{i});$ \\
+ $\widetilde{\alpha} \GETS C \sum_{j=1}^d\alpha_j / \sum_{i,j}s_{ij};$ 
 }
 \caption{DiVaS sampler.}\label{psd:DiVaS_sampler}
-			\end{algorithm}
+\end{algorithm}
 
 The second pseudo-code listing contains the simple sampler approach from Chapter \ref{sec:ALN_chapter}, the notation is similar to the first pseudocode.  
 
@@ -35,32 +28,32 @@ The second pseudo-code listing contains the simple sampler approach from Chapter
 			%\dontprintsemicolon
 			\KwData{ $n, \underline{p}^0,\mathcal{T}^0, \alpha^0$}
 \For{ $i=2, \dots, \# \text{samples}$}{
-	$\ \ X \GETS Discrete\_Uniform\left(1,5\right);\\$
-$\CASE {(X=1)} \ \ \mathcal{T}^\prime \GETS Grow(\mathcal{T}^i);\\$
-$\CASE {(X=2)} \ \ \mathcal{T}^\prime \GETS Prune(\mathcal{T}^i);\\$
-$\CASE {(X=3)} \ \ \mathcal{T}^\prime \GETS Change(\mathcal{T}^i);\\$
-$\CASE {(X=4)} \ \ \mathcal{T}^\prime \GETS Swap(\mathcal{T}^i);\\$
-$\CASE {(X=5)} \ \ \mathcal{T}^\prime \GETS Rotate(\mathcal{T}^i);\\$
-$\ \ N \GETS  log(\Pr(D \vert \mathcal{T}^\prime)); \\$
-$\ \ O \GETS log(\Pr(D \vert \mathcal{T}^{i-1}));\\$
-$\CASE {(X=1)} \ \ log(R) \GETS N-O+log(b);\\$
-$\CASE {(X=2)} \ \ log(R) \GETS N-O+log(b+1);\\$ 
-$\CASE {(X=3)} \ \ log(R) \GETS N-O+log(p_j)\ -\ log(p_{j^\prime});\\$
-$\CASE {(X=4 \OR X=5)} \ \ log(R) \GETS  N\ -\ O;\\$
-$\ \ U\GETS Continuous\_Uniform(0,1);\\$
-$\IF \{log(U) < log(R)\}  \ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; \\$
-$\textbf{else} \ \ \mathcal{T}^{i} \GETS \mathcal{T}^{i-1};\\$
-$\FOR j \GETS 1\TO d\\$
-$u_j \GETS Unif(0, \exp{(-c_js_j-\mu_j)^2/2\sigma_j^2}) \\$
-$c_j \GETS Unif(max(-a,-\sqrt{-2log(u_j)}), min(a, \sqrt{-2log(u_j)}))\\$
-$\sigma_j^2 \GETS Inv-Gamma(2a_j +2, ( (c_js_j-\mu_j)^2+(\mu_j-\mu_j^p)^2 )/2+ b_j)\\$
-$\mu_j \GETS N[c_js_j+\mu_j^p, \sigma^2_j]\\$
-$p_j\GETS\exp(\mu_j)/(1+\sum_{k=1}^d\exp(\mu_k))\\$
-$\textbf{EndFor}\\$
-$p_{d+1}\GETS 1-\sum_{k=1}^dp_k\\$
+	$\ \ X \GETS Discrete\_Uniform\left(1,5\right);$\\
+$\CASE {(X=1)} \ \ \mathcal{T}^\prime \GETS Grow(\mathcal{T}^i);$\\
+$\CASE {(X=2)} \ \ \mathcal{T}^\prime \GETS Prune(\mathcal{T}^i);$\\
+$\CASE {(X=3)} \ \ \mathcal{T}^\prime \GETS Change(\mathcal{T}^i);$\\
+$\CASE {(X=4)} \ \ \mathcal{T}^\prime \GETS Swap(\mathcal{T}^i);$\\
+$\CASE {(X=5)} \ \ \mathcal{T}^\prime \GETS Rotate(\mathcal{T}^i);$\\
+$\ \ N \GETS  log(\Pr(D \vert \mathcal{T}^\prime)); $\\
+$\ \ O \GETS log(\Pr(D \vert \mathcal{T}^{i-1}));$\\
+$\CASE {(X=1)} \ \ log(R) \GETS N-O+log(b);$\\
+$\CASE {(X=2)} \ \ log(R) \GETS N-O+log(b+1);$\\ 
+$\CASE {(X=3)} \ \ log(R) \GETS N-O+log(p_j)\ -\ log(p_{j^\prime});$\\
+$\CASE {(X=4 \OR X=5)} \ \ log(R) \GETS  N\ -\ O;$\\
+$\ \ U\GETS Continuous\_Uniform(0,1);$\\
+$\IF\{ log(U) < log(R)\}  \ \ \mathcal{T}^{i} \GETS \mathcal{T}^\prime; $\\
+$\textbf{else} \ \ \mathcal{T}^{i} \GETS \mathcal{T}^{i-1};$\\
+\For{ $j = 1,\dots, d$}{
+$u_j \GETS Unif(0, \exp{(-c_js_j-\mu_j)^2/2\sigma_j^2}) $\\
+$c_j \GETS Unif(max(-a,-\sqrt{-2log(u_j)}), min(a, \sqrt{-2log(u_j)}))$\\
+$\sigma_j^2 \GETS Inv-Gamma(2a_j +2, ( (c_js_j-\mu_j)^2+(\mu_j-\mu_j^p)^2 )/2+ b_j)$\\
+$\mu_j \GETS N[c_js_j+\mu_j^p, \sigma^2_j]$\\
+$p_j\GETS\exp(\mu_j)/(1+\sum_{k=1}^d\exp(\mu_k))$\\
+}
+$p_{d+1}\GETS 1-\sum_{k=1}^dp_k$
 }
 \caption{Simple sampler.}\label{psd:simple_sampler}
-			\end{algorithm}
+\end{algorithm}
 
 
 
@@ -162,7 +155,7 @@ Using the result from Villa and Escobar \cite{villa2006using},  which states.
 
 \noindent \textbf{Theorem}\\
 
-Suppose $M_{x\vert y}(t)=C_1(t)\exp[C_2(t)Y]$ and there exists a $\delta>0$ such that for $t\in(-\delta, \delta)$, $\vert C_i(t) \vert < \infty$  and $\vert M_y(C_2(t))\vert < \infty$ assuming $M_y(t)$ exists, then $M_x(t) =C_1(t)M_y(C_2(t))$. In more common MGF notation we have $M_x(t) = \mathbb{E}_y(M_{x\vert y}(t))$. 
+Suppose $M_{x\vert y}(t)=C_1(t)\exp[C_2(t)Y]$ and there exists a $\delta>0$ such that for $t\in(-\delta, \delta)$, $\vert C_i(t) \vert < \infty$  and $\vert M_y(C_2(t))\vert < \infty$ assuming $M_y(t)$ exists, then $M_x(t) =C_1(t)M_y(C_2(t))$. In more common moment generating function (MGF) \newabbrev{abbrev:MGF} notation we have $M_x(t) = \mathbb{E}_y(M_{x\vert y}(t))$. 
 See Villa and Escobar for the proof. 
 
 We an use this result to understand the mixture of normals. To do this we recall the forms of the MGFs for three common distributions: 

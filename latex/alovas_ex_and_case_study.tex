@@ -76,7 +76,7 @@ For this simulated example we take $x_{i1} \sim \text{Unif}(.1,.4)$, for $i=1,\d
 \]
 
 We run our algorithm using the regularized methods on the number of splits and then transform all the sampled $\mu_j$ using the \ALT. In this simulation, varying the sparsity is not something easily parametrized. Whereas in the next simulation we can vary the number of active covariates, in this simulation we must fix the number of active covariates to $3$ and vary the total number of covariates to accomplish a varying of the percentage of sparsity. Similarly to the next simulation, we compare the linear model methods: lasso, horseshoe, and SSVS. These various methods correspond to the rows within a sparsity level in Table \ref{tab:rashomon_study_results}.  
-\vspace{-1cm}
+
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{cc|c|c|c|}
@@ -102,6 +102,17 @@ We run our algorithm using the regularized methods on the number of splits and t
 \multicolumn{1}{ |c| }{}&SSVS &8.69 \%   \\  \cline{2-3}
 \multicolumn{1}{ |c| }{}&LASSO&6.12 \%    \\ \cline{2-3}
 \multicolumn{1}{ |c| }{}&HORSESHOE &7.52 \%  \\ \cline{1-3}
+\end{tabular}
+\caption{Multimodal simulation study results. Each entry represents the mean squared error of the optimal tree from the Markov chain.  The $^*$ indicates that 3 cannot be divided by a number to get 60\% sparsity exactly. }
+\label{tab:rashomon_study_results}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{cc|c|c|c|}
+  \\ \cline{3-3}
+& & MSE  \\\cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 90\%} } & 
 \multicolumn{1}{ |c| }{CGM} &68.06 \%  \\  \cline{2-3}
 \multicolumn{1}{ |c| }{}&SSVS &11.94 \%   \\  \cline{2-3}
@@ -118,10 +129,11 @@ We run our algorithm using the regularized methods on the number of splits and t
 \multicolumn{1}{ |c| }{}&LASSO&7.33\%     \\ \cline{2-3}
 \multicolumn{1}{ |c| }{}&HORSESHOE &5.73\%   \\ \cline{1-3}
 \end{tabular}
-\caption{Multimodal simulation study results, each entry represents the proportion of time the Markov chain stays in the two optimal trees given in Figure \ref{fig:best_two_trees}.  The $^*$ indicates that 3 cannot be divided by a number to get 60\% sparsity exactly. }
-\label{tab:rashomon_study_results}
+\caption{Second table of multimodal simulation study results. Each entry represents the mean squared error of the optimal tree from the Markov chain. The $^*$ indicates that 3 cannot be divided by a number to get 60\% sparsity exactly. }
+\label{tab:rashomon_study_results2}
 \end{center}
 \end{table}
+
 
  \begin{figure}[H]
   \begin{center}
