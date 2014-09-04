@@ -1,7 +1,7 @@
-\section{Synthesis: Comparing the DiVaS and ALoVaS Methods}
+\chapter{Synthesis: Comparing the DiVaS and ALoVaS Methods}
 In this section we compare the DiVaS and ALoVaS models. While both methods seem relatively similar, both methods performing variable selection for Bayesian decision trees, there are fundamental practical and theoretical differences between the two methods. 
 
-\subsection{Theoretical differences and a simulation study}
+\section{Theoretical differences and a simulation study}
 
 One of the most apparent theoretical differences between the DiVaS and ALoVaS models is the way the two models handle the correlation between covariate selection probabilities. One of the properties of the Dirichlet distribution is that $Corr(p_i,p_j) < 0$ for $i\neq j$. Thus, if the prior puts zero probability on non-negative covariate selection probability correlations, then the posterior will also place zero probability on these non-negative correlations. Figure \ref{fig:corr_divas_alovas} plots the relationship of the DiVaS and ALoVaS methods in the correlation space of two arbitrary covariate selection probabilities $(p_i,p_j)$. This section elucidates the differences between the two methods and compares the similarities. 
 
@@ -73,10 +73,7 @@ We now present a small simulation study. We sampled data according to the model 
 \begin{figure}
 \begin{center} 
 \begin{tabular}{cc}
-%  \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/mu0_0_bw.pdf}}
-%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/sigma3_3_bw.pdf}} \\
-%  \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/mu2_0_bw.pdf}}
-%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/sigma1_9_9_1_bw.pdf}} \\
+\includegraphics[scale=0.25]{figures/divas_tree_alovas_divas_compare.pdf}
 \end{tabular}
 \caption{The optimal DiVaS tree.}
 \label{fig:interaction_trees}
@@ -88,17 +85,14 @@ We ran the ALoVaS and DiVaS algorithms for $11,000$ samples discarding the first
 \begin{figure}
 \begin{center} 
 \begin{tabular}{cc}
-%  \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/mu0_0_bw.pdf}}
-%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/sigma3_3_bw.pdf}} \\
-%  \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/mu2_0_bw.pdf}}
-%    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/sigma1_9_9_1_bw.pdf}} \\
+\includegraphics[scale=0.25]{figures/lasso_compare_tree.pdf}
 \end{tabular}
 \caption{The optimal ALoVaS tree.}
 \label{fig:chain_max_interaction_tree}
 \end{center}
 \end{figure} 
 
-\subsection{Practical differences and a simulation study}
+\section{Practical differences and a simulation study}
 
 While the theoretical differences are important to academics and applied researchers who want to understand the limitations of a specific method, the questions most applied researchers tend to have are more practical in nature. We address the practical questions in this section. 
 
@@ -116,7 +110,7 @@ y_i = \beta_1x_1 + \beta_2x_2 + \epsilon_i,
 \end{equation}
 for $i=1, \dots, n$. The two covariates $x_1$ and $x_2$ were such that $Corr(x_1, x_2) \neq 0$. In this case we see that knowledge of one covariate indicates, at least approximately,knowledge of the other covariate as well. We would then need the generative model to be linear because the correlation is a bilinear operator. We could choose to split on $x_1<c$ for some constant $c$ or we could choose to split on $x_2 < c^\prime$ for some value $c^\prime$ because the two covariates are correlated. To reiterate, knowledge of one covariate implies approximate knowledge of the other covariate. Therefore, we would only need to split on one and not the other covariate. Thus, if we split on covariate $x_1$ for example, the prevalence of a split on covariate $x_2$ would not only be unlikely, but it would also be unnecessary, provided  $|Corr(x_1, x_2)|$ was large enough. 
  
-\subsection{Recommendations}
+\section{Recommendations}
 
 The similarities and the differences between the ALoVaS and DiVaS methods having been pointed out, we now turn to the conclusions and recommendations we have for the use of the two methods. 
 

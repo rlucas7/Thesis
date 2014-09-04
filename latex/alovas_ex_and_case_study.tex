@@ -1,8 +1,8 @@
-\section{ALoVaS Examples and a Case Study}\label{sec:Examples}
+\chapter{ALoVaS Examples and a Case Study}\label{sec:Examples}
 
 In this section we present simulation studies to illustrate properties of our methods. The two illustrated properties are handling multi-modality and handling highly non-balanced categorical response variable class probabilities. Following these simulation studies we present a case study using the internet ads dataset from the UC-Irvine machine learning database \cite{Frank:2010uq}. 
 
-	\subsection{Simulated Examples}
+	\section{Simulated Examples}
 	In this section we present two collections of simulations. The first collection aims to study the effects of having multiple best trees in the generative model. The second collection aims to study the effects of class imbalance when dealing with a categorical response. 
 	
 %\subsubsection{Correlated Covariate Simulations}
@@ -61,7 +61,7 @@ In this section we present simulation studies to illustrate properties of our me
 %
 %What is apparent from Table \ref{tab:corr_study_results} is that there is no clearly better flavor of ALoVaS. The choice of which method works best is likely to depend on the correlations of the covariates and the degree of sparsity present in the underlying data generating process. Moreover, We notice an increase in the mean squared prediction error as the sparsity decreases, in particular we notice a large increase as we move from a 90\% sparse data generating process to one that is less sparse. This corresponds with findings from Monte Carlo simulations the authors have conducted on the linear model equivalents of the three ALoVaS models. The finding that the best choice of method depends on unknown and difficult to estimate parameters is troubling from a practical standpoint. While it may be taken as a given that in genomics problems the sparsity of the underlying model is 99+\%, in many other application areas like insurance, econometric, and environmental statistics to name a few, the degree of sparsity is not so clear and may vary from less than 10\% to over 99\% depending on the data and the phenomenon being modeled.  
 
-\subsubsection{Multimodal Simulation Study}
+\subsection{Multimodal Simulation Study}
 In this collection of simulations we study is a class of simulations where more than one model explains the data equally well. We simulate data according to the model described in Wu, Tjelmland, and West \cite{wu2007bayesian}, which exhibits multi-modality, also called the Rashomon effect by Breiman \cite{breiman2001statistical}. To simulate effectively from the data generating process, we need to be able to sample the two models in the same chain. 
 
 For this simulated example we take $x_{i1} \sim \text{Unif}(.1,.4)$, for $i=1,\dots ,200$, and $x_{i1} \sim \text{Unif}(.6,.9)$, for $i=201,\dots,300$. Similarly, $x_{i2} \sim \text{Unif}(.1,.4)$, for $i=1,\dots ,100$, $x_{i2} \sim \text{Unif}(.6,.9)$, for $i=101, \dots,200$ , and $x_{i2} \sim \text{Unif}(.1,.9)$, for $i=201, \dots,300$. Finally, $x_{i3} \sim \text{Unif}(.6,.9)$ for $i =1, \dots 200$, and $x_{i3} \sim \text{Unif}(.1,.4)$, for $i=201, \dots,300$. Then, given these values, 
@@ -164,7 +164,7 @@ For the results presented in Table \ref{tab:rashomon_study_results} our burn-in 
  
 Moreover, in Table \ref{tab:rashomon_study_results} a sentiment appears. There is no clear winner across sparsity levels. While the lasso and the horseshoe appear to be competitive at higher sparsity levels, the SSVS method might also be competitive at lower and higher sparsity levels but there is some degree of variability across the sparsity levels. Additionally, while all three models are able to attain one of the two modes, all three models have difficulty moving from one of the two modes in the underlying model to the other mode. This is exactly a result of the sparsity imposed on the fitted model. The two posterior trees in the two modes have different sets of covariates and thus the sparsity patterns will have difficulty switching from one to the other. A similar pattern can be found in sparse linear models. Typically, correlation constraints are imposed on the $(X^TX)$ matrix to ensure consistency of the selected sparsity pattern. 
 
-\subsubsection{Class Unbalancedness Simulation Study}
+\subsection{Class Unbalancedness Simulation Study}
 We next perform a simulation on unbalanced response class probabilities. We examine various states of unbalancedness of the categorical response variable. The intent of this simulation study is to determine the effect of response class unbalancedness, a phenomenon widely seen in statistical practice. We simulate data according to the $3$ category logistic regression model with a varying number of covariates. In this simulation we fix the number of active covariates to $2$ so that varying the sparsity requires the number of covariates to range from $4$ total (sparsity =$50\%$) to $200$ total ($99\%$ sparsity). For convenience we fix the coefficient vector at $\vec{\beta}^T =[1,1,0,\dots, 0]$, varying the dimensionality of the vector as necessary for the desired sparsity. We include Figure \ref{fig:simulated_unbalanced_simplex} to give the reader a visual idea of the points on the three dimensional simplex where we study the class unbalanced problem. Note that by the self-similarity of the simplex space we don't need to study the areas of the simplex that are empty. Switching the labeling of the axes accomplishes this for us. In this case the settings where certain classes are extremely rare require a sample of $n=10000$ per simulation. This setting is used for the highly unbalanced cases, as well as all the other cases in Figure \ref{fig:unbalanced_study_results}.
 
 
@@ -275,7 +275,7 @@ Intuitively, the results of Figures \ref{fig:unbalanced_study_results} and \ref{
 
 The results here are somewhat inconclusive on which specific model, ssvs, lasso, or horseshoe is best in a given scenario. It appears from the unbalanced simulation studies that, aside from Monte Carlo variability, there is no clear winner amongst the three ALoVaS models. It does appear that given a certain sparsity and perhaps other characteristics of the underlying model, such as correlation or class unbalanceness, it may be better to choose one type of ALoVaS model over the others. However, this information seems unlikely to be known \emph{a priori} except in special circumstances. Moreover, any of the ALoVaS methods is likely to prove useful and provide improvements over the traditional Bayesian decision tree algorithm proposed by CGM. 
 
-\subsection{Case Study}\label{sec:real_data}
+\section{Case Study}\label{sec:real_data}
 
 In this section we compare the ALoVaS method against the CGM approach, a variable importance (VIMP) based frequentist method \cite{ishwaran2010high}, and a non-decision tree based approach, the logistic-lasso. We compare these methods using the publicly available internet ads dataset from the UCI data repository \cite{Frank:2010uq}. The internet ads data set contains 1558 covariates, some numeric and some categorical. The data set was first used in a paper by Kushmerick \cite{kushmerick1999learning} and has since been used in several statistical classification studies. A more complete description of the data and references to other papers using this dataset can be found at the UCI machine learning repository website, at the following link: \url{https://archive.ics.uci.edu/ml/datasets/Internet+Advertisements}.
 
@@ -358,7 +358,7 @@ Logistic-lasso&11.20\%\\ \hline
 		
 		The take home point of this section is that, not only is the ALoVaS method a useful conceptual method for performing variable selection when fitting Bayesian decision trees, but it is also practically useful. The ALoVaS method is capable of handling data with a large number of covariates and of performing covariate filtering by choosing various covariates. As a byproduct of the fitting method we also generate a sampled set of covariate selection probabilities which can be used if the method is to be compared with other methods that perform variable selection and use a similar approach. 
 
-\subsection{Conclusions}\label{sec:Conclusion}
+\section{Conclusions}\label{sec:Conclusion}
 
 A lot of press is given to variable selection methods, both in terms of theoretical properties and in terms of practical results. However, these applications nearly always implement linear or generalized linear models. Non-linear models, such as decisions trees, are mathematically less tractable and thus theoretical results are more difficult to derive. Our ALoVaS method facilitates variable selection methods familiar to the researcher and allows their use with decision tree models. In non-sparse settings our method experiences similar difficulties as those experienced by methods such as the lasso and horseshoe. This is not a limitation of our method \emph{per se} but rather an effect of model misspecification. 
 
@@ -371,7 +371,7 @@ There remain several avenues of future work based on the findings documented in 
 
 \begin{itemize}
 \item Explore other regularization methods that have non-zero probability of setting $\mu_j=0$. 
-\item Study the effect of imposing normality on the split counts, $s_{ij}$ instead of a Poisson or Negative Binomial model. 
+\item Study the effect of imposing normality on the split counts, $s_{ij}$ instead of a Poisson or negative binomial model. 
 \item Study the effects of multiplicity adjustments, false positives, and false negatives in the models detailed. 
 \end{itemize}
 

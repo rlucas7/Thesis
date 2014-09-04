@@ -124,22 +124,7 @@ for(i in 2:n){
 			}
 	
 	t2_lh<-tree_lhood(tree2,casper_data,theta=0,mult_penalty=FALSE)	# calculate the proposed tree's l-hood	
-	#proposed_tlh[i+1000*(j-1)]<-t2_lh
-	### log ratio calculation 
-	
-	### old code:	
-	#R<- t2_lh - t_lh[i+1000*(j-1)-1] 
-	
-	###NEW code: 
-		### Start of likelihood ratio calculation 
-	
 	R<-log_ratio_calc(tree2,tree1,t2_lh, t_lh[i+1000*(j-1)-1],data=casper_data,weight=weight[i+1000*(j-1)-1,])
-	
-	#R<- t2_lh - c_t_lh[i+1000*(j-1)-1] 
-	###End of likelihood ration calculation
-	
-	### end dof log ratio  calculation
-	
 	M_E<- -rexp(1,1)
 	if(M_E <=R){ 
 		t_lh[i+ (j-1)*1000 ]<- t2_lh # make the move to the proposed tree
@@ -157,13 +142,10 @@ for(i in 2:n){
 	if(i %%300 ==0 ){
 		print(tree1)
 		}
-	
-	#### now sample from the weights for each dimension.... 
 	split_counts<-count_cov_split(tree=tree1,data=casper_data,1) + split_counts 
 	Z[(j-1)*1000+i]<- data_dim/sum(split_counts)
 	#split_counts<-(split_counts)*Z[(j-1)*1000+i]/10 # here the dividing number must change as the dimensionality of data does 
 	weight[(j-1)*1000+i,]<-sample_weights(alpha=split_counts) ### the 1's are added inside the function.... 
-
 	}# end of for(i 1:n) loop
 } #end of for j in 1:m  loop
 

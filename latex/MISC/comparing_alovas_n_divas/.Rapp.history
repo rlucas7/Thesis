@@ -542,7 +542,6 @@ for(i in 2:n){#
 i
 j
 split_counts
-split_counts
 count_cov_split(tree=tree1,data=casper_data,1)
 j
 i<-1#
@@ -727,8 +726,6 @@ j
 match(max(t_lh), t_lh)
 rtree[[8330]]
 plot(rtree[[8330]])
-plot(rtree[[8330]])
-plot(rtree[[8330]])
 str(rtree[8330])
 plot(rtree[8330])
 str(rtree[8330], max.level=1)
@@ -736,13 +733,7 @@ plot(rtree[1])
 options(error=NULL )
 plot(rtree[[1]])
 plot(rtree[[8330]])
-plot(rtree[[8330]])
-plot(rtree[[8330]])
-plot(rtree[[8330]])
 plot(rtree[[8329]])
-plot(rtree[[8329]])
-plot(rtree[[8329]])
-plot(rtree[[999]])
 plot(rtree[[999]])
 rtree[[8330]]
 rtree[[8330]]$frame
@@ -753,7 +744,6 @@ rownames(rtree[[8330]]$frame)
 rtree[[8330]]
 tree1
 plot.tree(rtree[[8330]])
-plot(rtree[[8330]])
 plot(rtree[[8330]])
 text(rtree[[8330]])
 plot(rtree[[8330]], type='uniform')

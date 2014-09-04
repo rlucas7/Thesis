@@ -1,4 +1,4 @@
- \section{Dirichlet Variable Selection For Decision Trees: The DiVaS method}
+ \chapter{Dirichlet Variable Selection For Decision Trees: The DiVaS method}
 \label{ch:var_select}
 
 %subsection{Introduction}
@@ -14,7 +14,7 @@ This chapter follows from the original Bayesian decision tree model of Chipman, 
 
 The remainder of this paper unfolds as follows. Section \ref{sec:related_work} reviews previous greedy and Bayesian approaches to decision tree learning. Section \ref{sec:model_details} shows our model and describes how this is a modification of the algorithm proposed by CGM \cite{chipman1998bayesian}. In this and the next chapter we place emphasis on the algorithmic details of our procedure and only briefly describe some of the mathematical properties. Section \ref{sec:ecc} states necessary conditions for consistency of the decision trees we propose. Section \ref{sec:ase} shows how high dimensional data can create problems for both greedy and Bayesian approaches that have been previously proposed, and gives an example. Section \ref{sec:real_data} applies our approach to a dataset taken from the UCI machine learning repository. In Section \ref{sec:conc} we state conclusions and point towards future work.
 
-\subsection{Related Work}\label{sec:related_work}
+\section{Related Work}\label{sec:related_work}
 Some of the most well known approaches to decision tree learning are two approaches invented in the 1980's; these are Breiman, Friedman, Olshen, and Stone's cart method \cite{breiman1984classification} and Quinlan's C4.5 algorithms and variants \cite{quinlan1993c4}.  
 The work of Breiman et al. \cite{breiman1984classification} showed the practical and theoretical approaches to decision tree induction. In Breiman et al. \cite{breiman1984classification}, the theoretical framework for discussing decision trees is given in terms of general impurity functions, allowing results to apply to specific impurities suggested by Quinlan \cite{quinlan1993c4}. For a theoretical treatment of consistency, the work of Devroye, Lugosi, and Gy\"{o}rfi \cite{devroye1996probabilistic} provided the foundation and application of the theory to certain tree methods.
 
@@ -41,7 +41,7 @@ Bagging and boosting are two other common methods that might be used for perform
 %Similar to these two approaches, we are able to search across many trees.
  Bagging and boosting methods are primarily used in the context of prediction. As initially stated, our primary motivation is on inferring a mechanistic relationship between dimensions and the response of interest with a preference towards simple and easily understood models. Hence, inference is the primary goal, with prediction being secondary. 
 
-\subsection{Model Details}\label{sec:model_details}
+\section{Model Details}\label{sec:model_details}
 
 In this section, after we define our approach, we detail the transition kernels proposed by CGM \cite{chipman1998bayesian} and by GL \cite{gramacy2008bayesian}. We highlight the differences between their approaches and our approach. 
 
@@ -109,7 +109,7 @@ The transition kernel describes the dynamics governing the state transitions of 
  \end{itemize}
  Sleater and Tarjan \cite{sleator1985self} introduced the rotate operation for binary trees in computer science. GL \cite{gramacy2008bayesian} first introduced the rotate operation into the Bayesian decision tree literature. A good introduction and several practical uses of the rotate move can be found in Cormen, Lieserson, Rivest and Stein \cite{cormen2001introduction}. The proposal of Gramacy and Lee \cite{gramacy2008bayesian} only allows a rotate move for the specific case when a swap move is proposed and the parent child pair both split on the same covariate. We modify this and allow rotate to be a separate operation of the transition kernel and not a special swap move case. The proposal mechanism of CGM uses the grow, prune, change and swap moves only. We also allow swap moves in our proposal. In addition, neither of these papers included weights on each covariate in their examples or model specifications. They sampled each covariate and split value uniformly at random. 
 
-\subsection{Ensuring Consistent Classifiers}\label{sec:ecc}
+\section{Ensuring Consistent Classifiers}\label{sec:ecc}
 
 In this section we aim to answer two questions. The first question is what is the behavior of our method as the number of dimensions $d \to \infty$. We generally tend to think of data as having a fixed dimensionality, but as data storage costs decrease, the number of variables tends to increase. We assume that the data has a large number of dimensions and use the theoretical quantity $d \to \infty$ as a guidepost. We use a working example throughout this section, a stump tree, which is a tree containing only one split rule. The second working example is a decision tree with an arbitrary number of splits. Through these two examples we see when the theory discussed in this section works and when the theory fails.  
 
@@ -204,7 +204,7 @@ The second error bound (Equation \ref{eqn:sparse_vcb}) differs from the first (E
 
 We have necessary and sufficient conditions for convergence and therefore for consistency of our sparse classifier in infinite dimensional data. We need only ensure that $\sum_{j=1}^\infty p_j < \infty$. Provided $\sum_{j=1}^\infty p_j <\infty$ the stump tree will be consistent with infinite dimensional data as $n\to\infty$ Furthermore, the tree with arbitrary but finite depth will also be consistent, provided that the tree does not grow too deep, less than $2^K$ for some large but finite $K$. Intuitively this result should make sense. For infinite dimensional data, we must have most dimensions be irrelevant for the classification task, in order for the resulting classifiers to be consistent. In other words, most $p_j \to 0$ and some $p_{j^\prime}\to c >0$ ($0<c<1$) as $d\to\infty$. Our approach, without the $\widetilde{\alpha}$, ensures precisely this condition. Furthermore, this is not a weakness of our approach, because this theoretical result holds for $d\to\infty$. In our real data cases $d$ is finite and usually fixed. The $\widetilde{\alpha}$ is a practical aspect of our approach and is used to improve exploration and exploitation in fixed, finite dimensional data. 
 
-\subsection{A Simulated Example}\label{sec:ase}
+\section{A Simulated Example}\label{sec:ase}
 
 This section details a simulated example where we know which covariates are important and which are not important. Of course, this will never be the case in practice, yet, for verification, we find this setting useful. 
 
@@ -290,7 +290,7 @@ To compare the three methods, we calculate misclassification probabilities for e
 
 We see that the pruning rule fails to collect the correct covariates as important in the greedily grown tree. The problem is that the deterministic procedure is overwhelmed by candidate splits and thus overfits. In fact, the misclassification probability \emph{within} the training data is 4.8\%, better than the Bayes rate! However, this method performed poorly on hold out data compared to the weighted method, as shown in Tables \ref{tab:sim_misclass1} and \ref{tab:sim_misclass2}. The greedy method eventually finds some suboptimal splits. Of course, in this example we know the truth, and these extra splits are far from the truth. In addition, we see that the CGM approach fails on these trees. Much like the greedy method, the CGM approach is also overwhelmed with possible splits. Each new covariate adds exponentially more possible trees. This plethora of trees often allows one to find many locally optimal trees, but at the cost of exponentially increased search time. A benefit of our method is the improved search by effectively ignoring certain covariates and preventing some trapping of the chain in local optima. By allowing non-uniform probabilities of selecting covariates, the algorithm spends more time searching through covariates that have good splits, while not spending time in other covariates that have mostly useless splits. This behavior leads to a more efficient search of the tree space and, consequently, better predictive trees than those found by the CGM search approach. The trees built using our weighted approach are better or competitive in prediction but simpler for inference compared with those found by a greedy search as indicated by the results in Table \ref{tab:sim_misclass2}. 
 
-\subsubsection{Choosing Covariates}
+\subsection{Choosing Covariates}
 A natural question to ask is: How should one choose covariates? This question is important because there are often covariates which have estimated probabilities that might be considered large enough to be important but also could be small enough to be considered   not important. We approach this question from the context of the learning achieved during the sampling. We call the prior moment estimator defined here by Equation \ref{eqn:mom_est_dirichlet} as
 
 \begin{equation}\label{eqn:mom_est_dirichlet}
@@ -349,7 +349,7 @@ From Table \ref{tab:sim_study} it is clear that the weighted method outperforms 
 
 \newpage
 
-\section{A Case Study of the DiVaS Model}\label{sec:real_data}
+\chapter{A Case Study of the DiVaS Model}\label{sec:real_data}
 In this section we compare our method against the greedy approach and the CGM approach using the publicly available internet ads dataset from the UCI data repository \cite{Frank:2010uq}. The internet ads data set contains 1558 covariates, some numeric and some categorical. The data set was first used in a paper by Kushmerick \cite{kushmerick1999learning} and has since been used in several statistical classification studies. The UCI machine learning repository contains a more complete listing of papers using this dataset. 
 
 As noted by Kushmerick \cite{kushmerick1999learning}, there are several reasons for wanting to remove advertisements from webpages. Some reasons are: Images tend to dominate a page�s total download time, users dislike paying for services indirectly through advertisers, preferring direct payment for services rendered, and malicious software can be unintentionally placed on a user's machine through images masked as advertisements. 
@@ -421,7 +421,7 @@ Table \ref{tab:misclass_uci} shows that the best tree both in terms of simplicit
 
 Figure \ref{fig:uci_cov_weights} presents the estimated  probability of selection from our model. In this case there are three covariates that are clearly important in the model. Table \ref{tab:ads_data_ranks} ranks the covariates selected according to the rule from Equation \ref{eqn:cov_inclusion_rule} in decreasing order. The covariates used in the tree in Figure \ref{fig:ads_image3} correspond to a subset of these covariates and are starred in the table. The starred covariates are: the width of the image, the url tag ``tkaine+bars'', the url tag ``www.irish-times.com'', and the url tag ``click''. The tag ``click'' is not particularly surprising because many ads are in the form of images that pop up a secondary webpage if you click on the image. The ``Irish Times'' is a newspaper and a perusal of their current webpage indicates that they have many images that accompany news articles and we can reasonable assume the website was similar when the dataset was created. The width field is also not surprising, wide windows facilitate better views of images. It is not very clear what the field ``tkaine+bars'' means. Perhaps some of the images come from a collection of webpages during Tim Kaine's race for mayor of Richmond, Virginia, in 1998. Admittedly, more information on this field would be desirable. 
  
-\subsection{Discussion of Results}\label{sec:conc}
+\section{Conclusions}\label{sec:conc}
 In this chapter we studied the application of MCMC data partitioning models to large dimensional data. We showed that, in large dimensional data sets, the methods used on low dimensional examples will not work effectively. We provided a simple modification that greatly improves the accuracy and utility of the partitioning scheme in large dimensional datasets. 
 
  When running MCMC algorithms on large dimensional data, we spend more time searching the covariates that are important (high probability) and ignoring the covariates that are not useful (the low probability ones). Moreover, the values of the probabilities for each covariate are on a probability scale providing intuitive interpretation of the values sampled from the posterior distribution of weights.

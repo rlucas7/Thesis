@@ -1,4 +1,4 @@
-\section{Preliminaries}
+\chapter{Preliminaries}
 \label{ch:preliminaries}
 This chapter provides an overview of the models used for decision tree induction and variable selection. We begin by discussing the earliest methods of induction, greedy algorithms. With the advance of time (about a decade), greedy induction approaches became fully implemented through high quality Fortran code. Bayesian approaches to building decision trees were not possible until advances in computing power and the rediscovery of sampling based approaches to Bayesian statistics became popular again. While the work of Breiman et al. \cite{breiman1984classification} always contained a Bayesian flavor, no probability measure over trees was ever proposed. That is until the groundbreaking works of Denison, Mallick and Smith \cite{denison1998bayesian} and Chipman, George, and Mcculloch \cite{chipman1998bayesian}.
 
@@ -6,12 +6,12 @@ This chapter provides an overview of the models used for decision tree induction
 
 This chapter presents necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
 
-\subsection{Greedy Induction}
+\section{Greedy Induction}
 \label{ch:p1sub_greedy_ind}
 
 In this section we answer the question: how does greedy induction work? Once the reader has completed this section they should, with sufficient time, be able to reproduce computer code that implements decision trees using greedy strategies. We begin with impurity functions. 
 
-\subsubsection{Impurity Functions}
+\subsection{Impurity Functions}
 
 An impurity function corresponds to a likelihood function in statistics or to an objective function in machine learning. This function measures, in some sense, how many good observations lie in a node of the tree and how many bad observations lie in a node of the tree. Formally, an impurity function, denoted $\phi$, must satisfy three axioms:
 
@@ -39,7 +39,7 @@ To build a regression tree, in place of an impurity function, we use the mean sq
 
 $$\text{MSE}: \phi(y_i, \bar{y})=\frac{\sum_{i=1}^n(y_i-\bar{y})^2}{n}.$$
 The reader should note that the greedy approach to decision tree induction always tries to optimize impurity functions. The optimization problems are known to be NP-Hard (for an introduction to complexity theory confer Garey and Johnson \cite{garey1979computers}). Briefly, NP-Hard optimization problems are considered some of the hardest optimization problems to solve. These optimization problems increase exponentially with the number of observations in the problem. Therefore, exact methods will nearly always take too long to compute and thus greedy strategies are used to approximate the global optimum, assuming one exists, with a local optimum. 
-\subsubsection{Induction}
+\subsection{Induction}
 The induction of decision trees proceeds by solving the objective function
 
 \begin{equation}
@@ -59,7 +59,7 @@ Discussion of consistency of this pruning rule can be found in Devroye et al. \c
 
 The pruning rule discussed here, and the induction process overall, is an implicit form of model selection. This is implicit because the selected variables are the variables left in the tree after pruning. Those variables considered important are the variables that remain and those variables not selected are considered not important. Breiman et al. \cite{breiman1984classification} define no measure of importance on each variable, so it is difficult to rank variables based on importance. Breiman \cite{breiman2001random} proposed such a measure, called variable importance (abbreviated VIMP) \newabbrev{abbrev:VIMP} but in the context of random forests and not for a single decision tree. We propose different methods to perform explicit variable selection for Bayesian decision trees in later chapters.   
 
-\subsubsection{A Simple Example}
+\subsection{A Simple Example}
 
 In this subsection we work through a simple example to give the reader a flavor of the calculations necessary to induct a decision tree. 
 
@@ -114,12 +114,12 @@ Now, because the data is sorted, the same $\Delta\phi$ values will result for po
 \end{figure}
 If we had more than $3$ observations, we would then continue calculating $\Delta\phi$s for the data that falls into each of the two resultant terminal nodes, continuing until there is only one observation in each terminal node, or until there is some specified number of observations in each terminal node. Although any number is possible, the specified minimum number of observations in each terminal node is usually 5. Once this process is completed, the induction step is finished, and the pruning process begins. 
 
-\subsection{Bayesian Approaches}
+\section{Bayesian Approaches}
 \label{ch:p2sub_bayes}
 
 This section describes a Bayesian approach to decision trees. In the previous chapter we presented a greedy algorithm to fit decision trees. Besides the observed error in a greedy decision tree, there is nothing to describe the fit of the model, or to  provide a measure over the decision tree. This section provides both of these quantities. We begin by defining the CGM model and calculating necessary quantities for the algorithm. Furthermore, there is no explicit model selection, which will be the main contribution of this thesis.    
 
-\subsubsection{The CGM approach}
+\subsection{The CGM approach}
 We begin by defining notation and measures on each quantity of the tree. 
 We assume that the tree topology and split rules are conditionally independent. Based on fundamentals of probability we have the following relationships
 
@@ -210,7 +210,7 @@ p_{\text{rule}}(\rho \vert \eta, \mathcal{T}) \propto \underbrace{\Pr(\text{spli
 
 Here CGM recommends using a discrete uniform prior on $p_{\text{split}}$ and splitting uniformly amongst the splitting values (in $p_{\text{rule}}$) that do not result in an empty terminal node. While we choose the same proposal mechanism for the $p_{\text{rule}}$ quantity, the main point of this thesis is to examine and propose alternate specifications for $p_{\text{split}}$. The data sets modeled in CGM \cite{chipman1998bayesian} and DMS \cite{denison1998bayesian}, and other modifications in the literature, deal with data with a small number of predictors. In this thesis we are concerned with a large number of predictors, so we will focus on variable selection, which will ultimately explain how we specify quantity $p_{\text{split}}$ in Equation \ref{eqn:prule}. 
 
-\subsubsection{Integrated Likelihood}
+\subsection{Integrated Likelihood}
 We will now focus on the integrated likelihood, which is the quantity 
 
 \begin{equation}\label{eqn:int_lhood}
@@ -219,7 +219,7 @@ We will now focus on the integrated likelihood, which is the quantity
 To evaluate the integral in Equation \ref{eqn:int_lhood} we must first define a prior, denoted $\pi(\theta)$, for the parameters in each terminal node. 
 There are two possible priors for the case of the normal likelihood that will result in a conjugate prior/posterior. These are normal and normals-gamma distributions, or equivalently, normal-inverse gamma distributions depending upon the given parametrization. 
 
-\subsubsection{The Process Prior}
+\subsection{The Process Prior}
 
 Assuming we have a closed form solution for the integral in Equation \ref{eqn:int_lhood}, we can use Bayes' rule to determine 
 \begin{equation}\label{eqn:tree_post}
@@ -254,7 +254,7 @@ where $\mathcal{N}$ denotes the set of nodes in tree $\mathcal{T}$.
 The probability measure on each split, here denoted $p_{\text{split}}(\eta, \mathcal{T})$, uses Equation \ref{eqn:psplit}. Similarly, the measure on each rule, here denoted $p_{\text{rule}}(\rho \vert \eta, \mathcal{T})$, uses Equation \ref{eqn:prule}. 
 All that is left to specify is the likelihood in each node and the prior structure for the parameters in each node, both of which are done in the next subsection. 
 
-\subsubsection{Node Likelihoods and Priors}
+\subsection{Node Likelihoods and Priors}
 
 CGM discuss three models. Two of the models use Gaussian priors and Gaussian likelihoods and one of the models uses a Dirichlet prior and a multinomial likelihood. The two Gaussian models differ in that one has a single variance and the other has a different variance for each node. As noted by Lee \cite{lee2006decision}, in a greedy optimization context, sometimes the data suggest a different model than either a Gaussian or a multinomial-Dirichlet. If the experiment suggests analyzing data using an alternate model, the Bayesian context easily handles these alterations, once the corresponding likelihood and prior are specified. Lee \cite{lee2006decision}, proposed a zero inflated poisson (ZIP) model to analyze the solder data. Note our Bayesian model can easily handle extensions such as ZIP response data and also permits covariate selection, provided the integrated likelihood is available in closed form.
 
@@ -315,7 +315,7 @@ respectively.
  
 If we wanted to model the data using a different data generating process, for example a zero-inflated Poisson, we could do so by specifying a different likelihood, prior, and by computing the integrated likelihood. For a zero-inflated Poisson model defining a likelihood, prior, and calculating the integrated likelihood is possible using gamma priors for the rate ($\lambda$) and beta priors for zero inflation components ($\phi$). 
  
- \subsubsection{A Bayesian Zero Inflated Poisson Model}
+ \subsection{A Bayesian Zero Inflated Poisson Model}
  %\textbf{Write out the details of this model here and cite applied statistics paper which uses a greedy approach.}
  
  Lee and Jin \cite{lee2006decision} reconsidered impurity functions in light of the connection to likelihood functions. Lee and Jin \cite{lee2006decision} proposed to use likelihood functions instead of impurity functions that model the data generating process. Towards this end they considered the soldering data from Chambers and Hastie \cite{chambers1992statistical}. The response of interest in this case is a collection of counts on manufactured circuit boards. This response has many zero values and Lee and Jin \cite{lee2006decision} proposed using a zero inflated (ZIP)\newabbrev{abbrev:ZIP} Poisson likelihood to model the measured counts. Lee and Jin \cite{lee2006decision} optimized using a greedy algorithm and they found the fit and holdout prediction to be better using the ZIP model in each terminal node. If we are to use a Bayesian approach to this problem, we need to define the likelihood, the prior, and the integrated likelihood. We now define these three quantities.
@@ -345,7 +345,7 @@ If we wanted to model the data using a different data generating process, for ex
 
 A similar calculation may be performed for a response variable that is distributed as a zero-inflated negative binomial random variable (ZINB).\newabbrev{abbrev:ZINB}
  
-\subsection{Previous Variable Selection}
+\section{Previous Variable Selection}
 \label{ch:p4sub_var_sel}
 
 Previous approaches to variable selection have focused primarily on the linear model or GLM or GLMM models, all of which we briefly reviewed in Chapter \ref{ch:intro}. Hereafter we will refer to all three types of models as linear. The correspondence between variable selection in linear models and in Bayesian decision trees is a simple correspondence between zeros in the linear model, or zero means of the normal and transformed values on the unit simplex. This correspondence will be detailed in the next subsection of this chapter.   
@@ -365,14 +365,14 @@ In the Bayesian approach the quantity $\Delta\phi$ has little meaning, because w
 
 %\input{overview_chapter/previous_variable_selection_section/previous_var_selection.tex}
 
-\subsection{Derivations}
+\section{Derivations}
 \label{ch:p3sub_theory}
 
 This subsection contains the mathematical details for calculating the integrals to get the closed form solutions for the integrated likelihood equations of the ZIP model described in this chapter.   
 
 %\subsubsection{Normal Derivation}
 
-\subsubsection{ZIP Derivations}
+\subsection{ZIP Derivations}
 
 In this section we provide the derivation for the integrated likelihood for the Bayes ZIP (zero inflated Poisson) tree model. Now let us define our notation, $j$ will index all observations or only the observed zero observations with the upper limit being $n$ or  $n_0$ if the index is all observations or observed zero counts only, respectively.  Also $j^{\prime}$ will exclusively index the non-zero observations. The total number of non-zero observations is denoted $n_+$, so that $n_++n_0=n$, the total number of observations. Finally, let $\bar{y}_{i+}$ denote the sample mean of the non-zero count observations in terminal node $i$. 
 
@@ -414,11 +414,11 @@ This is all the result we need putting the two parts together now gives the clos
 
 \newpage
 
-\section{Bayesian Decision Tree Models}\label{sec:Model}
+\chapter{Bayesian Decision Tree Models}\label{sec:Model}
 
 In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT to link sparse linear models with covariate selection probabilities facilitating sparse Bayesian decision trees. In Section \ref{subsec:the_tp} we describe the tree prior and the local updates we use to explore the graph of permissible trees. Finally, in Section \ref{subsec:Regularization Priors} we give several examples of regularization priors we will study in our simulated examples.
 
-	\subsection{The Likelihood}\label{sec:lhood}
+	\section{The Likelihood}\label{sec:lhood}
 
 We begin by reviewing the model proposed in Chipman et al. \cite{chipman1998bayesian}, and show how our approaches generalize upon their model. 
 
@@ -438,7 +438,7 @@ The framework in Chipman et al. \cite{chipman1998bayesian} proposed assumed $\ve
 
 The prior density for $\vec{q}$, the covariate selection probabilities, is defined in Subsection \ref{subsec:alt}. Similar to Chipman et al., we place the uniform prior, denoted $\Pr(\mathcal{T})$, on the decision tree space. We sample the decision trees using the stochastic process defined in Section \ref{subsec:the_tp}.  To monitor the convergence of the Markov chain used to sample the space of decision trees, it is necessary to be able to calculate the marginal density for $\mathcal{T}$ given the covariate selection probabilities $\vec{q}$. This requires choosing conjugate priors for the vector $\vec{\theta}$ so that a closed form marginal density, $\Pr(\vec{y}\vert X,\vec{q},\mathcal{T})$ is available. Thus, if the response data are continuous, we choose a Gaussian density for the prior on $\vec{\theta}$. Similarly, if the response data are categorical, we choose a Dirichlet density as the prior density for $\vec{\theta}$.  
 
-	\subsection{The Additive Logistic Transform}\label{subsec:alt}
+	\section{The Additive Logistic Transform}\label{subsec:alt}
 	
 	The ALT, defined in Equation \ref{eqn:alt}, is a mapping from a Euclidean space to a probability space. 
 	%We define our model on a Euclidean space and then, once the draw from the posterior is simulated, we transform the draw to a probability scale using the ALT. 
@@ -466,7 +466,7 @@ In Figure \ref{fig:aln_plots}, the four sub-figures represent sampled observatio
 \end{center}
 \end{figure}
 
-\subsection{The Tree Prior}\label{subsec:the_tp}	
+\section{The Tree Prior}\label{subsec:the_tp}	
 This section reviews the tree prior first described in Chipman et al. \cite{chipman1998bayesian}, for those readers that are not familiar with the model. Those readers familiar with the paper may safely skip this subsection. 
 
 The tree prior is defined as
