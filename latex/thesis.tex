@@ -17,7 +17,7 @@
 \usepackage{epsfig,dsfont}
 \usepackage{times,tikz, tikz-qtree}
 \usepackage{amsmath, amssymb, hyperref,float}
-\usepackage[nottoc,numbib]{tocbibind}
+%\usepackage[nottoc,numbib]{tocbibind}
 \usepackage{framed, pseudocode}
 \usepackage{mathrsfs} 
 \usepackage{graphicx, dsfont}
@@ -27,6 +27,7 @@
 \usepackage{multirow} % for column and two spanning in tables
 \usepackage{subfigure}
 \usepackage[ruled,vlined]{algorithm2e}
+
 
 
 \setlength{\textwidth}{6.5in}
@@ -86,7 +87,7 @@
 % For letter-size paper: 8.5 in x 11 in
 % Latex Origin is 1''/1'', so measurements are relative to this.
 
-\linespread{1.7} % 1.6 = double space, 1.3 = 1.5 space comment out for regular
+\linespread{1.6} % 1.6 = double space, 1.3 = 1.5 space comment out for regular
 
 
 \topmargin      0.0in
@@ -210,7 +211,7 @@ In this thesis we propose a novel modification to previous Bayesian decision tre
 \pagebreak
 
 \clearpage
-\phantomsection
+%\phantomsection
  \addcontentsline{toc}{chapter}{\textbf{List of Abbreviations}}
 \listofabbreviations
 \pagebreak
@@ -245,13 +246,13 @@ In this thesis we propose a novel modification to previous Bayesian decision tre
 \pagebreak
 
 %\cleardoublepage
-%\phantomsection
+
 %\addcontentsline{toc}{chapter}{Bibliography}
 %\bibliographystyle{abbrv}
-
-
+%\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}% - See more at: http://www.howtotex.com/general/control-your-table-of-contents/#sthash.28ZEx8jt.dpuf
+%\phantomsection
 \bibliographystyle{abbrv}
-\bibliography{tree_biblio,tree_biblio1,tree_biblio2}
+\bibliography{tree_biblio}%,tree_biblio1,tree_biblio2}
 
 
 \end{document}

@@ -31,14 +31,14 @@ By focusing on the \ALT, we are able to transform the decision tree variable sel
  
 Figure \ref{fig:trees_and_probability} shows a plot of a decision tree and a plot of the probabilities associated with the tree on a two-dimensional simplex and the three-dimensional Euclidean space. If the observed data has only three covariates and we only observe the first two covariates, $x_1$ and $x_2$ in the estimated tree, then the covariate selection probability vector is approximately $\vec{p} = [0.50, 0.31, 0.19]$. The covariate that has no observed splits receives a lower assigned probability for the subsequent iteration, whereas the two covariates with larger numbers of splits receive proportionally higher covariate selection probabilities for the following iteration of the algorithm. Note the point $\vec{0}^\prime$ in Figure \ref{fig:trees_and_probability} is the point $(1/3,1/3,1/3)$ which functions as the origin on the simplex in 3 dimensions. 
 
-This chapter proceeds as follows: subsection \ref{sec:ALN_chapterl} describes and motivates the use of the ALT to model covariate selection probabilities. Subsection \ref{subsec:simple_sampler} gives the simple sampler with no regularization on the covariate selection means $\mu_j$. Subsection \ref{sec:ALoVaS_Model} contains a description of the models used in this chapter. The reader may find it helpful to reread the material of Chapter \ref{sec:Model},particularly the tree likelihood function and review the Chipman et al. Bayesian CART \cite{chipman1998bayesian} model for clarity. In Subsection \ref{sec:ALoVaS_model}, we present the details of the ALoVaS model, we show the relation with the CGM model, and detail the simulation algorithms used. Then in Subsection \ref{sec:Examples}, we present simulated examples where we study the efficacy of our proposed method using the regularization priors we describe in Subsection \ref{sec:ALoVaS_Model}. Concluding Subsection \ref{sec:Examples}, we give an example classifying webpages according to whether those webpages contain ads or not. Finally, in SubSection \ref{sec:Conclusion} we summarize our findings and discuss the limitations, extensions, and possible variations of the ALoVaS model.      
+This chapter proceeds as follows: Section \ref{sec:ALN_chapter} describes and motivates the use of the ALT to model covariate selection probabilities. Section \ref{subsec:simple_sampler} gives the simple sampler with no regularization on the covariate selection means $\mu_j$. Section \ref{sec:slice_gibbs} details how we use slice sampling to perform Gibbs updates. Section \ref{sec:PX_1} describes the SSVS regularized ALoVaS model. Section \ref{sec:PX_2} describes the lasso and horseshoe parameter expansions used in the ALoVaS model. Section \ref{subsec:Regularization Priors} contains a description of the regularization priors used in the ALoVaS model. In Section \ref{sec:ALoVaS_model}, we present the details of the ALoVaS model, we show the relation with the CGM model, and detail the simulation algorithms used. Finally, Section \ref{sec:pseudo} gives pseudocode for the three ALoVaS models. Additionally, the reader may find it helpful to reread the material of Chapter \ref{sec:Model}, particularly the tree likelihood function and review the Chipman et al. Bayesian CART \cite{chipman1998bayesian} model for clarity. 
 
 
 \section{Normal Distributions Transformed to the Unit Simplex: ALT and ALN Dynamics. }\label{sec:ALN_chapter}
 
-This chapter outlines the additive logistic transformation, which transforms a $d$ dimensional multivariate normal distribution onto the unit simplex in $d+1$ dimensions. Note that the unit simplex in $d+1$ dimensions actually lies in a subspace of $d$ dimensions because of the constraint that the sum of the probabilities equals one. 
+This section outlines the additive logistic transformation, which transforms a $d$ dimensional multivariate normal distribution onto the unit simplex in $d+1$ dimensions. Note that the unit simplex in $d+1$ dimensions actually lies in a subspace of $d$ dimensions because of the constraint that the sum of the probabilities equals one. 
 
-The goal of this chapter is to find a transform that moves the space $\mathbb{R}^d$ \newnot{symbol:real} to the simplex $\mathbb{S}^d$. \newnot{symbol:simp} The simplex $\mathbb{S}^d$ is a space defined by the constraints $\{x_i: 0<x_i<1, \sum_{j=1}^dx_j <1 \}$, and the extra term $x_{d+1}=1-\sum_{j=1}^d x_j$ ensures the total sums to 1.  
+The goal of this section is to find a transform that moves the space $\mathbb{R}^d$ \newnot{symbol:real} to the simplex $\mathbb{S}^d$. \newnot{symbol:simp} The simplex $\mathbb{S}^d$ is a space defined by the constraints $\{x_i: 0<x_i<1, \sum_{j=1}^dx_j <1 \}$, and the extra term $x_{d+1}=1-\sum_{j=1}^d x_j$ ensures the total sums to 1.  
 
 Define the notation $\yvec$, for the normal random variables that reside in the $\Rsp{d}$  dimensional space. Define the notation $\xvec$  for the vector that resides on $\simp{d}$, the simplex in $d$ dimensions. We use an underline to indicate that the stated quantity is a column vector and capital greek letters (and $I$) will denote matrices (the identity matrix) 
 
@@ -173,7 +173,7 @@ We define the likelihood of the tree by counting the tree's selected covariates 
 
 \section{A Simple Sampler Approach}\label{subsec:simple_sampler}
 
-This subsection derives the full conditional densities for each necessary update in the Gibbs loop to sample posterior weights on each dimension in the CGM decision tree sampler. 
+This section derives the full conditional densities for each necessary update in the Gibbs loop to sample posterior weights on each dimension in the CGM decision tree sampler. 
  Throughout this subsection we will use the notation $\odot$\newnot{symbol:hadamard} to denote a Hadamard product of two matrices or vectors. 
  
  \subsection{The General Strategy}
@@ -200,7 +200,7 @@ S\beta(c_j\vert \alpha_j, \beta_j, -a, a)\equiv\pi(c_j\vert \alpha_j, \beta_j, -
 
 A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform r.v.'s on the region  $[-a,a]$. 
 For each $j=1, \dots, d$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
-Through basic Bayesian calculations we find that the full conditional distributionss are 
+Through basic Bayesian calculations we find that the full conditional distributions are 
 
 \begin{equation}
 \pi(c_j\vert \mu_j, \sigma_j^2, a) \sim N_{[-a,a]}(c_js_j\vert \mu_j, \sigma^2_j) \text{(a normal truncated to the region $(-a,a)$),}
@@ -214,7 +214,9 @@ Through basic Bayesian calculations we find that the full conditional distributi
 \pi(\mu_j\vert \mu_j^p, c_j, \sigma^2_j)\sim N[c_js_j+\mu_j^p, \sigma_j^2].
 \end{equation}
 
-\section{Slice Sampling Gibbs Updates}
+The pseudocode for the simple sampler can be found in the Appendix. We now describe ho we use slice sampling to perform Gibbs updates.
+
+\section{Slice Sampling Gibbs Updates}\label{sec:slice_gibbs}
 
 Ideally we would like all sampled parameters to be Gibbs steps. This can be accomplished numerically using numerical approximations to the cumulative density of the standard normal distribution, here denoted $\Phi$, and $\Phi^{-1}$, the quantile function of the standard normal cumulative density. \newnot{symbol:sncdf} However, we can accomplish this directly using the technique of parameter expansion set forth in Damien and Walker \cite{damien2001sampling}, which we review here for completeness. 
  
@@ -367,7 +369,7 @@ Huang and Wand \cite{huang2013simple} indicate that using an inverse-Wishart pri
 
 
 \section{Regularization Posteriors}\label{subsec:Regularization Priors}
-		While this paper is focused on regularized trees, we will show the connection to various regularization frameworks used for regression models. In essence, the ALoVaS method can incorporate any model-based regularization method. We briefly describe a few popular approaches for the sake of completeness. 
+		While this chapter is focused on regularized trees, we will show the connection to various regularization frameworks used for linear regression models. In essence, the ALoVaS method can incorporate any model-based regularization method. We briefly describe a few popular approaches for clarity. 
 		
 		Regularization, originally defined as a constrained optimization problem, has been a popular topic of research in the sparse linear model literature. The lasso model \cite{tibshirani1996regression}, a popular regularization technique, seeks to optimize an $L_1$ constrained least squares problem. The negative of the log posterior density of the lasso is given by Equation \ref{eqn:lasso_obj}
 		
@@ -461,7 +463,7 @@ In this section we write out the ALoVaS model for a specific regularization prio
 
 \section{ALoVaS Algorithms Pseudocode}\label{sec:pseudo}
 
-This subsection contains some technical details of regularization priors described in Section \ref{sec:Model}.
+This section contains some technical details of regularization priors described in Section \ref{sec:Model}.
 Also in this appendix we explain the hierarchical expansions that we employ to facilitate Gibbs sampling. 
 
 		\subsection{The Lasso Prior}\label{sec:lasso_app}

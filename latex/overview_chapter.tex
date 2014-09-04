@@ -4,7 +4,7 @@ This chapter provides an overview of the models used for decision tree induction
 
  During the same time (the 1990s and the 2000s), researchers in Machine Learning and Statistics were developing theory beyond that published by Breiman et al. \cite{breiman1984classification}, that ensured decision trees' consistency. In this case consistency means that the error rate of the tree converges to the Bayes error. The initial impetus for this work stemmed from the landmark paper of Vapnik and Chervonenkis \cite{vapnik1971uniform}, and subsequent work by Vapnik \cite{vapnik2000nature}, though it would take over a decade for the full power of their combinatorial approach to be widely used in both Machine Learning and Statistics. 
 
-This chapter presents necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
+This chapter presents necessary preliminaries for the reader to understand the developments in subsequent chapters. Therefore the reader may omit this chapter on a first reading and refer back to the necessary subsections when subsequent chapters recall the preliminaries. Section \ref{ch:p1sub_greedy_ind} and Section \ref{ch:p2sub_bayes} review the necessary material on greedy and Bayesian approaches to decision tree induction. Section \ref{ch:p4sub_var_sel} details a similar variable selection approach proposed for decision trees with time series data. This approach, while similar in spirit to our methods, is significantly different in both methodology and application to our methods but we include a discussion of the method for completeness. Finally, Section \ref{ch:p3sub_theory} details how alternative models of a response variable can work and what requirements these alternate models must satisfy. The reader who is not familiar with these two approaches to decision trees should read these two subsections before moving on to the rest of the thesis.  
 
 \section{Greedy Induction}
 \label{ch:p1sub_greedy_ind}
@@ -357,7 +357,7 @@ A similar method of ranking covariates was proposed by Taddy, Gramacy, and Polso
 \Delta\phi = \int\phi ds - \pi_L\int\phi ds -\pi_R \int \phi_Rds. 
  \end{equation}
 Taddy, Gramacy and Polson proposed using samples and estimating the integrals with Monte Carlo approximations. In this case the approach is using a greedy measure on a Bayesian problem, something we find confusing.
-In the Bayesian approach the quantity $\Delta\phi$ has little meaning, because we are using an MCMC approach to search across trees. The resulting estimates of the covariates' importance will be the same as the greedy approach, which we find undesirable for many reasons. The method proposed by Taddy, Gramacy, and Polson is worth comparing against our approach because it will have similar difficulties to CGM in high-dimensional data. We will do compare their approach to a time series version of our model in future work.
+In the Bayesian approach the quantity $\Delta\phi$ has little meaning, because we are using an MCMC approach to search across trees. The resulting estimates of the covariates' importance will be the same as the greedy approach, which we find undesirable for many reasons. The method proposed by Taddy, Gramacy, and Polson is worth comparing against our approach because it will have similar difficulties to CGM in high-dimensional data. We will compare their approach to a time series version of our model in future work.
  
 
  
@@ -416,7 +416,7 @@ This is all the result we need putting the two parts together now gives the clos
 
 \chapter{Bayesian Decision Tree Models}\label{sec:Model}
 
-In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT to link sparse linear models with covariate selection probabilities facilitating sparse Bayesian decision trees. In Section \ref{subsec:the_tp} we describe the tree prior and the local updates we use to explore the graph of permissible trees. Finally, in Section \ref{subsec:Regularization Priors} we give several examples of regularization priors we will study in our simulated examples.
+In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT to link sparse linear models with covariate selection probabilities facilitating sparse Bayesian decision trees. In Section \ref{subsec:the_tp} we describe the tree prior and the local updates we use to explore the graph of permissible trees. %Finally, in Section \ref{subsec:Regularization Priors} we give several examples of regularization priors we will study in our simulated examples.
 
 	\section{The Likelihood}\label{sec:lhood}
 
