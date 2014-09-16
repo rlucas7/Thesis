@@ -11,11 +11,14 @@
 {\Huge\textbf{List of Symbols}}
 \begin{tabbing}
 % YOU NEED TO ADD THE FIRST ONE MANUALLY TO ADJUST THE TABBING AND SPACES
-$\vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}$~~~~~\=\parbox{4.5in}{The $\nu$ norm of the vector $\vec{x}$.\dotfill \pageref{symbol:norm}}\\
+%$\vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}$~~~~~\=\parbox{4.5in}{The $\nu$ norm of the vector $\vec{x}$.\dotfill \pageref{symbol:norm}}\\
+$ \vec{a}$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\=\parbox{4.5in}{A column vector of entries $a_i$ for $i=1,\dots,d$. \dotfill \pageref{symbol:vec} }\\
+
 %ADD THE REST OF SYMBOLS WITH THE HELP OF MACRO
 %\addsymbol : {}{symbol:proptp}
 %\addsymbol \vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}: {\hspace{1.2in}The $\nu$ norm if the vector $\vec{x}$.}{symbol:norm}
-\addsymbol \vec{a}: {A column vector of entries $a_i$ for $i=1,\dots,d$.}{symbol:vec}
+%\addsymbol \vec{a}: {A column vector of entries $a_i$ for $i=1,\dots,d$.}{symbol:vec}
+$\vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}$~~~~~\=\parbox{4.5in}{The $\nu$ norm of the vector $\vec{x}$.\dotfill \pageref{symbol:norm}}\\
 \addsymbol \mathds{1}[A]: {Indicator function for the set $A$.}{symbol:ind_A}
 \addsymbol N_{[a,b]}(A\vert B,C): {\hspace{.0in}Normal density on $A$, with mean $B$, and variance $C$, truncated to $[a,b]$.}{symbol:normal}
 \addsymbol \sim: {Distributed as, or, Distributed according to the density.}{symbol:sim}
@@ -29,9 +32,9 @@ $\vert \vec{x} \vert_{\nu} = \left(\sum_{i=1}^d\vert x_i\vert^\nu\right)^{1/\nu}
 \addsymbol v_n=\frac{\sum_{i=1}^n\mathds{1}(y_i =\hat{\mathcal{T}}(X_i))}{n}: {\hspace{.0in}The empirical error of the classifier.}{symbol:empirical_error}
 \addsymbol v=\Pr(\mathcal{T}(X)=y): {\hspace{.0in}The theoretical (Bayes) error of the classifier.}{symbol:true_error}
 \addsymbol \mathcal{H}(x): {\hspace{.0in}The entropy function.}{symbol:entropy}
-\addsymbol J(\vec{y}\vert\vec{x}): {\hspace{.0in}The Jacobian of the transformation from $\vec{y}$ to $\vec{x}$.}{symbol:jacobian}
 \addsymbol \mathbb{R}: {\hspace{.0in}The real number system.}{symbol:real}
 \addsymbol \mathbb{S}^d: {\hspace{.0in}The $d$-dimensional simplex.}{symbol:simp}
+\addsymbol J(\vec{y}\vert\vec{x}): {\hspace{.0in}The Jacobian of the transformation from $\vec{y}$ to $\vec{x}$.}{symbol:jacobian}
 \addsymbol Diag(a_i): {\hspace{.0in}A square, diagonal matrix with diagonal entries $a_i$.}{symbol:diag}
 \addsymbol \mathcal{O}(A): {\hspace{.0in}Big ``O'' of $A$.}{symbol:big_oh}
 \addsymbol \odot: {\hspace{.0in}Hadamard product of two vectors (element-wise product).}{symbol:hadamard}

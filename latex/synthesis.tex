@@ -73,7 +73,7 @@ We now present a small simulation study. We sampled data according to the model 
 \begin{figure}
 \begin{center} 
 \begin{tabular}{cc}
-\includegraphics[scale=0.25]{figures/divas_tree_alovas_divas_compare.pdf}
+\includegraphics[scale=0.5]{figures/divas_tree_alovas_divas_compare.pdf}
 \end{tabular}
 \caption{The optimal DiVaS tree.}
 \label{fig:interaction_trees}
@@ -85,13 +85,14 @@ We ran the ALoVaS and DiVaS algorithms for $11,000$ samples discarding the first
 \begin{figure}
 \begin{center} 
 \begin{tabular}{cc}
-\includegraphics[scale=0.25]{figures/lasso_compare_tree.pdf}
+\includegraphics[scale=0.5]{figures/lasso_compare_tree.pdf}
 \end{tabular}
 \caption{The optimal ALoVaS tree.}
 \label{fig:chain_max_interaction_tree}
 \end{center}
 \end{figure} 
 
+While the DiVaS tree primarily picks up only the two covariates interacting, the ALoVaS method accounts for the interaction between the two covariates while also provided a sparser representation than the DiVaS tree. The additional covariates picked up by the ALoVaS method are noise which can happen under either method.  the additional covariates represents a data artifact and should not be interpreted as a deficiency of the method, rather an inevitable result of stochasticity. 
 \section{Practical differences and a simulation study}
 
 While the theoretical differences are important to academics and applied researchers who want to understand the limitations of a specific method, the questions most applied researchers tend to have are more practical in nature. We address the practical questions in this section. 
@@ -114,7 +115,7 @@ for $i=1, \dots, n$. The two covariates $x_1$ and $x_2$ were such that $Corr(x_1
 
 The similarities and the differences between the ALoVaS and DiVaS methods having been pointed out, we now turn to the conclusions and recommendations we have for the use of the two methods. 
 
-While the DiVaS method is a theoretically sound method, several theoretical and practical difficulties arise when trying to implement the method. In contrast, the ALoVaS method has few theoretical difficulties and the practical difficulties are primarily in terms of simulation time which will typically not be an issue for scientific problems and most problems with no dynamic time varying component. Therefore, problems involving decision trees where the data occur on a timescale of less than one day and especially less than one hour will likely not find use of the DiVaS and ALoVaS methods. Those needing these short timeframe models are likely to find some use of the time varying decision trees proposed by Gramacy, Taddy, and Polson \cite{taddy2011dynamic}. Moreover, the DiVaS approach is more of an ad-hoc method lacking a unifying idea, whereas the ALoVaS method has one underlying concept, the ALT to transform from a linear scale to a probability scale. 
+While the DiVaS method is a theoretically sound method, several theoretical and practical difficulties arise when trying to implement the method. In contrast, the ALoVaS method has few theoretical difficulties and the practical difficulties are primarily in terms of simulation time, which will typically not be an issue for scientific problems and most problems with no dynamic time varying component. Therefore, problems involving decision trees where the data occur on a timescale of less than one day and especially less than one hour will likely not find use of the DiVaS and ALoVaS methods. Those needing these short timeframe models are likely to find some use of the time varying decision trees proposed by Gramacy, Taddy, and Polson \cite{taddy2011dynamic}. Moreover, the DiVaS approach is more of an ad-hoc method lacking a unifying idea, whereas the ALoVaS method has one underlying concept, the ALT to transform from a linear scale to a probability scale. 
 
 The conclusion then seems straightforward. If one is to choose between the DiVaS and the ALoVaS methods, one would choose the ALoVaS method because of the  theoretical soundness, the conceptual link with linear methods, and the ease of implementation. The key drawbacks are the run-time of the algorithm and the need to choose one of the regularization techniques discussed in this text or one of the plethora of other regularization techniques available in the statistics literature. However, as indicated in Section \ref{sec:Examples}  the choice of which ALoVaS method to use is dependent largely on the underlying DGP, the knowledge of which would preclude the model fitting exercise. Also, our simulation studies presented in Section \ref{sec:Examples} largely indicate that, within a given sparsity level, the choice of which type of ALoVaS method to choose is largely irrelevant. To reiterate, any ALoVaS method, is to be preferred to the DiVaS method. 
 

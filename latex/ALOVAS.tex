@@ -8,12 +8,12 @@ Let us start with the linear model
 \begin{equation}\label{def:linear_model}
 \vec{y} = X\vec{\mu} + \vec{\epsilon},
 \end{equation}
-where $\vec{\epsilon}$ is an $n \times 1$ vector of random errors, typically assumed to follow a multivariate normal distribution. Also, $X$ is an $n \times p$ matrix, also called the design matrix, which determines the mean value associated with each observed response, the associated element of the $n\times 1$ vector $\vec{y}$. It should be noted that in this section and throughout this paper we use the cell means model to describe the ANOVA linear model. Thus here $X$ denotes an incidence matrix of full rank. It is well known that if $n$, the number of observations, is less than $p$, the number of covariates, then the estimated values of the $\mu_j$, for $j=1,\dots,p$, denoted $\hat{\mu}_j$, are not estimable. However, regularizing, or equivalently, putting a prior on the $\mu_j$, results in estimable values for the $\hat{\mu}_j$. Moreover, a nice property of the linear model is that covariates deemed not useful can have their coefficients coded as zero, whereas useful covariates can be encoded with non-zero coefficients. Thus, a sparse linear model indicates knowledge that certain covariates are not useful. Sparse linear models are typically necessary when dealing with high-dimensional data, especially in the $p>n$ case. 
+where $\vec{\epsilon}$ is an $n \times 1$ vector of random errors, typically assumed to follow a multivariate normal distribution. Also, $X$ is an $n \times p$ matrix, also called the design matrix, which determines the mean value associated with each observed response, the associated element of the $n\times 1$ vector $\vec{y}$. It should be noted that in this section and throughout this chapter we use the cell means model to describe the ANOVA linear model. Thus here $X$ denotes an incidence matrix of full rank. It is well known that if $n$, the number of observations, is less than $p$, the number of covariates, then the estimated values of the $\mu_j$, for $j=1,\dots,p$, denoted $\hat{\mu}_j$, are not estimable. However, regularizing, or equivalently, putting a prior on the $\mu_j$, results in estimable values for the $\hat{\mu}_j$. Moreover, a nice property of the linear model is that covariates deemed not useful can have their coefficients coded as zero, whereas useful covariates can be encoded with non-zero coefficients. Thus, a sparse linear model indicates knowledge that certain covariates are not useful. Sparse linear models are typically necessary when dealing with high-dimensional data, especially in the $p>n$ case. 
 
 The Additive Logistic Transform (\ALT) \newabbrev{abbrev:ALT}, is used as the canonical inverse link function \cite{mccullagh1989generalized} with multi-category response data in a multi class logistic regression. The \ALT\ is referred to as the softmax function in the machine learning literature \cite{bishop2006pattern}. Additionally, the \ALT\ is fundamental to the analysis of compositional data \cite{aitchison1986statistical}. The \ALT\ is defined by the vector valued function given in Equation \ref{eqn:alt}, 
 \begin{equation}\label{eqn:alt}
 \vec{q} = \left[ q_1, q_2,\dots, q_{p-1}, q_p \right] =\vec{g}^{-1}(\vec{\mu})= \left[ \frac{e^{\mu_1}}{1+S_{p-1}},\frac{e^{\mu_2}}{1+S_{p-1}}, \dots,\frac{e^{\mu_{p-1}}}{1+S_{p-1}},\frac{1}{1+S_{p-1}} \right],\end{equation} 
-where $S_{p-1}=\sum_{j=1}^{p-1}e^{\mu_j}$. Moreover, the \ALT\ is an invertible mapping from the $p$ dimensional real number system to a probability simplex. This allows us to calculate the distribution of the random variables obtained by the \ALT\ via a change of variables. In this paper we focus on the Additive Logistic Normal (\ALN) density, obtained by applying the \ALT\ to a random vector with a multivariate normal density. The \ALN\ density has proved successful in the correlated topic model \cite{blei2007correlated,lafferty2005correlated}.  Additionally, for our applications the \ALN\ density allows us to model covariate selection probabilities that have both positive and negative correlations, whereas distributions like the Dirichlet density only permit negative correlations.
+where $S_{p-1}=\sum_{j=1}^{p-1}e^{\mu_j}$. Moreover, the \ALT\ is an invertible mapping from the $p$ dimensional real number system to a probability simplex. This allows us to calculate the distribution of the random variables obtained by the \ALT\ via a change of variables. In this chapter we focus on the Additive Logistic Normal (\ALN) density, obtained by applying the \ALT\ to a random vector with a multivariate normal density. The \ALN\ density has proved successful in the correlated topic model \cite{blei2007correlated,lafferty2005correlated}.  Additionally, for our applications the \ALN\ density allows us to model covariate selection probabilities that have both positive and negative correlations, whereas distributions like the Dirichlet density only permit negative correlations.
 
 By focusing on the \ALT, we are able to transform the decision tree variable selection problem into a problem of variable selection in a linear model. The upshot of this is that we may use variable selection methods, prevalent in the linear model literature, with decision trees. Thus, we can sample from a posterior distribution of the covariate selection probabilities and determine the utility of covariates, simultaneously performing variable selection and decision tree fitting. 
  
@@ -84,7 +84,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{mu0_0.pdf}
-\caption[ALN plot with a zero mean vector]{In this figure, $\muvec$ has all zero entries, with $\Sigma=I$, corresponding to the equiprobable case. Each probability is approximately $1/(d+1)$. }
+\caption[ALN plot with a zero mean vector.]{In this figure, $\muvec$ has all zero entries, with $\Sigma=I$, corresponding to the equiprobable case. Each probability is approximately $1/(d+1)$. }
 \label{fig:figure9}
 \end{minipage}
 \hspace{0.5cm}
@@ -93,7 +93,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 
 \includegraphics[width=\textwidth]{mu-1-1.pdf}
 %\vspace{.9cm}
-\caption[ALN plot with a negative one mean vector]{In this figure, $\vec{\mu}=(-1,-1)^T$, with $\Sigma=I$. Here, moving the mean vector of the normal density  corresponds to moving towards a sparser set of covariates. }
+\caption[ALN plot with a negative one mean vector.]{In this figure, $\vec{\mu}=(-1,-1)^T$, with $\Sigma=I$. Here, moving the mean vector of the normal density  corresponds to moving towards a sparser set of covariates. }
 \label{fig:figure10}
 \end{minipage}
 \end{figure}
@@ -102,14 +102,14 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{mu2_0.pdf}
-\caption[ALN plot with a mean vector $(2,0)^{T}$]{$\vec{\mu}=(2,0)^T$, with $\Sigma=I$, moves the density towards one corner of the simplex. }
+\caption[ALN plot with a mean vector $(2,0)^{T}$.]{$\vec{\mu}=(2,0)^T$, with $\Sigma=I$, moves the density towards one corner of the simplex. }
 \label{fig:figure1}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{mu0_2.pdf}
-\caption[ALN plot with mean vector $(2,0)^{T}$]{$\vec{\mu}=(0,2)^T$, with $\Sigma=I$, moves the density towards the other corner of the simplex. }
+\caption[ALN plot with mean vector $(2,0)^{T}$.]{$\vec{\mu}=(0,2)^T$, with $\Sigma=I$, moves the density towards the other corner of the simplex. }
 \label{fig:figur2}
 \end{minipage}
 \end{figure}
@@ -118,14 +118,14 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{mu-2_2.pdf}
-\caption[ALN plot with a mean vector of $(-2,2)^{T}$]{$\vec{\mu}=(-2,2)^T$, with $\Sigma=I$, corresponds to most probability mass along a corner of the simplex and is a sparse representation.} 
+\caption[ALN plot with a mean vector of $(-2,2)^{T}$.]{$\vec{\mu}=(-2,2)^T$, with $\Sigma=I$, corresponds to most probability mass along a corner of the simplex and is a sparse representation.} 
 \label{fig:figure3}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma0_01_10.pdf}
-\caption[ALN plot $\Sigma=\text{Diag(0.01,100)}$]{ $\vec{\mu}=\vec{0}$, with
+\caption[ALN plot $\Sigma=\text{Diag(0.01,100)}$.]{ $\vec{\mu}=\vec{0}$, with
  $\Sigma= \text{diag}(0.01, 100)$, corresponds to most density lying on a one dimensional subspace (the second covariate in the $\Rsp\ $ space).  }
 \label{fig:figure4}
 \end{minipage}
@@ -136,14 +136,14 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma1_9_9_1.pdf}
-\caption[ALN plot $\Sigma$ numerically singular]{Here $\Sigma$ is approximately singular and most of the probability mass in concentrated along the $d+1$th dimension in the $\mathbb{R}^{d+1}$ space.  }
+\caption[ALN plot $\Sigma$ numerically singular.]{Here $\Sigma$ is approximately singular and most of the probability mass in concentrated along the $d+1$th dimension in the $\mathbb{R}^{d+1}$ space.  }
 \label{fig:figure5}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma10_0_01.pdf}
-\caption[Similar to the case in Figure \ref{fig:figure4} but with the variances reversed]{This figure presents a display of the ALN density similar to the case in Figure \ref{fig:figure4} but with the variances reversed. The density lies nearly on a line.}
+\caption[Similar to the case in Figure \ref{fig:figure4} but with the variances reversed.]{This figure presents a display of the ALN density similar to the case in Figure \ref{fig:figure4} but with the variances reversed. The density lies nearly on a line.}
 \label{fig:figure6}
 \end{minipage}
 \end{figure}
@@ -152,7 +152,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma100_100.pdf}
-\caption[ALN plot with a zero vector mean and $\Sigma=\text{Diag}(100,100)$]{$\vec{\mu}=\vec{0}$, with
+\caption[ALN plot with a zero vector mean and $\Sigma=\text{Diag}(100,100)$.]{$\vec{\mu}=\vec{0}$, with
  $\Sigma= \text{diag}(100, 100)$, corresponds to encouraging sparse representations \emph{a priori}. The sparse representation is agnostic in which covariates to select.  }
 \label{fig:figure7}
 \end{minipage}
@@ -160,7 +160,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma01_01.pdf}
-\caption[ALN plot approximating the CGM model]{Here $\Sigma=0.1I$, and $\muvec=\vec{0}$, corresponds to roughly the CGM specification. As the variances approach zero, the model approaches the CGM model.}
+\caption[ALN plot approximating the CGM model.]{Here $\Sigma=0.1I$, and $\muvec=\vec{0}$, corresponds to roughly the CGM specification. As the variances approach zero, the model approaches the CGM model.}
 \label{fig:figure8}
 \end{minipage}
 \end{figure}
@@ -214,7 +214,7 @@ Through basic Bayesian calculations we find that the full conditional distributi
 \pi(\mu_j\vert \mu_j^p, c_j, \sigma^2_j)\sim N[c_js_j+\mu_j^p, \sigma_j^2].
 \end{equation}
 
-The pseudocode for the simple sampler can be found in the Appendix. We now describe ho we use slice sampling to perform Gibbs updates.
+The pseudocode for the simple sampler can be found in Appendix A. We now describe ho we use slice sampling to perform Gibbs updates.
 
 \section{Slice Sampling Gibbs Updates}\label{sec:slice_gibbs}
 
@@ -253,7 +253,8 @@ which results in the region for $x$
  Simulating from a truncated normal is equivalent to simulating from two uniforms on the appropriate regions and evaluating a natural logarithm and a square root function at each iteration. 
  
  A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform random variables on the region $[-a,a]$. 
-For each $j=1, \dots, d$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
+For each $j=1, \dots, d$, we first calculate \\
+ $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate $j$ at node $\eta$ } ]$, for some fixed $\epsilon>0$.
 Through basic Bayesian calculations we find the full conditionals in closed form
  
 \begin{equation}\label{eqn:u_given_cjsj}
@@ -301,7 +302,7 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 
 \section{A Stochastic Search Variable Selection Approach}\label{sec:PX_1}
 
-Using the results of George and McCulloch we derive Gibbs updates for each of the parameters and have as a special case the approach of CGM if all the dimension indicators are selected to be the point masses at zero. In this case the ALN transform puts probability $1/(d+1)$ on each dimension. 
+Using the results of George and McCulloch we derive Gibbs updates for each of the parameters. In the case where all the dimension indicators are selected to be the point masses at zero, we obtain the model proposed by CGM. In the case of all point masses at zero being selected, the ALN transform puts probability $1/(d+1)$ on each dimension. 
 
 
 We investigate three priors for use in variable selection with decision trees. They are: 
@@ -326,7 +327,7 @@ Here the $\psi_i >0$ and the $\tau_i>0$. Usually $p_i\equiv1/2$ but it is also p
 
 \section{Parameter Expansions For the Lasso and Horseshoe Priors}\label{sec:PX_2}
 In this section we propose to use parameter expansion to facilitate Gibbs sampling within the sampling framework for the posterior means ($\mu_j$) for each covariate in the normal space. We use the ALN transform to convert the $\mu_j$ to probabilities using the ALT transform. 
-We use the scale mixture of normals representation to write the Laplace prior is parameter expanded form. This representation is stated here for reference.
+We use the scale mixture of normals representation to write the Laplace prior is parameter expanded form. This representation is stated here for reference and derived using moment generating functions in Appendix C.
 
 If $V \sim \text{Exponential(1)}$ and $Z \sim N(0, 1)$ independent of $V$, then $X = \mu + b \sqrt{2 V}Z \sim \mathrm{Laplace}(\mu,b)$. 
 
@@ -374,7 +375,7 @@ Huang and Wand \cite{huang2013simple} indicate that using an inverse-Wishart pri
 		Regularization, originally defined as a constrained optimization problem, has been a popular topic of research in the sparse linear model literature. The lasso model \cite{tibshirani1996regression}, a popular regularization technique, seeks to optimize an $L_1$ constrained least squares problem. The negative of the log posterior density of the lasso is given by Equation \ref{eqn:lasso_obj}
 		
 		\begin{equation}\label{eqn:lasso_obj}
-		-log(\pi(\vec{\mu} \vert \vec{y}, X, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\lambda \sum_{j=1}^p \vert \mu_j \vert}_{\text{$-log$ Laplace prior}}\hspace{-0.5cm}.
+		-log(\pi(\vec{\mu} \vert \vec{y}, X, \lambda )) \propto \sum_{i=1}^n\left(y_i - \vec{x}_i^T\vec{\mu}\right)^2 + \underbrace{\lambda \sum_{j=1}^p \vert \mu_j \vert}_{\text{$-log$ Laplace prior}}\hspace{-0.3cm}.
 		\end{equation}
 		
 \noindent Interpreted in a Bayesian setting, the $L_1$ constraint is viewed as a double exponential or Laplace prior on the coefficients, $\mu_j$. A nice property of the lasso model is that the \emph{maximum a posteriori} estimated coefficients form a sparse vector, with $\lambda$ controlling the degree of sparsity. Thus, one of the models that we will use in our simulations uses a lasso prior to constrain the covariate selection probabilities. 
@@ -444,7 +445,7 @@ In practice inference should not be conducted on all the parameters in the model
  The proposed trees are accepted or rejected based on the usual Metropolis-Hastings rule, which is written here for completeness
  
  \begin{equation}
-\alpha(\mathcal{T}\vert \mathcal{T}^\prime) = \text{min}\left(\frac{\Pr(\mathcal{T}^\prime \vert X, \vec{q}, \vec{y} )\Pr(\mathcal{T}| \mathcal{T}^\prime) }{ \Pr(\mathcal{T} \vert X, \vec{q}, \vec{y})\Pr(\mathcal{T}^\prime \vert \mathcal{T}) } ,1\right)
+\alpha(\mathcal{T}\vert \mathcal{T}^\prime) = \text{min}\left(\frac{\Pr(\mathcal{T}^\prime \vert X, \vec{q}, \vec{y} )\Pr(\mathcal{T}| \mathcal{T}^\prime) }{ \Pr(\mathcal{T} \vert X, \vec{q}, \vec{y})\Pr(\mathcal{T}^\prime \vert \mathcal{T}) } ,1\right).
  \end{equation}
  
 Detailed balance is a formal property imposed on Markov Chains after convergence. Intuitively, the detailed balance equation indicates that, after convergence, the process has the same distribution when run forwards in time as when run backwards in time. Formally, this is represented in Equation \ref{eqn:detailed_balance}, 
@@ -459,12 +460,12 @@ The Markov Transition Density (MTD) \newabbrev{abbrev:MTD} for $q_j$ is given by
 \end{equation}
 A similar MTD can be formulated for $\mathcal{T}$. When closed forms exist for these MTDs, and minorization and drift conditions are also satisfied, geometric convergence may be established. For examples and more details on this line of study, see the very readable introduction by Jones and Hobert \cite{jones2001honest}. For our example, the MTD for $\vec{q}$ involves evaluating an NP-Hard sum, thus exact convergence rates seem unlikely to be found. 
 
-In this section we write out the ALoVaS model for a specific regularization prior. In general, the prior on the set $\{\mu_j,\sigma^2_j\}_{j=1}^{p}$ will change, giving us different flavors of the ALoVaS method. In this paper we include a study of the lasso, horseshoe, and SSVS priors, but other variations are certainly possible. Moreover, we do not claim optimality of our results. Indeed, many of these priors are optimal only in specific circumstances. If a model is not optimal in a linear model, this will carry over to our ALoVaS model. Therefore, the ALoVaS method will be sub-optimal as well. This is not a drawback of our proposed ALoVaS method but is a drawback of the choice of the regularization prior in the given situation.  
+In this section we write out the ALoVaS model for a specific regularization prior. In general, the prior on the set $\{\mu_j,\sigma^2_j\}_{j=1}^{p}$ will change, giving us different flavors of the ALoVaS method. In this chapter we include a study of the lasso, horseshoe, and SSVS priors, but other variations are certainly possible. Moreover, we do not claim optimality of our results. Indeed, many of these priors are optimal only in specific circumstances. If a model is not optimal in a linear model, this will carry over to our ALoVaS model. Therefore, the ALoVaS method will be sub-optimal as well. This is not a drawback of our proposed ALoVaS method but is a drawback of the choice of the regularization prior in the given situation.  
 
 \section{ALoVaS Algorithms Pseudocode}\label{sec:pseudo}
 
 This section contains some technical details of regularization priors described in Section \ref{sec:Model}.
-Also in this appendix we explain the hierarchical expansions that we employ to facilitate Gibbs sampling. 
+Also in this section we explain the hierarchical expansions that we employ to facilitate Gibbs sampling. 
 
 		\subsection{The Lasso Prior}\label{sec:lasso_app}
 		The lasso prior, also referred to as $L_1$ regularization, was described in \cite{tibshirani1996regression} and has the posterior density
@@ -575,3 +576,5 @@ Note the normal density limit $\lim_{\sigma_0 \to 0} N(0, \sigma_0^2) \overset{d
 }
 \caption{SSVS sampler.}\label{psd:SSVS_sampler}
 			\end{algorithm}
+
+Thus, all three algorithms are straight forward algorithms to code using standard mathematical functions and statistical random number generators. The only difficult part is implementing the Tree sampling which requires programming the proposal mechanisms describe above.
