@@ -47,7 +47,7 @@ The induction of decision trees proceeds by solving the objective function
 \begin{equation}
 \underset{t,s}{argmax} \Delta\phi = \phi - \pi_L\phi_L-\pi_R\phi_R.
 \end{equation}
-Here the variables $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$. The impurity functions are similarly subscripted. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. 
+Here the variables $t$ and $s$ scroll over all covariates in the data and all midpoints between successive observations (or at observed points) of the $t$th covariate respectively. The proportions $\pi_L$ and $\pi_R$ represent the number of data points going into the node to the left ($L$) and right ($R$) of the current node if the chosen split is on covariate $t$ and observation $s$. The impurity functions are similarly subscripted. Thus, if there are 100 observations in the current node and as a result of the split on covariate $t$, at observation $s$, 70 observations go into the left child node and 30 observations go into the right child node, then the two proportions are $(\pi_L, \pi_R) = (0.7, 0.3)$. It is worth noting that we consider binary splits on decision trees but not splits more than two ways. We only consider binary splits because that is the same framework as the CGM model and the framework set forth in the CART book. Moreover as noted in the CART book, a three way split can be modeled as two two way splits with higher order splits being handled similarly, thus we consider only binary splits in this thesis. 
 
 The tree induction process continues until no more data points are incorrectly classified, or a predetermined stopping rule is met. A common stopping rule is to stop when there are less than $5$ observations in a terminal node. Once the full tree has been built, the second stage of the process now starts. This is known as the pruning stage. Now that the full tree is grown, we progressively prune back terminal nodes of the tree until the root node occurs. Several related approaches have been proposed in the literature to select the optimal tree via pruning. The most common is to select the tree using the regularized risk estimate given in Equation \ref{eqn:reg_risk_est} \newnot{symbol:risk_tree}
 
@@ -414,6 +414,8 @@ This is the result we need, putting the two parts together gives the closed form
  & + \frac{\Gamma(\alpha_{\lambda}+n_+\bar{y}_+)}{\Gamma(\alpha_{\lambda})\beta_{\lambda}^{\alpha_{\lambda}}}\left(n_+ + 1/\beta_{\lambda} \right)^{\alpha_{\lambda}+n_+\bar{y}_+}.
 \end{align}
 The reader should now clearly see the first and second quantities from the derivations above in succession in the above equation. While the number of observed zeros, $n_0$, is small this finite sum can easily be calculated. For a large dataset, perhaps with a large number of zeros, a numeric approximation may be sufficient for practical implementation.
+
+The reader should understand that for efficient sampling terminal node models beyond the common normal and Dirichlet terminal node models. Bayesian decision trees with counts as a response, including counts with an excess of zeros, and over dispersed can easily be handled. The only difficulty might lie in the numeric evaluation of the series in the zero-inflated terminal node models. However, this should not be too much of an issue because Sterling's approximation to the Gamma can be applied with good accuracy in most settings. Moreover, should the number of observed zeros, $n_0$ be too large an integral approximation to the sum should suffice. 
 \newpage
 
 \chapter{Bayesian Decision Tree Models}\label{sec:Model}
@@ -424,7 +426,7 @@ In Sections \ref{sec:lhood} and \ref{subsec:alt} we describe how we use the ALT 
 
 We begin by reviewing the model proposed in Chipman et al. \cite{chipman1998bayesian}, and show how our approaches generalize upon their model. 
 
-The response data is usually assumed to be observed from a normal or multinomial likelihood function. Nonetheless, other forms of response data such as zero inflated models are possible \cite{Roberts:2014fk}. The likelihood is denoted 
+The response data is usually assumed to be observed from a normal or multinomial likelihood function. Nonetheless, other forms of response data such as zero inflated models are possible \cite{lee2006decision}. The likelihood is denoted 
 
 \begin{equation}\label{eqn:cgm_likelihood}
 \mathcal{L}(\mathcal{T}, \vec{q}, \vec{\theta} \vert \vec{y} X)=\Pr(\vec{y} \vert X, \mathcal{T}, \vec{q}, \vec{\theta}).

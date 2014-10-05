@@ -1,6 +1,6 @@
 \chapter{Additive Logistic Variable Selection: The ALoVaS method}\label{sec:Introduction}
 
-In this chapter we describe a decision tree method to explicitly handle variable selection in high-dimensional data, called the Additive Logistic Variable Selection  (ALoVaS) method. This method allows us to reuse regularization approaches, prominent in the linear model literature, and apply them to decision trees. Although Bayesian methods have been available for use with decision trees since the seminal papers of Chipman, George, and McCulloch \cite{chipman1998bayesian}  and Denison, Mallick, and Smith \cite{denison1998bayesian}, there has been little work to alleviate the practical difficulties of applying Bayesian decision trees for high-dimensional data. A notable exception is the approach of Roberts and Leman \cite{Roberts:2013uq} who used a Dirichlet prior on the covariate selection probabilities. Also, the non-Bayesian approaches described by Ishwaran and coauthers \cite{ishwaran2011random,ishwaran2010high,ishwaran2007variable} deserve mentioning these authors use an initial bootstrap sample to determine the covariate selection probabilities and then use these estimated covariate selection probabilities in a subsequent random forest algorithm. Moreover, in the discussion of Chipman et al., it is noted by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} that the Bayesian approach to decision trees breaks down as the number of covariates increases. 
+In this chapter we describe a decision tree method to explicitly handle variable selection in high-dimensional data, called the Additive Logistic Variable Selection  (ALoVaS) method. This method allows us to reuse regularization approaches, prominent in the linear model literature, and apply them to decision trees. Although Bayesian methods have been available for use with decision trees since the seminal papers of Chipman, George, and McCulloch \cite{chipman1998bayesian}  and Denison, Mallick, and Smith \cite{denison1998bayesian}, there has been little work to alleviate the practical difficulties of applying Bayesian decision trees for high-dimensional data. A notable exception is the approach of Roberts and Leman \cite{Roberts:2013uq} who used a Dirichlet prior on the covariate selection probabilities. Also, the non-Bayesian approaches described by Ishwaran et al. \cite{ishwaran2011random,ishwaran2010high,ishwaran2007variable} deserve mentioning  as these authors use an initial bootstrap sample to determine the covariate selection probabilities and then use these estimated covariate selection probabilities in a subsequent random forest algorithm. Moreover, in the discussion of Chipman et al., it is noted by Knight, Kustra, and Tibshirani \cite{knight1998bayesian} that the Bayesian approach to decision trees breaks down as the number of covariates increases. 
 
 In contrast to the literature on decision tree variable selection, the literature on variable selection for linear models is voluminous. Textbooks have been written on variable selection for linear models \cite{miller2002subset}. Each year several papers are published in major statistical journals developing properties of various variable selection methods and proposing modifications to improve known deficiencies. 
 
@@ -25,7 +25,7 @@ By focusing on the \ALT, we are able to transform the decision tree variable sel
 %    & \num\putindeepbox[2pt]{\includegraphics[scale=0.25]{figures/real_space_tikz.png}} 
     & \subfigure[]{\includegraphics[trim={2cm 11cm 8cm 10.1cm},clip,scale=0.7]{figures/simple_tree_tikz.pdf}} \\
 \end{tabular}
-  \caption{In (a) we plot the points in the Euclidean space and the primed points represent the points mapped to the probability simplex, represented in the plot by the surface of the triangular plane given by the equation $x+y+z=1, x,y,z >0$. The primes indicate points on the probability simplex after applying the additive logistic transformation to the split counts. In (b) we plot an example decision tree splitting on two of three possible covariates.}
+  \caption{In (a) we plot the points in the Euclidean space and the primed points represent the points mapped to the probability simplex, represented in the plot by the surface of the triangular plane given by the equation $x_1+x_2+x_3=1, x_1,x_2,x_3 >0$. The primes indicate points on the probability simplex after applying the additive logistic transformation to the split counts. In (b) we plot an example decision tree splitting on two of three possible covariates.}
   \label{fig:trees_and_probability}
 \end{figure}
  
@@ -36,45 +36,48 @@ This chapter proceeds as follows: Section \ref{sec:ALN_chapter} describes and mo
 
 \section{Normal Distributions Transformed to the Unit Simplex: ALT and ALN Dynamics. }\label{sec:ALN_chapter}
 
-This section outlines the additive logistic transformation, which transforms a $d$ dimensional multivariate normal distribution onto the unit simplex in $d+1$ dimensions. Note that the unit simplex in $d+1$ dimensions actually lies in a subspace of $d$ dimensions because of the constraint that the sum of the probabilities equals one. 
+This section outlines the additive logistic transformation, which transforms a $p$ dimensional multivariate normal distribution onto the unit simplex in $p+1$ dimensions. Note that the unit simplex in $p+1$ dimensions actually lies in a subspace of $p$ dimensions because of the constraint that the sum of the probabilities equals one. 
 
-The goal of this section is to find a transform that moves the space $\mathbb{R}^d$ \newnot{symbol:real} to the simplex $\mathbb{S}^d$. \newnot{symbol:simp} The simplex $\mathbb{S}^d$ is a space defined by the constraints $\{x_i: 0<x_i<1, \sum_{j=1}^dx_j <1 \}$, and the extra term $x_{d+1}=1-\sum_{j=1}^d x_j$ ensures the total sums to 1.  
+The goal of this section is to find a transform that moves the space $\mathbb{R}^p$ \newnot{symbol:real} to the simplex $\mathbb{S}^p$. \newnot{symbol:simp} The simplex $\mathbb{S}^p$ is a space defined by the constraints $\{x_i: 0<x_i<1, \sum_{j=1}^px_j <1 \}$, and the extra term $x_{p+1}=1-\sum_{j=1}^p x_j$ ensures the total sums to 1.  
 
-Define the notation $\yvec$, for the normal random variables that reside in the $\Rsp{d}$  dimensional space. Define the notation $\xvec$  for the vector that resides on $\simp{d}$, the simplex in $d$ dimensions. We use an underline to indicate that the stated quantity is a column vector and capital greek letters (and $I$) will denote matrices (the identity matrix) 
+Define the notation $\yvec$, for the normal random variables that reside in the $\Rsp{p}$  dimensional space. Define the notation $\xvec$  for the vector that resides on $\simp{p}$, the simplex in $p$ dimensions. We use an underline to indicate that the stated quantity is a column vector and capital greek letters (and $I$) will denote matrices (the identity matrix) 
 
 \begin{equation}\label{eqn:simplex_transform}
-x_i = \frac{e^{y_i}}{1+\displaystyle{\sum_{j=1}^de^{y_j}}}. \\
+x_i = \frac{e^{y_i}}{1+\displaystyle{\sum_{j=1}^pe^{y_j}}}. \\
 \end{equation}
 Define the Jacobian of the transformation as
 \newnot{symbol:jacobian}
 \begin{equation}\label{eqn:jacobian}
-J(\yvec \vert \xvec) = \left( \prod_{j=1}^{d+1}x_j \right)^{-1}.
+J(\yvec \vert \xvec) = \left( \prod_{j=1}^{p+1}x_j \right)^{-1}.
 \end{equation}
 
-It is important to note that $\yvec\in\Rsp{d}$, whereas $\xvec\in\simp{d}$. The $d$ dimensional normal has the usual parameters and density
+While the transformation holds exactly when $y_i$ has a normal distribution, if $y_i$ has a distribution that is non-normal there may be difficulties of model misspecification. However, we appeal to the logic of the central limit theorem which will likely mitigate a substantial portion of these cases. The few cases where a deviation in distribution from normal are likely, are too varied and require case specific techniques for each case to warrant further discussion in this thesis. However, this area is an active area of current and future research for the author in both decision trees and regression scenarios. 
+
+Additionally, the reader may be concerned about the lack of invariance in this model compared to the traditional CART model. In the greedy CART model we know that the resulting tree is invariant to monotonic transformations which is useful from a practical and scientific viewpoint because changing the units of measurement should not matter when looking at the final trees. In our model the we will see as we elaborate on the model that the invariance still holds. The $y_i$ that we use for illustrative purposes here do not correspond to split values in our ALoVaS model. Rather the $y_i$ correspond to a scaled version of the counts of the number of times a tree contains a split on a given covariate. Thus whether a tree splits on a covariate at two or twenty the affect in the $y_i$ will be the same and we therefore can consider the fitted trees to be invariant to monotonic transformations. 
+
+ It is important to note that $\yvec\in\Rsp{p}$, whereas $\xvec\in\simp{p}$. The $p$ dimensional normal has the usual parameters and density
 
 \begin{equation}\label{eqn:multinormal}
-f_{\yvec}(\yvec\vert \Sigma, \mu)=(2\pi)^{-d/2}|\Sigma|^{-1/2}\exp{\left(-1/2(\yvec-\muvec)^T\Sigma^{-1}(\yvec-\muvec)\right)}.
+f_{\yvec}(\yvec\vert \Sigma, \mu)=(2\pi)^{-p/2}|\Sigma|^{-1/2}\exp{\left(-1/2(\yvec-\muvec)^T\Sigma^{-1}(\yvec-\muvec)\right)}.
 \end{equation}
-
+We assume for simplicity that $\Sigma$ is non-singular.
 Upon applying the transformation defined by Equation \ref{eqn:simplex_transform}, we arrive at the additive logistic normal (ALN) distribution, with density 
 
 \begin{equation}
-f_{\xvec}(\xvec\vert \Sigma, \mu)=\frac{(2\pi)^{-d/2}}{\sqrt{\vert\Sigma\vert}\prod_{j=1}^{d+1}x_j } 
-\exp{\left(-1/2(\text{log}(\xvec_{(d+1)}/x_{d+1})-\muvec)^T\Sigma^{-1}(\text{log}(\xvec_{(d+1)}/x_{d+1})-\muvec)\right)}.
+f_{\xvec}(\xvec\vert \Sigma, \mu)=\frac{(2\pi)^{-p/2}}{\sqrt{\vert\Sigma\vert}\prod_{j=1}^{p+1}x_j } 
+\exp{\left(-1/2(\text{log}(\xvec_{(p+1)}/x_{p+1})-\muvec)^T\Sigma^{-1}(\text{log}(\xvec_{(p+1)}/x_{p+1})-\muvec)\right)}.
 \end{equation}
-The vector notation $\xvec_{(d+1)}$ denotes the vector in $d$ dimensions that has the $d+1$ entry removed from the vector $\xvec$. 
-It is important to note that this density function is defined on the space $\simp{d}$ and \emph{not} on the space $\Rsp{d}$. 
+The vector notation $\xvec_{(p+1)}$ denotes the vector in $p$ dimensions that has the $p+1$ entry removed from the vector $\xvec$. 
 
-A useful property of this transform is that we can handle probabilities defined on the $d$ dimensional simplex while working with a normal distribution. This is a common and comfortable probability distribution for most statisticians and applied scientists.
+A useful property of this transform is that we can handle probabilities defined on the $p$ dimensional simplex while working with a normal distribution. This is a common and comfortable probability distribution for most statisticians and applied scientists.
 We now wish to understand how the specification of the mean vector $\muvec$ and the covariance matrix $\Sigma$ impact the structure of the ALN density. From simulation we can formulate the following conclusions: 
 
 \begin{itemize}
-\item With $\Sigma=I$, increasing the mean vector in the positive direction in any one of the $d$ components individually corresponds to shifting density towards the corner of the simplex associated with that covariate. 
-\item With $\Sigma=I$, increasing the mean vector in the negative in \emph{all} $d$ components corresponds to shifting density towards the $d+1$ corner of the simplex. 
-\item Keeping $\muvec =\vec{0}$, adjusting any of the variances corresponds to shifting towards a projected space of $\simp{d}$. 
-\item With $\muvec =\vec{0}$, making one variance small corresponds to the shifting density towards the median of the simplex associated with the remaining $d$ dimensions. 
-\item Making the $\Sigma$ matrix approximately singular and moving $\muvec$ in the negative direction for all components places most of the probability density along the median of simplex associated with first $d$ dimensions. 
+\item With $\Sigma=I$, increasing the mean vector in the positive direction in any one of the $p$ components individually corresponds to shifting density towards the corner of the simplex associated with that covariate. 
+\item With $\Sigma=I$, increasing the mean vector in the negative in \emph{all} $p$ components corresponds to shifting density towards the $p+1$ corner of the simplex. 
+\item Keeping $\muvec =\vec{0}$, adjusting any of the variances corresponds to shifting towards a projected space of $\simp{p}$. 
+\item With $\muvec =\vec{0}$, making one variance small corresponds to the shifting density towards the median of the simplex associated with the remaining $p$ dimensions. 
+\item Making the $\Sigma$ matrix approximately singular and moving $\muvec$ in the negative direction for all components places most of the probability density along the median of simplex associated with first $p$ dimensions. 
 \item If $\Sigma = \text{Diag}(\sigma^2_j)$,\newnot{symbol:diag} as the $\sigma^2_j$ entries become smaller, the probabilities approach the CGM specification.    
 \end{itemize}
 
@@ -84,7 +87,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{mu0_0.pdf}
-\caption[ALN plot with a zero mean vector.]{In this figure, $\muvec$ has all zero entries, with $\Sigma=I$, corresponding to the equiprobable case. Each probability is approximately $1/(d+1)$. }
+\caption[ALN plot with a zero mean vector.]{In this figure, $\muvec$ has all zero entries, with $\Sigma=I$, corresponding to the equiprobable case. Each probability is approximately $1/(p+1)$. }
 \label{fig:figure9}
 \end{minipage}
 \hspace{0.5cm}
@@ -136,7 +139,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \begin{minipage}[b]{0.45\linewidth}
 \centering
 \includegraphics[width=\textwidth]{Sigma1_9_9_1.pdf}
-\caption[ALN plot $\Sigma$ numerically singular.]{Here $\Sigma$ is approximately singular and most of the probability mass in concentrated along the $d+1$th dimension in the $\mathbb{R}^{d+1}$ space.  }
+\caption[ALN plot $\Sigma$ numerically singular.]{Here $\Sigma$ is approximately singular and most of the probability mass in concentrated along the $p+1$th dimension in the $\mathbb{R}^{p+1}$ space.  }
 \label{fig:figure5}
 \end{minipage}
 \hspace{0.5cm}
@@ -165,7 +168,7 @@ The ALN density can be simulated using the transformation defined in Equation \r
 \end{minipage}
 \end{figure}
 
- The simulations indicate that we can scale everything at approximately an $\mathcal{O}(d)$\newnot{symbol:big_oh} rate because of the diagonality of the variance covariance matrix, and no matrix inversions are required. The step that remains is to link this portion of the model with the (currently) observed data in the tree, so that better trees are favored over trees that are worse, when each is observed in the Markov chain. We will first work in the space $\Rsp{d}$ and then translate to probabilities by using Equation \ref{eqn:simplex_transform}.  
+ The simulations indicate that we can scale everything at approximately an $\mathcal{O}(p)$\newnot{symbol:big_oh} rate because of the diagonality of the variance covariance matrix, and no matrix inversions are required. The step that remains is to link this portion of the model with the (currently) observed data in the tree, so that better trees are favored over trees that are worse, when each is observed in the Markov chain. We will first work in the space $\Rsp{p}$ and then translate to probabilities by using Equation \ref{eqn:simplex_transform}.  
  
  If we focus on the means and a collection of variances in a multivariate normal i.i.d. model, then we must fully specify the likelihood and the prior to form our posterior. 
  
@@ -199,11 +202,11 @@ S\beta(c_j\vert \alpha_j, \beta_j, -a, a)\equiv\pi(c_j\vert \alpha_j, \beta_j, -
 \end{equation}
 
 A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform r.v.'s on the region  $[-a,a]$. 
-For each $j=1, \dots, d$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
+For each $j=1, \dots, p$, we first calculate $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate j at node $\eta$}]$, for some fixed $\epsilon>0$.
 Through basic Bayesian calculations we find that the full conditional distributions are 
 
 \begin{equation}
-\pi(c_j\vert \mu_j, \sigma_j^2, a) \sim N_{[-a,a]}(c_js_j\vert \mu_j, \sigma^2_j) \text{(a normal truncated to the region $(-a,a)$),}
+\pi(c_j\vert \mu_j, \sigma_j^2, a) \sim N_{[-a,a]}(c_js_j\vert \mu_j, \sigma^2_j) \text{ (a normal truncated to the region $(-a,a)$),}
 \end{equation}
 
 \begin{equation}
@@ -214,7 +217,7 @@ Through basic Bayesian calculations we find that the full conditional distributi
 \pi(\mu_j\vert \mu_j^p, c_j, \sigma^2_j)\sim N[c_js_j+\mu_j^p, \sigma_j^2].
 \end{equation}
 
-The pseudocode for the simple sampler can be found in Appendix A. We now describe ho we use slice sampling to perform Gibbs updates.
+The pseudocode for the simple sampler can be found in Appendix A. We now describe how we use slice sampling to perform Gibbs updates.
 
 \section{Slice Sampling Gibbs Updates}\label{sec:slice_gibbs}
 
@@ -253,7 +256,7 @@ which results in the region for $x$
  Simulating from a truncated normal is equivalent to simulating from two uniforms on the appropriate regions and evaluating a natural logarithm and a square root function at each iteration. 
  
  A special case of these scaled beta densities is when $\alpha_j=\beta_j=1$, which yields uniform random variables on the region $[-a,a]$. 
-For each $j=1, \dots, d$, we first calculate \\
+For each $j=1, \dots, p$, we first calculate \\
  $s_j = \epsilon+\sum_{\forall \eta \in \mathcal{T}}\mathds{1}[\text{split on covariate $j$ at node $\eta$ } ]$, for some fixed $\epsilon>0$.
 Through basic Bayesian calculations we find the full conditionals in closed form
  
@@ -302,7 +305,7 @@ We show results from a preliminary coding of the stated algorithm. We use two sp
 
 \section{A Stochastic Search Variable Selection Approach}\label{sec:PX_1}
 
-Using the results of George and McCulloch we derive Gibbs updates for each of the parameters. In the case where all the dimension indicators are selected to be the point masses at zero, we obtain the model proposed by CGM. In the case of all point masses at zero being selected, the ALN transform puts probability $1/(d+1)$ on each dimension. 
+Using the results of George and McCulloch we derive Gibbs updates for each of the parameters. In the case where all the dimension indicators are selected to be the point masses at zero, we obtain the model proposed by CGM. In the case of all point masses at zero being selected, the ALN transform puts probability $1/(p+1)$ on each dimension. 
 
 
 We investigate three priors for use in variable selection with decision trees. They are: 
@@ -345,7 +348,7 @@ V \sim \text{Exponential}(1), \text{ and}
 X \sim \text{Laplace}(\mu, \sigma).
 \end{equation}
 
-What we want to examine here is whether shrinkage along an $L_1$ penalty will achieve similar results to the SSVS approach and give us meaningful results. The belief here is the same as in the SSVS approach, shrinkage will shrink means toward zero in the multivariate normal. These sampled values from the multivariate normal will then be transformed into something on the $[0,1]$ (probability) scale using the ALN transform. Values of zero, or near zero of the $\mu_j$, transform from the Euclidean space into values of approximately $1/(d+1)$ in the simplex space. The probabilities with values around $1/(d+1)$ correspond to covariates that we are indifferent about. Recall that all probabilities must sum to 1, adding some difficulty to interpreting the estimated probabilities. Therefore if some values are excessively small this may coerce all the other probabilities to be larger. In this case it is then difficult to determine which covariates are non-informative. Further simulations regarding selecting covariates using the rule of Equation \ref{eqn:cov_inclusion_rule} will be conducted using the ALN transform and will be done on several simulated and real data examples.    
+What we want to examine here is whether shrinkage along an $L_1$ penalty will achieve similar results to the SSVS approach and give us meaningful results. The belief here is the same as in the SSVS approach, shrinkage will shrink means toward zero in the multivariate normal. These sampled values from the multivariate normal will then be transformed into something on the $[0,1]$ (probability) scale using the ALN transform. Values of zero, or near zero of the $\mu_j$, transform from the Euclidean space into values of approximately $1/(p+1)$ in the simplex space. The probabilities with values around $1/(p+1)$ correspond to covariates that we are indifferent about. Recall that all probabilities must sum to 1, adding some difficulty to interpreting the estimated probabilities. Therefore if some values are excessively small this may coerce all the other probabilities to be larger. In this case it is then difficult to determine which covariates are non-informative. Further simulations regarding selecting covariates using the rule of Equation \ref{eqn:cov_inclusion_rule} will be conducted using the ALN transform and will be done on several simulated and real data examples.    
 
 The following result will be useful for parameter expansion. If 
 
