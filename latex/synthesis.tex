@@ -1,7 +1,7 @@
 \chapter{Synthesis: Comparing the DiVaS and ALoVaS Methods}
 In this chapter we compare the DiVaS and ALoVaS models. While both methods seem relatively similar, both methods performing variable selection for Bayesian decision trees, there are fundamental practical and theoretical differences between the two methods. 
 
-\section{Theoretical differences and a simulation study}
+\section{Theoretical differences and A Simulation Study}
 
 One of the most apparent theoretical differences between the DiVaS and ALoVaS models is the way the two models handle the correlation between covariate selection probabilities. One of the properties of the Dirichlet distribution is that $Corr(p_i,p_j) < 0$ for $i\neq j$. Thus, if the prior puts zero probability on non-negative covariate selection probability correlations, then the posterior will also place zero probability on these non-negative correlations. Figure \ref{fig:corr_divas_alovas} plots the relationship of the DiVaS and ALoVaS methods in the correlation space of two arbitrary covariate selection probabilities $(p_i,p_j)$. This section elucidates the differences between the two methods and compares the similarities. 
 
@@ -93,7 +93,7 @@ We ran the ALoVaS and DiVaS algorithms for $11,000$ samples discarding the first
 \end{figure} 
 
 While the DiVaS tree primarily picks up only the two covariates interacting, the ALoVaS method accounts for the interaction between the two covariates while also provided a sparser representation than the DiVaS tree. The additional covariates picked up by the ALoVaS method are noise which can happen under either method.  the additional covariates represents a data artifact and should not be interpreted as a deficiency of the method, rather an inevitable result of stochasticity. 
-\section{Practical differences and a simulation study}
+\section{Practical Differences and A Simulation Study}
 
 While the theoretical differences are important to academics and applied researchers who want to understand the limitations of a specific method, the questions most applied researchers tend to have are more practical in nature. We address the practical questions in this section. 
 

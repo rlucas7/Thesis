@@ -85,27 +85,27 @@ We run our algorithm using the regularized methods on the number of splits and t
   \\ \cline{3-3}
 & & MSE  \\\cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 50\%} } & 
-\multicolumn{1}{ |c| }{CGM} & 34.74\%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS &12.43 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO& 5.89\%    \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &7.35 \%  \\ \cline{1-3}
-\multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 60\%$^*$} } & 
-\multicolumn{1}{ |c| }{CGM} &34.44 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS & 9.64\%    \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO&6.19\%     \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &9.22\%  \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} & $34.74 \pm 12.27$\%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS &$12.43 \pm 6.21$\%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO& $5.89 \pm 3.48$\%    \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$7.35 \pm 8.21$ \%  \\ \cline{1-3}
+\multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 60\%} } & 
+\multicolumn{1}{ |c| }{CGM} &$34.44 \pm 9.62$ \%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS & $9.64 \pm 5.81$\%    \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO&$6.19 \pm 2.61$\%     \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$9.22 \pm 7.14$\%  \\ \cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity70\%} } & 
-\multicolumn{1}{ |c| }{CGM} &27.13 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS &8.41\%    \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO&6.64\%    \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &16.05\%   \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} &$27.13 \pm 11.83$\%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS &$8.41 \pm 5.79$\%    \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO&$6.64 \pm 2.63$\%    \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$16.05 \pm 7.23$\%   \\ \cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 80\%} } & 
-\multicolumn{1}{ |c| }{CGM} & 27.64 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS &8.69 \%   \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO&6.12 \%    \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &7.52 \%  \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} & $27.64 \pm12.91$\%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS &$8.69 \pm 3.43$ \%   \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO&$6.12 \pm 1.01$\%    \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$7.52 \pm 5.21$\%  \\ \cline{1-3}
 \end{tabular}
-\caption{Multimodal simulation study results. Each entry represents the mean squared error of the optimal tree from the Markov chain.  The $^*$ indicates that 3 cannot be divided by a number to get 60\% sparsity exactly. }
+\caption{Multimodal simulation study results. Each entry represents the mean squared error of the optimal tree from the Markov chain. The numbers after the $\pm$ are the standard errors across the ten optima for the parallel chains. The $^*$ indicates that 3 cannot be divided by a number to get 60\% sparsity exactly. }
 \label{tab:rashomon_study_results}
 \end{center}
 \end{table}
@@ -116,20 +116,20 @@ We run our algorithm using the regularized methods on the number of splits and t
   \\ \cline{3-3}
 & & MSE  \\\cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 90\%} } & 
-\multicolumn{1}{ |c| }{CGM} &68.06 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS &11.94 \%   \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO& 8.41\%     \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &9.63\%   \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} &$68.06 \pm 13.76$ \%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS &$11.94 \pm 4.68$ \%   \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO& $8.41\pm 2.09$\%     \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE & $ 9.63\pm 7.89$\%   \\ \cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 95\%} } & 
-\multicolumn{1}{ |c| }{CGM} &47.37 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS & 7.08\%    \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO&11.15\%     \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &8.98\%   \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} &$47.37 \pm 17.89$\%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS & $7.08 \pm 4.37$\%    \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO& $11.15\pm 3.70$\%     \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$8.98 \pm 3.88$ \%   \\ \cline{1-3}
 \multicolumn{1}{ |c| }{\multirow{3}{*}{sparsity 99\%} } & 
-\multicolumn{1}{ |c| }{CGM} &47.51 \%  \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&SSVS & 6.82\%   \\  \cline{2-3}
-\multicolumn{1}{ |c| }{}&LASSO&7.33\%     \\ \cline{2-3}
-\multicolumn{1}{ |c| }{}&HORSESHOE &5.73\%   \\ \cline{1-3}
+\multicolumn{1}{ |c| }{CGM} & $47.51 \pm 18.31$ \%  \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&SSVS & $6.82 \pm 3.17$\%   \\  \cline{2-3}
+\multicolumn{1}{ |c| }{}&LASSO&$7.33 \pm 3.21$\%     \\ \cline{2-3}
+\multicolumn{1}{ |c| }{}&HORSESHOE &$5.73 \pm  4.01$\%   \\ \cline{1-3}
 \end{tabular}
 \caption{Second table of multimodal simulation study results. Each entry represents the mean squared error of the optimal tree from the Markov chain. }
 \label{tab:rashomon_study_results2}
@@ -286,12 +286,12 @@ As noted by Kushmerick \cite{kushmerick1999learning}, there are several reasons 
 \begin{center}
 \begin{tabular}{|c|c|} \hline
 Model & Error \\ \hline
-ALoVaS-SSVS&7.48\%\\ \hline
-ALoVaS-Lasso &5.12\% \\ \hline
-ALoVaS-Horseshoe&5.40\% \\ \hline
-VIMP& 15.30\%\\ \hline
-CGM&7.20\%\\ \hline
-Logistic-lasso&11.20\%\\ \hline
+ALoVaS-SSVS&$7.48 \pm 2.01$\%\\ \hline
+ALoVaS-Lasso &$5.12 \pm 1.38$\% \\ \hline
+ALoVaS-Horseshoe& $5.40 \pm 3.22$\% \\ \hline
+VIMP& $15.30 \pm 4.10$\%\\ \hline
+CGM& $7.20 \pm 3.57$\%\\ \hline
+Logistic-lasso&$11.20 \pm 4.11$\%\\ \hline
 \end{tabular}
 \caption{Class unbalancedness simulation study results, each entry represents the MSE for that scenario and model. }
 \label{tab:ads_misclass}
